@@ -9,7 +9,7 @@ import { LoginSchema } from "@/server/auth/schemas";
 import { getUserByEmail } from "@/server/actions/users";
 import { DEFAULT_LOGIN_REDIRECT } from "@/server/auth/routes";
 import { generateVerificationToken } from "@/server/auth/tokens";
-import { sendVerificationEmail } from "@/server/mail";
+import { sendVerificationEmail } from "@/server/mail/auth/verification";
 
 
 export const login = async (
