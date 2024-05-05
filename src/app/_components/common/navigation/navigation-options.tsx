@@ -127,26 +127,24 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                         </NavigationMenuLink>
                     </Link>
                 </NavigationMenuItem>
-                {!!isAuthenticated &&
+                {!isAuthenticated &&
                     <LoginButton asChild mode="modal">
-                        <Button variant='ghost' size='sm'>
+                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                             Sign In
-                        </Button>
+                        </NavigationMenuLink>
                     </LoginButton>
                 }
                 {!!isAuthenticated &&
                     <>
-                        <Link href='/profile'
-                            className={buttonVariants({
-                                variant: 'ghost',
-                                size: 'sm'
-                            })}>Profile
-                            <UserCircle className="relative z-50 h-5 w-5 ml-3 text-zinc-700 dark:text-white" />
+                        <Link  href='/profile' legacyBehavior passHref>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                Profile
+                            </NavigationMenuLink>
                         </Link>
                         <LogoutButton>
-                            <Button variant='ghost' size='sm'>
+                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                                 Sign Out
-                            </Button>
+                            </NavigationMenuLink>
                         </LogoutButton>
                     </>
                 }

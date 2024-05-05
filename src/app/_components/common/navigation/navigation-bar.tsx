@@ -1,10 +1,11 @@
 import Link from "next/link"
 import MaxWidthWrapper from "../max-width-wrapper"
 import { NavigationOptions } from "./navigation-options"
+import { auth } from "@/auth";
 
 
-export default function NavigationBar() {
-  let isAuthenticated: boolean = true;
+export default async function NavigationBar() {
+    const session = await auth();
 
     return (
         <nav className="sticky h-14 inset-x-0 z-30 w-full border-b border-gray-200 bg-white/75 dark:bg-transparent backdrop-blur-lg transition-all px-3 md:px-0">
@@ -18,7 +19,7 @@ export default function NavigationBar() {
 
                     <div className="hidden items-center space-x-4 sm:flex">
                         <>
-                            <NavigationOptions isAuthenticated={isAuthenticated} />
+                            <NavigationOptions isAuthenticated={!!session} />
 
                             {/* <ModeToggle /> */}
                         </>

@@ -19,8 +19,6 @@ export default auth((req) => {
 
     const url = new URL(DEFAULT_LOGIN_REDIRECT, nextUrl)
     
-    console.log("Is Authenticated:", isLoggedIn)
-    
     if (isApiAuthRoute) {
         return;
     }

@@ -1,7 +1,12 @@
+import MaxWidthWrapper from "../_components/common/max-width-wrapper";
 
 
 export default function Profile() {
   return (
-    <div>Profile</div>
+    <MaxWidthWrapper>
+      <div>
+        Profile
+      </div>
+    </MaxWidthWrapper>
   )
 }
