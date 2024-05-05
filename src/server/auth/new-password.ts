@@ -3,8 +3,8 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import { NewPasswordSchema } from "@/lib/schemas";
-import { getPasswordResetTokenByToken } from "@/server/actions/auth/password-reset-token";
+import { NewPasswordSchema } from "@/server/auth/schemas";
+import { getPasswordResetTokenByToken } from "@/server/auth/password-reset-token";
 import { getUserByEmail } from "@/server/actions/users";
 import { db } from "@/server/db";
 import { passwordResetTokens, users } from "@/server/db/schema";

@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google"
 import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import bcrypt from "bcryptjs"
 import { db } from "@/server/db"
-import authConfig from "@/server/auth/auth.config"
+import authConfig from "@/auth.config"
 import { LoginSchema } from "@/server/auth/schemas"
 import { getUserByEmail, getUserById } from "@/server/actions/users"
 import { users } from "@/server/db/schema"

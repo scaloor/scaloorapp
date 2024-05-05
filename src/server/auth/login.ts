@@ -4,19 +4,19 @@ import * as z from "zod";
 import { AuthError } from "next-auth";
 
 import { db } from "@/server/db";
-import { signIn } from "@/server/auth";
-import { LoginSchema } from "@/lib/schemas";
+import { signIn } from "@/auth";
+import { LoginSchema } from "@/server/auth/schemas";
 import { getUserByEmail } from "@/server/actions/users";
-import { DEFAULT_LOGIN_REDIRECT } from "@/server/routes";
-import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
+import { DEFAULT_LOGIN_REDIRECT } from "@/server/auth/routes";
+import { generateVerificationToken } from "@/server/auth/tokens";
+import { sendVerificationEmail } from "@/server/mail";
 
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null,
 ) => {
-  const validatedFields = LoginSchema.safeParse(values);
+  const validatedFields = LoginSchema.safeParse(values);  
 
   if (!validatedFields.success) {
     return { error: "Invalid fields!" };
@@ -34,7 +34,7 @@ export const login = async (
     const verificationToken = await generateVerificationToken(
       existingUser.email,
     );
-
+    
     if (!!verificationToken) {
       await sendVerificationEmail(
         verificationToken.email,
@@ -47,6 +47,7 @@ export const login = async (
   }
 
 
+  
   try {
     await signIn("credentials", {
       email,

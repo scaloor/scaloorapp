@@ -29,6 +29,7 @@ export const generatePasswordResetToken = async (email: string) => {
 }
 
 export const generateVerificationToken = async (email: string) => {
+    console.log("Hello from token:")
     const token = crypto.randomUUID();
     const expires = new Date(new Date().getTime() + 3600 * 1000);
 
@@ -53,6 +54,8 @@ export const generateVerificationToken = async (email: string) => {
     };
 
     const verificationToken = insertToken(newToken);
+
+    
 
     return verificationToken;
 };

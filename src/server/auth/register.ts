@@ -1,12 +1,12 @@
-"use server";
+"use server"
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import { RegisterSchema } from "@/lib/schemas";
+import { RegisterSchema } from "@/server/auth/schemas";
 import { addUser, getUserByEmail } from "@/server/actions/users";
-import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
+import { generateVerificationToken } from "@/server/auth/tokens";
+import { sendVerificationEmail } from "@/server/mail";
 
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -21,7 +21,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 
   const existingUser = await getUserByEmail(email);
 
-  if (existingUser) {
+  if (!!existingUser) {
     return { error: "Email already in use!" };
   }
 
