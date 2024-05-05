@@ -1,4 +1,4 @@
-/* 'use server';
+'use server';
 import { transporter } from "@/server/mail";
 
 export const sendVerificationEmail = async (
@@ -13,4 +13,4 @@ export const sendVerificationEmail = async (
         subject: "Confirm your email",
         html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`
     });
-}; */
+};
