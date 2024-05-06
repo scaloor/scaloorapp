@@ -17,6 +17,9 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    /* console.log("Authenticated:", isLoggedIn);
+    console.log("Next URL:", nextUrl) */
+
     const url = new URL(DEFAULT_LOGIN_REDIRECT, nextUrl)
     
     if (isApiAuthRoute) {
