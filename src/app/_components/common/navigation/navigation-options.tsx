@@ -128,7 +128,7 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                     </Link>
                 </NavigationMenuItem>
                 {!isAuthenticated &&
-                    <LoginButton asChild mode="modal">
+                    <LoginButton asChild mode="redirect">
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                             Sign In
                         </NavigationMenuLink>
@@ -137,7 +137,7 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                 {!!isAuthenticated &&
                     <>
                         <Link  href='/profile' legacyBehavior passHref>
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-background-primary")}>
                                 Profile
                             </NavigationMenuLink>
                         </Link>

@@ -4,7 +4,7 @@ export const sendPasswordResetEmail = async (
     email: string,
     token: string,
 ) => {
-    const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/new-password?token=${token}`
+    const resetLink = `${process.env.NEXT_PUBLIC_URL}/auth/new-password?token=${token}`
 
     await transporter.sendMail({
         from: `${process.env.MAIL_ADMIN}`,

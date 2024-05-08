@@ -6,6 +6,7 @@ import {
     authRoutes,
     publicRoutes,
 } from '@/server/auth/routes'
+import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig)
 
@@ -17,11 +18,6 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-    /* console.log("Authenticated:", isLoggedIn);
-    console.log("Next URL:", nextUrl) */
-
-    const url = new URL(DEFAULT_LOGIN_REDIRECT, nextUrl)
-    
     if (isApiAuthRoute) {
         return;
     }
@@ -33,8 +29,19 @@ export default auth((req) => {
         return;
     }
 
+
     if (!isLoggedIn && !isPublicRoute) {
-        return Response.redirect(new URL("/auth/login", nextUrl))
+        let callbackUrl = nextUrl.pathname;
+        if (nextUrl.search) {
+            callbackUrl += nextUrl.search
+        }
+
+        const encodedCallbackUrl = encodeURIComponent(callbackUrl);
+
+        return NextResponse.redirect(new URL(
+            `/auth/login?callbackUrl=${encodedCallbackUrl}`,
+            nextUrl
+        ));
     }
 
     return;

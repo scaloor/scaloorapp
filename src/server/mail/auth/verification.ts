@@ -5,7 +5,7 @@ export const sendVerificationEmail = async (
     email: string,
     token: string
 ) => {
-    const confirmLink = `${process.env.NEXT_PUBLIC_BASE_URL}/auth/new-verification?token=${token}`;
+    const confirmLink = `${process.env.NEXT_PUBLIC_URL}/auth/new-verification?token=${token}`;
 
     await transporter.sendMail({
         from: `${process.env.MAIL_ADMIN}`,

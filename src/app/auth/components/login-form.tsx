@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 
@@ -22,16 +22,22 @@ import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
 import { login } from "@/server/auth/login";
+import { useRouter } from "next/navigation";
 
 
 export const LoginForm = () => {
+/*     const path = usePathname();
+    const router = useRouter(); */
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl");
+/*     if (path !== "/auth/login") {
+        return router.push(`/auth/login`);
+    } */
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
         ? "Email already in use with different provider!"
         : "";
 
-        
+
 
     const [showTwoFactor, setShowTwoFactor] = useState(false);
     const [error, setError] = useState<string | undefined>("");
@@ -49,7 +55,7 @@ export const LoginForm = () => {
     const onSubmit = (values: z.infer<typeof LoginSchema>) => {
         setError("");
         setSuccess("");
-        
+
         startTransition(() => {
             console.log('callback:', callbackUrl);
             login(values, callbackUrl)
