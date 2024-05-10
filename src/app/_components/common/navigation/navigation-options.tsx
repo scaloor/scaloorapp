@@ -13,8 +13,8 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/app/_components/ui/navigation-menu"
-import { LoginButton } from "@/app/auth/components/login-button"
-import { LogoutButton } from "@/app/auth/components/logout-button"
+import { LoginButton } from "@/app/auth/_components/login-button"
+import { LogoutButton } from "@/app/auth/_components/logout-button"
 
 export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolean }) {
     return (
@@ -29,7 +29,7 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                 }
                 {!!isAuthenticated &&
                     <>
-                        <Link  href='/profile' legacyBehavior passHref>
+                        <Link  href='/dashboard' legacyBehavior passHref>
                             <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-background-primary")}>
                                 Profile
                             </NavigationMenuLink>

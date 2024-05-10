@@ -17,7 +17,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/app/_components/ui/form";
-import { CardWrapper } from "@/app/auth/components/card-wrapper"
+import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
@@ -26,13 +26,8 @@ import { useRouter } from "next/navigation";
 
 
 export const LoginForm = () => {
-/*     const path = usePathname();
-    const router = useRouter(); */
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl");
-/*     if (path !== "/auth/login") {
-        return router.push(`/auth/login`);
-    } */
     const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
         ? "Email already in use with different provider!"
         : "";
