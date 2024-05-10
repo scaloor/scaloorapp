@@ -3,9 +3,9 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import { RegisterSchema } from "@/server/auth/schemas";
-import { addUser, getUserByEmail } from "@/server/actions/users";
-import { generateVerificationToken } from "@/server/auth/tokens";
+import { RegisterSchema } from "@/server/actions/auth/schemas";
+import { addUser, getUserByEmail } from "@/server/data/users";
+import { generateVerificationToken } from "@/server/actions/auth/tokens";
 import { sendVerificationEmail } from "@/server/mail/auth/verification";
 
 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import MaxWidthWrapper from "../max-width-wrapper"
 import { NavigationOptions } from "./navigation-options"
 import { auth } from "@/auth";
+import { MobileNavigation } from "./mobile-navigation";
 
 
 export default async function NavigationBar() {
@@ -22,7 +23,7 @@ export default async function NavigationBar() {
                         />
                     </Link>
 
-                    {/* <MobileNavbar /> */}
+                    <MobileNavigation />
 
                     <div className="hidden items-center space-x-4 sm:flex">
                         <>

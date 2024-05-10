@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { ResetSchema } from "@/server/auth/schemas";
+import { ResetSchema } from "@/server/actions/auth/schemas";
 import { Input } from "@/app/_components/ui/input";
 import {
     Form,
@@ -19,7 +19,7 @@ import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
-import { resetPassword } from "@/server/auth/reset-password";
+import { resetPassword } from "@/server/actions/auth/reset-password";
 
 export const ResetForm = () => {
     const [error, setError] = useState<string | undefined>("");

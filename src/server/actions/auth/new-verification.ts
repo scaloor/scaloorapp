@@ -1,8 +1,8 @@
 "use server";
 
 import { db } from "@/server/db";
-import { getUserByEmail } from "@/server/actions/users";
-import { getVerificationTokenByToken } from "@/server/auth/verification-token";
+import { getUserByEmail } from "@/server/data/users";
+import { getVerificationTokenByToken } from "@/server/actions/auth/verification-token";
 import { users, verificationTokens } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 

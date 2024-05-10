@@ -5,7 +5,7 @@ import {
     apiAuthPrefix,
     authRoutes,
     publicRoutes,
-} from '@/server/auth/routes'
+} from '@/server/actions/auth/routes'
 import { NextResponse } from "next/server";
 
 const { auth } = NextAuth(authConfig)
@@ -17,6 +17,14 @@ export default auth((req) => {
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
+    const url = req.nextUrl
+    const searchParams = url.searchParams.toString();
+    let hostname = req.headers
+
+    if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_DOMAIN) {
+        return NextResponse.rewrite(new URL('/site', req.url));
+    }
 
     if (isApiAuthRoute) {
         return;

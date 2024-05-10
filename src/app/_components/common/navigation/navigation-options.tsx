@@ -31,7 +31,7 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                     <>
                         <Link  href='/dashboard' legacyBehavior passHref>
                             <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-background-primary")}>
-                                Profile
+                                Dashboard
                             </NavigationMenuLink>
                         </Link>
                         <LogoutButton>

@@ -6,7 +6,7 @@ import { useState, useTransition } from "react";
 import { useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { NewPasswordSchema } from "@/server/auth/schemas";
+import { NewPasswordSchema } from "@/server/actions/auth/schemas";
 import { Input } from "@/app/_components/ui/input";
 import {
   Form,
@@ -20,7 +20,7 @@ import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
-import { newPassword } from "@/server/auth/new-password";
+import { newPassword } from "@/server/actions/auth/new-password";
 import { error } from "console";
 
 export const NewPasswordForm = () => {

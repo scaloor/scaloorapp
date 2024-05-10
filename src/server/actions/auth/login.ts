@@ -5,10 +5,10 @@ import { AuthError } from "next-auth";
 
 import { db } from "@/server/db";
 import { signIn } from "@/auth";
-import { LoginSchema } from "@/server/auth/schemas";
-import { getUserByEmail } from "@/server/actions/users";
-import { DEFAULT_LOGIN_REDIRECT } from "@/server/auth/routes";
-import { generateVerificationToken } from "@/server/auth/tokens";
+import { LoginSchema } from "@/server/actions/auth/schemas";
+import { getUserByEmail } from "@/server/data/users";
+import { DEFAULT_LOGIN_REDIRECT } from "@/server/actions/auth/routes";
+import { generateVerificationToken } from "@/server/actions/auth/tokens";
 import { sendVerificationEmail } from "@/server/mail/auth/verification";
 
 

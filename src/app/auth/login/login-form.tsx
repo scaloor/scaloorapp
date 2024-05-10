@@ -7,7 +7,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 
-import { LoginSchema } from "@/server/auth/schemas";
+import { LoginSchema } from "@/server/actions/auth/schemas";
 import { Input } from "@/app/_components/ui/input";
 import {
     Form,
@@ -21,7 +21,7 @@ import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
-import { login } from "@/server/auth/login";
+import { login } from "@/server/actions/auth/login";
 import { useRouter } from "next/navigation";
 
 

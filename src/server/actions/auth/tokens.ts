@@ -1,5 +1,5 @@
-import { getPasswordResetTokenByEmail } from "@/server/auth/password-reset-token";
-import { getVerificationTokenByEmail } from "@/server/auth/verification-token";
+import { getPasswordResetTokenByEmail } from "@/server/actions/auth/password-reset-token";
+import { getVerificationTokenByEmail } from "@/server/actions/auth/verification-token";
 import { db } from "@/server/db";
 import { passwordResetTokens, verificationTokens } from "@/server/db/schema";
 import { eq } from "drizzle-orm";

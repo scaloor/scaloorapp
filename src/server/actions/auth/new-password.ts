@@ -3,9 +3,9 @@
 import * as z from "zod";
 import bcrypt from "bcryptjs";
 
-import { NewPasswordSchema } from "@/server/auth/schemas";
-import { getPasswordResetTokenByToken } from "@/server/auth/password-reset-token";
-import { getUserByEmail } from "@/server/actions/users";
+import { NewPasswordSchema } from "@/server/actions/auth/schemas";
+import { getPasswordResetTokenByToken } from "@/server/actions/auth/password-reset-token";
+import { getUserByEmail } from "@/server/data/users";
 import { db } from "@/server/db";
 import { passwordResetTokens, users } from "@/server/db/schema";
 import { eq } from "drizzle-orm";

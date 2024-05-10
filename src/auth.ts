@@ -5,8 +5,8 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import bcrypt from "bcryptjs"
 import { db } from "@/server/db"
 import authConfig from "@/auth.config"
-import { LoginSchema } from "@/server/auth/schemas"
-import { getUserByEmail, getUserById } from "@/server/actions/users"
+import { LoginSchema } from "@/server/actions/auth/schemas"
+import { getUserByEmail, getUserById } from "@/server/data/users"
 import { users } from "@/server/db/schema"
 import { eq } from "drizzle-orm"
 

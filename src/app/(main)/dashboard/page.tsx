@@ -1,4 +1,4 @@
-import MaxWidthWrapper from "../_components/common/max-width-wrapper";
+import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
 
 
 export default function Profile() {
