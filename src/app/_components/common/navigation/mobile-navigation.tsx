@@ -18,7 +18,6 @@ import { LoginButton } from "@/app/auth/_components/login-button"
 export const MobileNavigation = () => {
 
     const { data: session, status } = useSession();
-    console.log(session)
 
     const [isOpen, setOpen] = useState<boolean>(false);
 

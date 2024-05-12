@@ -3,12 +3,12 @@ import { AdapterAccount } from "next-auth/adapters";
 
 
 export const users = pgTable("user", {
-    id: text("id").primaryKey().notNull(),
-    name: text("name"),
-    email: text("email").notNull(),
-    emailVerified: timestamp("emailVerified", { mode: "date" }),
-    image: text("image"),
-    password: text("password"),
+	id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+	name: text("name"),
+	email: text("email").notNull(),
+	emailVerified: timestamp("emailVerified", { mode: "date" }),
+	image: text("image"),
+	password: text("password"),
 })
 
 export const accounts = pgTable(

@@ -5,13 +5,14 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import NavigationBar from "@/app/_components/common/navigation/navigation-bar";
 import { ThemeProvider } from "@/app/_components/providers/theme-provider";
+import ModalProvider from "./_components/providers/modal-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Scaloor",
   description: "No code funnel builder",
-  
+
 };
 
 export default function RootLayout({
@@ -29,11 +30,13 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NavigationBar />
-            {children}
+            <ModalProvider>
+              <NavigationBar />
+              {children}
+            </ModalProvider>
           </ThemeProvider>
         </SessionProvider>
       </body>
-    </html>
+    </html >
   );
 }
