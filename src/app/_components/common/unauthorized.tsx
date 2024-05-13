@@ -5,7 +5,7 @@ import Link from "next/link";
 
 
 
-export default function UnauthorizedForm() {
+export default function Unauthorized() {
     return (
         <div className="p-4 text-center flex justify-center items-center align-middle flex-col h-screen w-full">
             <h1 className="text-3xl md:text-6xl">Unauthorized access!</h1> 

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image";
-import MaxWidthWrapper from "../max-width-wrapper"
+import MaxWidthWrapper from "../../../_components/common/max-width-wrapper"
 import { NavigationOptions } from "./navigation-options"
 import { auth } from "@/auth";
 import { MobileNavigation } from "./mobile-navigation";

@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
-import NavigationBar from "@/app/_components/common/navigation/navigation-bar";
 import { ThemeProvider } from "@/app/_components/providers/theme-provider";
 import ModalProvider from "./_components/providers/modal-provider";
 
@@ -31,7 +30,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ModalProvider>
-              <NavigationBar />
+              
               {children}
             </ModalProvider>
           </ThemeProvider>

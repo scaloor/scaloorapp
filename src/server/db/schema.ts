@@ -1,4 +1,4 @@
-import { integer, pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
+import { bigint, integer, pgTable, primaryKey, text, timestamp } from "drizzle-orm/pg-core";
 import { AdapterAccount } from "next-auth/adapters";
 
 
@@ -9,7 +9,25 @@ export const users = pgTable("user", {
 	emailVerified: timestamp("emailVerified", { mode: "date" }),
 	image: text("image"),
 	password: text("password"),
-})
+	businessId: bigint("business_id", { mode: "number" }).references(() => business.id),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+});
+
+export const business = pgTable("business", {
+	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
+	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
+	name: text("name").notNull(),
+	businessLogo: text("business_logo"),
+	businessEmail: text("business_email").notNull(),
+	address: text("address"),
+	city: text("city"),
+	postCode: text("post_code"),
+	state: text("state"),
+	country: text("country"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
+});
 
 export const accounts = pgTable(
 	"account",
@@ -31,7 +49,7 @@ export const accounts = pgTable(
 	(account) => ({
 		compoundKey: primaryKey({ columns: [account.provider, account.providerAccountId] }),
 	})
-)
+);
 
 export const verificationTokens = pgTable(
 	"verificationToken",
@@ -44,7 +62,7 @@ export const verificationTokens = pgTable(
 	(vt) => ({
 		compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
 	})
-)
+);
 
 export const passwordResetTokens = pgTable(
 	"passwordResetToken",
@@ -57,4 +75,4 @@ export const passwordResetTokens = pgTable(
 	(pt) => ({
 		compoundKey: primaryKey({ columns: [pt.identifier, pt.token] }),
 	})
-)
+);

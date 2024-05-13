@@ -1,14 +1,12 @@
 import { auth } from "@/auth";
-import { db } from "@/server/db";
-import { users } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { getUserById } from "@/server/data/users";
 
 export async function getAuthUserDetails() {
     const session = await auth();
     if (!session?.user?.id) {
         console.log("Not Authenticated");
-        return Error("Not Authenticated");
+        return null;
     }
-    const user = db.select().from(users).where(eq(users.id, session?.user?.id)).then(res => res[0]);
+    const user = await getUserById(session?.user?.id);
     return user
 }
