@@ -3,6 +3,9 @@ import { cn } from '@/lib/utils'
 import { Home } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
+import Breadcrumbs from './breadcrumbs'
+
+
 
 type Props = {
     className?: string
@@ -10,6 +13,8 @@ type Props = {
 
 export function NavigationBar({ className }: Props) {
     // There should be notification logic here
+
+
 
 
 
@@ -21,6 +26,7 @@ export function NavigationBar({ className }: Props) {
                     className
                 )}
             >
+                <Breadcrumbs />
                 <div className="flex items-center gap-2 ml-auto">
                     <Link href={'/'}>
                         <Button
