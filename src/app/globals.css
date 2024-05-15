@@ -84,6 +84,22 @@
     @apply bg-background text-foreground;
   }
 
+  h1 {
+    @apply text-7xl
+  }
+
+  h2 {
+    @apply text-6xl
+  }
+
+  h3 {
+    @apply text-5xl
+  }
+
+  h4 {
+    @apply text-4xl
+  }
+
   .bg-gradient {
     background: var(--gradient)
   }

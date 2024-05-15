@@ -4,12 +4,20 @@ import { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
 import { Button } from "@/app/_components/ui/button";
 
+import edjsHTML from "editorjs-html";
+import parse from "html-react-parser";
+import HTMLPreview from "./html-preview";
+
 
 
 
 export default function Editor() {
     const [isMounted, setIsMounted] = useState(false);
+    const [data, setData] = useState<string[] | null>(null);
     const ref = useRef<EditorJS>();
+
+    const edjsParser = edjsHTML();
+
 
     const initializeEditor = async () => {
         const EditorJS = (await import("@editorjs/editorjs")).default;
@@ -53,7 +61,12 @@ export default function Editor() {
         if (!!ref.current) {
             ref.current.save().then((outputData) => {
                 console.log("Article data: ", outputData);
-                alert(JSON.stringify(outputData));
+                /* alert(JSON.stringify(outputData)); */
+
+
+                const html = edjsParser.parse(outputData);
+                console.log('HTML: ', html)
+                setData(html)
             })
         }
     };
@@ -62,10 +75,25 @@ export default function Editor() {
 
     return (
         <div>
-            <div id="editorjs" className="max-w-full min-h-screen text-black" />
-            <Button onClick={save}>
-                Save
-            </Button>
-        </div>
+            {!data &&
+                <>
+                    <Button onClick={save} className="">
+                        Save
+                    </Button>
+                    <div id="editorjs" className="max-w-full min-h-screen text-black" />
+                </>
+            }
+            {!!data &&
+                <div className="text-black">
+                    <Button onClick={() => {
+                        setData(null)
+                        setIsMounted(true)
+                    }} className="">
+                        Edit
+                    </Button>
+                    <HTMLPreview html={data} />
+                </div>
+            }
+        </div >
     )
 }

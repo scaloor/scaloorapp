@@ -1,5 +1,6 @@
 import { Sidebar } from "@/app/(main)/_components/navigation/sidebar"
 import { NavigationBar } from "@/app/(main)/_components/navigation/navigation-bar"
+import { BlurPage } from "../_components/blur-page"
 
 
 interface SettingsLayoutProps {
@@ -13,7 +14,9 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
             <div className="md:pl-[300px]">
                 <NavigationBar />
                 <div className="relative">
-                    {children}
+                    <BlurPage>
+                        {children}
+                    </BlurPage>
                 </div>
             </div>
         </div>
