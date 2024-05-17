@@ -47,10 +47,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
     return (
         <section className="flex h-screen">
-            <ResizableSidebar
-                children
-                business={business}
-            />
+            <ResizableSidebar business={business}>
+                    {children}
+                </ResizableSidebar>
         </section >
     );
 }

@@ -1,12 +1,16 @@
 'use client'
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/app/_components/ui/resizable"
-import { TooltipProvider } from "@/app/_components/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/_components/ui/tooltip"
 import { cn } from "@/lib/utils";
 import Nav from "./nav";
-import { Filter, LayoutDashboard, Settings } from "lucide-react";
+import { Compass, Filter, LayoutDashboard, Settings } from "lucide-react";
 import { useState } from "react";
 import { Business } from "@/server/db/types";
+import { AspectRatio } from "@/app/_components/ui/aspect-ratio";
+import Image from "next/image";
+import { Separator } from "@/app/_components/ui/separator";
+import Link from "next/link";
 
 interface ResizableSidebarProps {
     children: React.ReactNode
@@ -18,7 +22,8 @@ export function ResizableSidebar({ children, business }: ResizableSidebarProps) 
     const defaultLayout = [265, 440, 655]
     const navCollapsedSize = 4;
 
-    /* console.log(business) */
+    console.log(business)
+    let sidebarLogo = business?.businessLogo || "/assets/scaloor_cropped.jpg";
 
     return (
         <TooltipProvider delayDuration={0}>
@@ -53,6 +58,54 @@ export function ResizableSidebar({ children, business }: ResizableSidebarProps) 
                         isCollapsed &&
                         "min-w-[50px] transition-all duration-300 ease-in-out"
                     )}>
+                    {!isCollapsed &&
+                        <div className="pt-6 ml-4">
+                            <AspectRatio ratio={16 / 5}
+                                className="pt-6">
+                                <Image
+                                    src={sidebarLogo}
+                                    alt={'Sidebar Logo'}
+                                    fill
+                                    className='rounded-md object-contain' />
+                            </AspectRatio>
+                            <div className='w-full my-4 flex items-center text-left gap-2'>
+                                <Compass />
+                                <div className='flex flex-col'>
+                                    {business.name}
+                                    <span className='text-muted-foreground'>
+                                        {business.address}
+                                    </span>
+                                </div>
+                            </div>
+                            <p className='text-muted-foreground text-xs mb-2'>
+                                Account Options
+                            </p>
+                            <Separator className='mb-4' />
+                        </div>
+                    }
+
+                    {!!isCollapsed &&
+                        <div className="py-6">
+                            <Tooltip delayDuration={0}>
+                                <TooltipTrigger asChild>
+                                    <Link href='/'>
+                                        <AspectRatio ratio={16 / 8}
+                                            className="pt-6">
+                                            <Image
+                                                src={sidebarLogo}
+                                                alt={'Sidebar Logo'}
+                                                fill
+                                                className='rounded-md object-contain' />
+                                        </AspectRatio>
+                                    </Link>
+                                </TooltipTrigger>
+                                <TooltipContent side="right" className="flex items-center gap-4">
+                                    {business.name}
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
+                    }
+
                     <Nav
                         isCollapsed={isCollapsed}
                         links={[
