@@ -7,6 +7,8 @@ import { Button } from "@/app/_components/ui/button";
 import edjsHTML from "editorjs-html";
 import parse from "html-react-parser";
 import HTMLPreview from "./html-preview";
+import { testData } from "@/server/actions/editor/index";
+import { OutputData } from "@editorjs/editorjs";
 
 
 
@@ -28,7 +30,10 @@ export default function Editor() {
             const editor = new EditorJS({
                 holder: 'editorjs',
                 tools: {
-                    header: Header,
+                    header: {
+                        class: Header,
+                        inlineToolbar: true
+                      },
                 },
             });
             ref.current = editor;
@@ -59,9 +64,11 @@ export default function Editor() {
 
     const save = () => {
         if (!!ref.current) {
-            ref.current.save().then((outputData) => {
+            ref.current.save().then((outputData: OutputData) => {
                 console.log("Article data: ", outputData);
+                console.log("Type of Article data: ", typeof outputData);
                 /* alert(JSON.stringify(outputData)); */
+                testData(outputData);
 
 
                 const html = edjsParser.parse(outputData);
@@ -75,7 +82,11 @@ export default function Editor() {
 
     return (
         <div>
-            {!data &&
+            <Button onClick={save} className="">
+                Save
+            </Button>
+            <div id="editorjs" className="max-w-full min-h-screen text-black" />
+            {/* {!data &&
                 <>
                     <Button onClick={save} className="">
                         Save
@@ -93,7 +104,7 @@ export default function Editor() {
                     </Button>
                     <HTMLPreview html={data} />
                 </div>
-            }
+            } */}
         </div >
     )
 }
