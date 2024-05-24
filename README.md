@@ -1,9 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Scaloor
 
-
-## AuthJS Boilerplate
-
-This repo is an open source NextJS boilerplate with authentication build in via AuthJS. Complete with email verification and password reset via Amazon SES. Configured with Drizzle ORM for postgres.
+Scaloor is a unique funnel builder based on the ideaology that building funnels should be a simple as possible.
 
 ## Tech Stack
 
@@ -12,10 +9,21 @@ This repo is an open source NextJS boilerplate with authentication build in via 
 - [Drizzle ORM](https://orm.drizzle.team/) - Typesafe database ORM. Configured in this project for postgres.
 - [Amazon SES](https://aws.amazon.com/ses/) - Email server for developers used for password reset and account verification.
 - [Shadcn/ui](https://ui.shadcn.com/) - Customizable react components.
+- [EditorJS](https://editorjs.io/) - Open source block based text editor
+
+## Roadmap
+- Funnel Creator
+    - [ ] Text based funnel page editor
+    - [ ] Pre-built custom made funnel page components (e.g. checkout)
+    - [ ] GUI for creating funnel pages
+    - [ ] Funnel page templates
+
+- Funnel Analytics
 
 
-## Deploy on Vercel
+## Documentation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Internal documentation coming soon.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
