@@ -84,54 +84,57 @@ export function ResizableSidebar({ children, business }: ResizableSidebarProps) 
                         </div>
                     }
 
-                    {!!isCollapsed &&
-                        <div className="py-6">
-                            <Tooltip delayDuration={0}>
-                                <TooltipTrigger asChild>
-                                    <Link href='/'>
-                                        <AspectRatio ratio={16 / 8}
-                                            className="pt-6">
-                                            <Image
-                                                src={sidebarLogo}
-                                                alt={'Sidebar Logo'}
-                                                fill
-                                                className='rounded-md object-contain' />
-                                        </AspectRatio>
-                                    </Link>
-                                </TooltipTrigger>
-                                <TooltipContent side="right" className="flex items-center gap-4">
-                                    {business.name}
-                                </TooltipContent>
-                            </Tooltip>
+                    <div className="grid grid-rows-3 h-screen">
+                        {!!isCollapsed &&
+                            <div className="py-6 justify-start">
+                                <Tooltip delayDuration={0}>
+                                    <TooltipTrigger asChild>
+                                        <Link href='/'>
+                                            <AspectRatio ratio={16 / 8}
+                                                className="pt-6">
+                                                <Image
+                                                    src={sidebarLogo}
+                                                    alt={'Sidebar Logo'}
+                                                    fill
+                                                    className='rounded-md object-contain' />
+                                            </AspectRatio>
+                                        </Link>
+                                    </TooltipTrigger>
+                                    <TooltipContent side="right" className="flex items-center gap-4">
+                                        {business.name}
+                                    </TooltipContent>
+                                </Tooltip>
+                            </div>
+                        }
+                        <div className={cn("justify-center items-center", !!isCollapsed && "flex")}>
+                            <Nav
+                                isCollapsed={isCollapsed}
+                                links={[
+                                    {
+                                        title: "Dashboard",
+                                        href: "/account",
+                                        label: "",
+                                        icon: LayoutDashboard,
+                                        variant: "default",
+                                    },
+                                    {
+                                        title: "Funnels",
+                                        href: "/account/funnel",
+                                        label: "",
+                                        icon: Filter,
+                                        variant: "ghost",
+                                    },
+                                    {
+                                        title: "Settings",
+                                        href: "/account/settings",
+                                        label: "",
+                                        icon: Settings,
+                                        variant: "ghost",
+                                    },
+                                ]}
+                            />
                         </div>
-                    }
-
-                    <Nav
-                        isCollapsed={isCollapsed}
-                        links={[
-                            {
-                                title: "Dashboard",
-                                href: "/account",
-                                label: "",
-                                icon: LayoutDashboard,
-                                variant: "default",
-                            },
-                            {
-                                title: "Funnels",
-                                href: "/account/funnel",
-                                label: "",
-                                icon: Filter,
-                                variant: "ghost",
-                            },
-                            {
-                                title: "Settings",
-                                href: "/account/settings",
-                                label: "",
-                                icon: Settings,
-                                variant: "ghost",
-                            },
-                        ]}
-                    />
+                    </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel>
@@ -139,5 +142,6 @@ export function ResizableSidebar({ children, business }: ResizableSidebarProps) 
                 </ResizablePanel>
             </ResizablePanelGroup>
         </TooltipProvider>
+
     )
 }

@@ -4,7 +4,8 @@ import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/app/_components/providers/theme-provider";
-import ModalProvider from "./_components/providers/modal-provider";
+import ModalProvider from "@/app/_components/providers/modal-provider";
+import { Toaster } from "@/app/_components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,8 +31,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ModalProvider>
-              
+
               {children}
+              <Toaster />
             </ModalProvider>
           </ThemeProvider>
         </SessionProvider>

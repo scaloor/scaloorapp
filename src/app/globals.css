@@ -104,3 +104,37 @@
     background: var(--gradient)
   }
 }
+
+@layer utilities {
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+  }
+
+  .editorjs-container .ce-toolbar__plus {
+    @apply absolute left-2 top-2;
+    /* Use Tailwind utilities for positioning */
+    right: auto;
+    /* Override the default right position */
+  }
+
+  .editorjs-container .ce-toolbar__plus .ce-toolbar__plus-button {
+    @apply ml-0 mr-auto;
+    /* Use Tailwind utilities for margin */
+  }
+
+  /* Optional: Ensure the toolbar appears correctly */
+  .editorjs-container .ce-toolbar {
+    @apply flex justify-start;
+    /* Use Tailwind utilities for flex layout */
+  }
+}
