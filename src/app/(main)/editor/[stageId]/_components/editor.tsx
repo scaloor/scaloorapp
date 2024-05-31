@@ -6,7 +6,7 @@ import { Button } from "@/app/_components/ui/button";
 
 import { testData } from "@/server/actions/editor/index";
 import { OutputData } from "@editorjs/editorjs";
-import ImageBlock from "../_tools/image-block/tool";
+import ImageBlock from "../image-block/tool";
 import StylesSidebar from "./navigation/styles-sidebar";
 import StructureSidebar from "./navigation/structure-sidebar";
 
