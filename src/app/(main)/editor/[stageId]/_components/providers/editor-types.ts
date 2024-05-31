@@ -28,7 +28,7 @@ export type Editor = {
     selectedBlock: BlockComponent | null;
     device: DeviceTypes;
     previewMode: boolean;
-    stageId: number | null;
+    stageId: number;
 }
 
 /**

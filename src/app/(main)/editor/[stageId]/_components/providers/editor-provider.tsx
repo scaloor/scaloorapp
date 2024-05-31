@@ -11,7 +11,7 @@ const initialEditorState: EditorState['editor'] = {
     selectedBlock: null,
     device: 'Desktop',
     previewMode: false,
-    stageId: null, // This proabably shouldn't be nullable.
+    stageId: 0,
 };
 
 const initialHistoryState: HistoryState = {
@@ -128,6 +128,10 @@ const editorReducer = (
             return changedDeviceState;
 
         case "TOGGLE_PREVIEW_MODE":
+
+            const previewModeState = !!state.editor.previewMode
+            console.log('previewModeState:', previewModeState)
+
             const togglePreviewModeState = {
                 ...state,
                 editor: {
@@ -142,7 +146,9 @@ const editorReducer = (
                 ...state,
                 editor: {
                     ...state.editor,
-                    previewMode: !state.editor.liveMode,
+                    previewMode: action.payload
+                        ? action.payload.value
+                        : !state.editor.liveMode,
                 },
             }
             return toggleLiveModeState;

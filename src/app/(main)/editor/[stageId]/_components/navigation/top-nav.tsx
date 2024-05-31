@@ -6,40 +6,94 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/
 import { cn } from "@/lib/utils";
 import { ArrowLeftCircle, EyeIcon, EyeOff, Laptop, Redo2, Smartphone, Tablet, Undo2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { FocusEventHandler, useEffect, useState } from "react";
 import ExitPreviewButton from "../exit-preview-button";
+import { useEditor } from "../providers/editor-provider";
+import { Stage } from "@/server/db/types";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { Input } from "@/app/_components/ui/input";
 
-type Props = {
+type EditorNavigationProps = {
     // Funnel ID goes here
     // Account ID maybe goes here
+    stageDetails: Stage
 }
 
-export default function EditorNavigation({ }: Props) {
-    const [isPreviewMode, setIsPreviewMode] = useState(false);
-    /* const router = useRouter(); */
+export default function EditorNavigation({ stageDetails }: EditorNavigationProps) {
+    const { state, dispatch } = useEditor();
+    const router = useRouter();
+
+    useEffect(() => {
+        dispatch({
+            type: 'SET_STAGE_ID',
+            payload: { stageId: stageDetails.id },
+        })
+    }, [stageDetails])
+
+    const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
+        event
+    ) => {
+        if (event.target.value === stageDetails.name) return
+        if (event.target.value) {
+            /* await upsertFunnelPage(
+                subaccountId,
+                {
+                    id: funnelPageDetails.id,
+                    name: event.target.value,
+                    order: funnelPageDetails.order,
+                },
+                funnelId
+            ) */
+
+            toast('Success', {
+                description: 'Saved Funnel Page title',
+            })
+            router.refresh()
+        } else {
+            toast('Oppse!', {
+                description: 'You need to have a title!',
+            })
+            event.target.value = stageDetails.name
+        }
+    }
+
+    const handlePreviewClick = () => {
+        console.log('Preview clicked:', state.editor.previewMode)
+        dispatch({ type: 'TOGGLE_PREVIEW_MODE' })
+        dispatch({ type: 'TOGGLE_LIVE_MODE' })
+    }
 
 
     return (
         <TooltipProvider>
             <nav className={cn('border-b-[1px] grid grid-cols-3 transition-all bg-background overflow-hidden h-[50px]',
-                { '!h-0 !p-0 !overflow-hidden': isPreviewMode }
+                { '!h-0 !p-0 !overflow-hidden': state.editor.previewMode }
             )}>
-                {!!isPreviewMode && (
+                {!!state.editor.previewMode && (
                     <Button
                         variant={'ghost'}
                         size={'icon'}
                         className="w-6 h-6 bg-slate-600 p-[2px] fixed top-0 left-0 z-[100]"
-                        onClick={() => { setIsPreviewMode(!isPreviewMode) }}
+                        onClick={handlePreviewClick}
                     >
                         <EyeOff />
-                        <ExitPreviewButton />
                     </Button>
                 )}
                 <aside className="flex justify-start items-center gap-4 max-w-[260px] w-[300px]">
                     <Link href={'/account/funnel'} className="">
                         <ArrowLeftCircle className="ml-4" />
                     </Link>
-                    {/* Funnel Name editor here */}
+                    <div className="flex flex-col w-full ">
+                        <Input
+                            defaultValue={stageDetails.name}
+                            className="border-none h-5 m-0 p-0 text-lg"
+                            onBlur={handleOnBlurTitleChange}
+                        />
+                        <span className="text-sm text-muted-foreground">
+                            Path: /{stageDetails.pathName}
+                        </span>
+                    </div>
                 </aside>
                 <aside className="flex justify-center">
                     <Tabs
@@ -96,7 +150,7 @@ export default function EditorNavigation({ }: Props) {
                                 variant={'ghost'}
                                 size={'icon'}
                                 className="hover:bg-slate-800"
-                                onClick={() => { setIsPreviewMode(!isPreviewMode) }}
+                                onClick={handlePreviewClick}
                             >
                                 <EyeIcon />
                             </Button>

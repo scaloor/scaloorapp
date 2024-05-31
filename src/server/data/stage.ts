@@ -74,3 +74,14 @@ export async function deleteStage(stage_id: number) {
         return console.log('Unable to delete stage');
     }
 }
+
+export async function getStagesByFunnelId(funnel_id: number) {
+    try {
+        const stages = await db.select().from(stage).where(
+            eq(stage.funnelId, funnel_id)
+        ).then(res => res);
+        return stages
+    } catch {
+        return console.log('Unable to get stages by funnel id');
+    }
+}

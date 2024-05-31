@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 // SideToolbar.tsx
 import React from 'react';
 import StylesTabs from './styles-tabs';
+import { useEditor } from '../providers/editor-provider';
 
 interface SideToolbarProps {
     tools: Array<JSX.Element>;
@@ -12,6 +13,7 @@ interface SideToolbarProps {
 }
 
 const StylesSidebar: React.FC<SideToolbarProps> = ({ tools, visible }) => {
+    const { state, dispatch } = useEditor();
     /* console.log(visible) */
     return (
         <>
@@ -28,7 +30,7 @@ const StylesSidebar: React.FC<SideToolbarProps> = ({ tools, visible }) => {
                         side="right"
                         className={cn(
                             'mt-[50px] w-[50px] z-[80] shadow-none  p-0 focus:border-none transition-all overflow-hidden',
-                            /* { hidden: state.editor.previewMode } */
+                            { hidden: state.editor.previewMode }
                         )}
                     >
                         <StylesTabs />
@@ -38,7 +40,7 @@ const StylesSidebar: React.FC<SideToolbarProps> = ({ tools, visible }) => {
                         side="right"
                         className={cn(
                             'mt-[50px] w-72 z-[40] shadow-none p-0 mr-[50px] bg-background h-full transition-all overflow-hidden ',
-                            /* { hidden: state.editor.previewMode } */
+                            { hidden: state.editor.previewMode }
                         )}
                     >
                         <div className="grid gap-4 h-full pb-36 overflow-scroll no-scrollbar">
@@ -59,9 +61,6 @@ const StylesSidebar: React.FC<SideToolbarProps> = ({ tools, visible }) => {
                                     ))}
                                 </div>
 
-                            </TabsContent>
-                            <TabsContent value="Media">
-                                {/* <MediaBucketTab subaccountId={subaccountId} /> */}
                             </TabsContent>
                             <TabsContent value="Components">
                                 <SheetHeader className="text-left p-6 ">
