@@ -137,4 +137,8 @@
     @apply flex justify-start;
     /* Use Tailwind utilities for flex layout */
   }
+
+  .use-automation-zoom-in {
+    animation: automation-zoom-in 0.5s;
+  }
 }

@@ -129,9 +129,6 @@ const editorReducer = (
 
         case "TOGGLE_PREVIEW_MODE":
 
-            const previewModeState = !!state.editor.previewMode
-            console.log('previewModeState:', previewModeState)
-
             const togglePreviewModeState = {
                 ...state,
                 editor: {

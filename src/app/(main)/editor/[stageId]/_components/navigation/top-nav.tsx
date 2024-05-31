@@ -13,6 +13,9 @@ import { Stage } from "@/server/db/types";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/app/_components/ui/input";
+import { updateStage } from "@/server/data/stage";
+import { Switch } from "@/app/_components/ui/switch";
+import { DeviceTypes } from "../providers/editor-types";
 
 type EditorNavigationProps = {
     // Funnel ID goes here
@@ -20,9 +23,28 @@ type EditorNavigationProps = {
     stageDetails: Stage
 }
 
+const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: true,
+};
+
 export default function EditorNavigation({ stageDetails }: EditorNavigationProps) {
     const { state, dispatch } = useEditor();
     const router = useRouter();
+
+    const updatedAt = stageDetails.updatedAt
+    let formattedUpdatedAt = ''
+    if (!!updatedAt) {
+        formattedUpdatedAt = new Date(updatedAt).toLocaleString('en-US', options)
+
+    }
+
+
 
     useEffect(() => {
         dispatch({
@@ -36,15 +58,11 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
     ) => {
         if (event.target.value === stageDetails.name) return
         if (event.target.value) {
-            /* await upsertFunnelPage(
-                subaccountId,
-                {
-                    id: funnelPageDetails.id,
-                    name: event.target.value,
-                    order: funnelPageDetails.order,
-                },
-                funnelId
-            ) */
+            const newStageDetails = {
+                ...stageDetails,
+                name: event.target.value,
+            }
+            await updateStage(newStageDetails)
 
             toast('Success', {
                 description: 'Saved Funnel Page title',
@@ -59,9 +77,18 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
     }
 
     const handlePreviewClick = () => {
-        console.log('Preview clicked:', state.editor.previewMode)
         dispatch({ type: 'TOGGLE_PREVIEW_MODE' })
-        dispatch({ type: 'TOGGLE_LIVE_MODE' })
+        /* dispatch({ type: 'TOGGLE_LIVE_MODE' }) */ // This causes the editor to not update
+    }
+
+    const handleOnSave = async () => { }
+
+    const handleUndo = () => {
+        dispatch({ type: 'UNDO' })
+    }
+
+    const handleRedo = () => {
+        dispatch({ type: 'REDO' })
     }
 
 
@@ -70,16 +97,6 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
             <nav className={cn('border-b-[1px] grid grid-cols-3 transition-all bg-background overflow-hidden h-[50px]',
                 { '!h-0 !p-0 !overflow-hidden': state.editor.previewMode }
             )}>
-                {!!state.editor.previewMode && (
-                    <Button
-                        variant={'ghost'}
-                        size={'icon'}
-                        className="w-6 h-6 bg-slate-600 p-[2px] fixed top-0 left-0 z-[100]"
-                        onClick={handlePreviewClick}
-                    >
-                        <EyeOff />
-                    </Button>
-                )}
                 <aside className="flex justify-start items-center gap-4 max-w-[260px] w-[300px]">
                     <Link href={'/account/funnel'} className="">
                         <ArrowLeftCircle className="ml-4" />
@@ -99,6 +116,13 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                     <Tabs
                         defaultValue="Desktop"
                         className="flex w-fit justify-center"
+                        value={state.editor.device}
+                        onValueChange={(value) => {
+                            dispatch({
+                                type: 'CHANGE_DEVICE',
+                                payload: { device: value as DeviceTypes },
+                            })
+                        }}
                     >
                         <TabsList className="grid w-full grid-cols-3 bg-transparent h-fit">
                             <Tooltip>
@@ -160,6 +184,9 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                         </TooltipContent>
                     </Tooltip>
                     <Button
+                        disabled={!(state.history.currentIndex > 0)}
+                        onClick={handleUndo}
+
                         variant={'ghost'}
                         size={'icon'}
                         className="hover:bg-slate-800"
@@ -167,14 +194,32 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                         <Undo2 />
                     </Button>
                     <Button
+                        disabled={
+                            !(state.history.currentIndex < state.history.history.length - 1)
+                        }
+                        onClick={handleRedo}
                         variant={'ghost'}
                         size={'icon'}
                         className="hover:bg-slate-800 mr-4"
                     >
                         <Redo2 />
                     </Button>
+                    <Button onClick={handleOnSave}>Save</Button>
+                    <div className="flex flex-col item-center mr-4">
+                        <span className="text-muted-foreground text-sm">
+                            Last updated {formattedUpdatedAt}
+                        </span>
+                    </div>
                 </aside>
             </nav>
+            {!!state.editor.previewMode && (
+                <Button
+                    variant={'outline'}
+                    className='fixed bottom-6 left-1/2 transform -translate-x-1/2 rounded-3xl bg-transparent border-primary text-primary'
+                    onClick={handlePreviewClick}>
+                    Exit Preview mode
+                </Button>
+            )}
         </TooltipProvider>
     )
 }

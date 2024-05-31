@@ -2,6 +2,7 @@ import { getStageById } from "@/server/data/stage"
 import Editor from "./_components/editor"
 import EditorNavigation from "./_components/navigation/top-nav"
 import EditorProvider from "./_components/providers/editor-provider"
+import ExitPreviewButton from "./_components/exit-preview-button"
 
 
 type FunnelEditorProps = {

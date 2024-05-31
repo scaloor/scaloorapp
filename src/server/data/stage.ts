@@ -27,6 +27,7 @@ export async function addStage(stageDetails: Stage) {
  * @returns 
  */
 export async function updateStage(stageDetails: Stage) {
+    console.log(Date())
     try {
         await db
             .update(stage)
@@ -36,6 +37,7 @@ export async function updateStage(stageDetails: Stage) {
                 content: stageDetails.content,
                 order: stageDetails.order,
                 previewImage: stageDetails.previewImage,
+                updatedAt:  new Date().toISOString(),
             })
             .where(eq(stage.id, stageDetails.id));
 

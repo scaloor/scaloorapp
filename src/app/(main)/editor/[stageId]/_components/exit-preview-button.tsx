@@ -6,12 +6,8 @@ type Props = {}
 
 export default function ExitPreviewButton() {
     return (
-        <div className='relative h-screen'>
-            <div className='absolute bottom-4 left-1/2 transform '>
-                <Button className='mt-[1/10]'>
-                    Exit Preview mode
-                </Button>
-            </div>
-        </div>
+        <Button variant={'outline'} className='fixed bottom-6 left-1/2 transform -translate-x-1/2 rounded-3xl bg-transparent border-primary text-primary'>
+            Exit Preview mode
+        </Button>
     )
 }

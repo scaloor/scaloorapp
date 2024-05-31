@@ -3,17 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
 import { Button } from "@/app/_components/ui/button";
-
 import { testData } from "@/server/actions/editor/index";
 import { OutputData } from "@editorjs/editorjs";
 import ImageBlock from "../_tools/image-block/tool";
-import StylesSidebar from "./navigation/styles-sidebar";
-import StructureSidebar from "./navigation/structure-sidebar";
+import StylesSidebar from "./navigation/style/styles-sidebar";
+import StructureSidebar from "./navigation/structure/structure-sidebar";
+import { useEditor } from "./providers/editor-provider";
+import { cn } from "@/lib/utils";
 
 
 
 
 export default function Editor() {
+    const { state, dispatch } = useEditor();
     const [isMounted, setIsMounted] = useState(false);
     const [data, setData] = useState<string[] | null>(null);
     const ref = useRef<EditorJS>();
@@ -106,10 +108,27 @@ export default function Editor() {
         }
     };
 
+    const handleClick = () => {
+        dispatch({
+            type: 'CHANGE_SELECTED_BLOCK',
+            payload: {},
+        })
+    }
+
 
 
     return (
-        <div className="">
+        <div className={cn(
+            'border',
+            {
+                '!p-0 !mr-0':
+                    state.editor.previewMode === true || state.editor.liveMode === true,
+                '!w-[850px]': state.editor.device === 'Tablet',
+                '!w-[420px]': state.editor.device === 'Mobile',
+                'w-full': state.editor.device === 'Desktop',
+            }
+        )}
+            onClick={handleClick}>
             <StructureSidebar />
             <StylesSidebar
                 tools={[
@@ -119,12 +138,12 @@ export default function Editor() {
                 ]}
                 visible={toolsVisible}
             />
-            <div className="mt-10">
+            <div className="">
                 <div id="editorjs" className="text-black"></div>
-                <Button onClick={save} className="">
-                    Save
-                </Button>
             </div>
+            <Button onClick={save} className="">
+                Save
+            </Button>
         </div>
     )
 }

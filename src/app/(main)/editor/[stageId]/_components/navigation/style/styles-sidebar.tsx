@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 // SideToolbar.tsx
 import React from 'react';
 import StylesTabs from './styles-tabs';
-import { useEditor } from '../providers/editor-provider';
+import { useEditor } from '../../providers/editor-provider';
 
 interface SideToolbarProps {
     tools: Array<JSX.Element>;

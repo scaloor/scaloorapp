@@ -3,7 +3,7 @@ import { Tabs, TabsContent } from '@/app/_components/ui/tabs';
 import { cn } from '@/lib/utils';
 import React from 'react'
 import StructureTabs from './structure-tabs';
-import { useEditor } from '../providers/editor-provider';
+import { useEditor } from '../../providers/editor-provider';
 
 type Props = {
     // This should have funnel ID to get the stages in the current funnel
