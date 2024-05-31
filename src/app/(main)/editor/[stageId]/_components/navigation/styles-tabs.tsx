@@ -1,6 +1,6 @@
 import React from 'react'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/app/_components/ui/tabs'
-import { Database, Plus, SettingsIcon, SquareStackIcon } from 'lucide-react'
+import { TabsList, TabsTrigger } from '@/app/_components/ui/tabs'
+import { Plus, SettingsIcon } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip'
 
 type Props = {}

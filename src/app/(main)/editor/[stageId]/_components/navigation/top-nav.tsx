@@ -6,7 +6,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/
 import { cn } from "@/lib/utils";
 import { ArrowLeftCircle, EyeIcon, EyeOff, Laptop, Redo2, Smartphone, Tablet, Undo2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 import ExitPreviewButton from "../exit-preview-button";
 

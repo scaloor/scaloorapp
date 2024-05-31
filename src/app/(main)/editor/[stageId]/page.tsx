@@ -1,21 +1,25 @@
-import { BlurPage } from "@/app/(main)/_components/blur-page"
+import { getStageById } from "@/server/data/stage"
 import Editor from "./_components/editor"
 import EditorNavigation from "./_components/navigation/top-nav"
-import Toolbar from "./_components/navigation/styles-sidebar"
 import EditorProvider from "./_components/providers/editor-provider"
-import { Stage } from "@/server/db/types"
-import { useReducer } from "react"
-
 
 
 type FunnelEditorProps = {
-    businessId: number
-    funnelId: number
-    stageId: number
+    params: {
+        businessId: number
+        funnelId: number
+        stageId: number
+    }
 }
 
-export default function FunnelEditor({ businessId, funnelId, stageId }: FunnelEditorProps) {
-    const stage: Stage = {} // Get Stage by ID
+export default async function FunnelEditor({ params }: FunnelEditorProps) {
+    const { businessId, funnelId, stageId } = params;
+    const stage = await getStageById(stageId);
+
+
+    if (!stage) {
+        return <div>Stage not found</div>
+    }
 
     return (
         <EditorProvider

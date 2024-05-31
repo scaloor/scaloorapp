@@ -30,6 +30,11 @@ export async function addUser({ name, email, hashedPassword }:
 
 }
 
+/**
+ * Update user
+ * @param param0 
+ * @returns 
+ */
 export async function updateUser(
     { user_id, name, email }:
         { user_id: string, name: string, email: string }
