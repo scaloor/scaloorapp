@@ -115,6 +115,7 @@ const editorReducer = (
                     currentIndex: state.history.currentIndex + 1,
                 },
             };
+            console.log('selectedState:', action.payload.blockDetails)
             return selectedState;
 
         case "CHANGE_DEVICE":

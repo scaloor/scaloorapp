@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
 import { Button } from "@/app/_components/ui/button";
-import { testData } from "@/server/actions/editor/index";
+import { saveStageContent, testData } from "@/server/actions/editor/index";
 import { OutputData } from "@editorjs/editorjs";
 import ImageBlock from "../_tools/image-block/tool";
 import StylesSidebar from "./navigation/style/styles-sidebar";
@@ -21,7 +21,7 @@ export default function Editor() {
     const ref = useRef<EditorJS>();
     const [toolsVisible, setToolsVisible] = useState(false);
 
-
+    // Initialize the editor
     const initializeEditor = async () => {
         const EditorJS = (await import("@editorjs/editorjs")).default;
         const Header = (await import("@editorjs/header")).default;
@@ -49,17 +49,20 @@ export default function Editor() {
                         editorElement.addEventListener('keyup', handleTextSelection);
                     }
                 },
+                onChange: handleChange,
             });
             ref.current = editor;
         }
     }
 
+    // Use effect to check if the editor is mounted
     useEffect(() => {
         if (typeof window != 'undefined') {
             setIsMounted(true);
         }
     }, [])
 
+    // Use effect to invoke the initializeEditor function when the component is mounted
     useEffect(() => {
         const init = async () => {
             await initializeEditor();
@@ -76,7 +79,25 @@ export default function Editor() {
         }
     }, [isMounted]);
 
-    const save = () => {
+    // Handle update block
+    const handleChange = async () => {
+        if (ref.current) {
+            try {
+                const savedData = await ref.current.save();
+                console.log('Saved data: ', savedData);
+                if (savedData.blocks.length > 0) {
+                    console.log('Blocks: ', savedData.blocks);
+                    dispatch({ type: "UPDATE_BLOCK", payload: { blockDetails: savedData.blocks[0] } });
+                }
+            } catch (error) {
+                console.error('Saving failed: ', error);
+            }
+        }
+    };
+
+    // Save the editor data
+    const save = async () => {
+        // Access the editor instance directly
         if (!!ref.current) {
             ref.current.save().then((outputData: OutputData) => {
                 console.log("Article data: ", outputData);
@@ -84,9 +105,17 @@ export default function Editor() {
                 /* alert(JSON.stringify(outputData)); */
                 testData(outputData);
             })
+            const savedData = await ref.current.save();
+            console.log('Save SavedData:', savedData.blocks);
+            saveStageContent(state.editor.stageId, savedData.blocks);
         }
+        // Save from the editorContext state
+        console.log('Editor state:', state.editor);
+        
+
     };
 
+    // Handle text selection
     const handleTextSelection = () => {
         const selection = window.getSelection();
         if (selection && selection.toString()) {
@@ -96,6 +125,7 @@ export default function Editor() {
         }
     };
 
+    // Show tools in toolbar
     const applyTool = (command: string) => {
         if (ref.current) {
             const selection = window.getSelection();
@@ -108,12 +138,14 @@ export default function Editor() {
         }
     };
 
-    const handleClick = () => {
+    // This function requires onSelectionChange to be implemented in the editor
+    /* const handleClick = () => {
         dispatch({
             type: 'CHANGE_SELECTED_BLOCK',
             payload: {},
         })
-    }
+        console.log('selected block:', state.editor.selectedBlock)
+    } */
 
 
 
@@ -128,7 +160,7 @@ export default function Editor() {
                 'w-full': state.editor.device === 'Desktop',
             }
         )}
-            onClick={handleClick}>
+            /* onClick={handleClick} */>
             <StructureSidebar />
             <StylesSidebar
                 tools={[

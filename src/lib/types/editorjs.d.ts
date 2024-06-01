@@ -30,7 +30,7 @@ declare module '@editorjs/editorjs' {
     }
   
     export interface Block {
-      id?: string;
+      id: string;
       type: string;
       data: BlockData;
     }
