@@ -84,10 +84,8 @@ export default function Editor() {
         if (ref.current) {
             try {
                 const savedData = await ref.current.save();
-                console.log('Saved data: ', savedData);
                 if (savedData.blocks.length > 0) {
-                    console.log('Blocks: ', savedData.blocks);
-                    dispatch({ type: "UPDATE_BLOCK", payload: { blockDetails: savedData.blocks[0] } });
+                    dispatch({ type: "UPDATE_BLOCK", payload: { blockDetails: savedData.blocks } });
                 }
             } catch (error) {
                 console.error('Saving failed: ', error);
@@ -111,7 +109,7 @@ export default function Editor() {
         }
         // Save from the editorContext state
         console.log('Editor state:', state.editor);
-        
+
 
     };
 

@@ -11,7 +11,7 @@ export type EditorAction =
     | {
         type: 'UPDATE_BLOCK'
         payload: {
-            blockDetails: BlockComponent
+            blockDetails: BlockComponent[]
         }
     }
     | {
@@ -58,7 +58,7 @@ export type EditorAction =
     }
 
 /**
- * 
+ * This function probably isn't required as editorJS handles adding and moving blocks
  * @param editorArray 
  * @param action 
  * @returns 
@@ -75,6 +75,12 @@ export const addBlock = (
 
 }
 
+/**
+ * 
+ * @param editorArray 
+ * @param action 
+ * @returns 
+ */
 export const updateBlock = (
     editorArray: BlockComponent[],
     action: EditorAction
@@ -82,10 +88,16 @@ export const updateBlock = (
     if (action.type !== 'UPDATE_BLOCK') {
         throw Error('Wrong action type to the update Block editor state')
     }
-    // Update block logic    
-    return editorArray
+    // Update block logic 
+    return action.payload.blockDetails;
 }
 
+/**
+ * This function probably isn't required as editorJS handles deleting blocks
+ * @param editorArray 
+ * @param action 
+ * @returns 
+ */
 export const deleteBlock = (
     editorArray: BlockComponent[],
     action: EditorAction

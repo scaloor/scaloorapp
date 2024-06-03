@@ -39,7 +39,7 @@ const StylesSidebar: React.FC<SideToolbarProps> = ({ tools, visible }) => {
                         showX={false}
                         side="right"
                         className={cn(
-                            'mt-[50px] w-72 z-[40] shadow-none p-0 mr-[50px] bg-background h-full transition-all overflow-hidden ',
+                            'mt-[50px] w-60 z-[40] shadow-none p-0 mr-[50px] bg-background h-full transition-all overflow-hidden ',
                             { hidden: state.editor.previewMode }
                         )}
                     >

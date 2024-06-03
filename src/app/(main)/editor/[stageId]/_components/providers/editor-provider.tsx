@@ -52,12 +52,12 @@ const editorReducer = (
             return newEditorStateAfterAdd;
 
         case "UPDATE_BLOCK":
-            const updatedBlockIsSelected = state.editor.selectedBlock?.id === action.payload.blockDetails.id
+/*             const updatedBlockIsSelected = state.editor.selectedBlock?.id === action.payload.blockDetails.id */
 
             const updatedEditorStateAfterUpdate = {
                 ...state.editor,
                 blocks: updateBlock(state.editor.blocks, action),
-                selectedBlock: updatedBlockIsSelected ? action.payload.blockDetails : null,
+                /* selectedBlock: updatedBlockIsSelected ? action.payload.blockDetails : null, */
             }
 
             const updatedHistoryAfterUpdate = [

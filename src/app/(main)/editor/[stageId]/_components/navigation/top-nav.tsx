@@ -91,6 +91,10 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
         dispatch({ type: 'REDO' })
     }
 
+    const currentBlocks = () => {
+        console.log('Current blocks:', state.editor.blocks)
+    }
+
 
     return (
         <TooltipProvider>
@@ -204,12 +208,13 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                     >
                         <Redo2 />
                     </Button>
-                    <Button onClick={handleOnSave}>Save</Button>
+                    {/* <Button onClick={handleOnSave}>Save</Button>
                     <div className="flex flex-col item-center mr-4">
                         <span className="text-muted-foreground text-sm">
                             Last updated {formattedUpdatedAt}
                         </span>
-                    </div>
+                    </div> */}
+                    <Button onClick={currentBlocks}>Current</Button>
                 </aside>
             </nav>
             {!!state.editor.previewMode && (

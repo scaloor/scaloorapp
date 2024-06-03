@@ -35,7 +35,7 @@ export default function StructureSidebar({ }: Props) {
                         showX={false}
                         side="left"
                         className={cn(
-                            'mt-[50px] w-72 z-[40] shadow-none p-0 ml-[50px] bg-background h-full transition-all overflow-hidden max-w-',
+                            'mt-[50px] w-60 z-[40] shadow-none p-0 ml-[50px] bg-background h-full transition-all overflow-hidden max-w-',
                             { hidden: state.editor.previewMode }
                         )}
                     >

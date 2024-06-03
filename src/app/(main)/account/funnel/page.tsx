@@ -16,7 +16,7 @@ export default async function Funnel() {
   if (!stage) {
     return <div>Stage not found</div>
   }
-  console.log(stage)
+
   return (
     <div className="flex-col justify-center text-center">
       <h1 className="text-4xl font-bold">Funnel Page here</h1>
