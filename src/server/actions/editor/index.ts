@@ -1,18 +1,17 @@
 'use server';
 
-import { BlockComponent } from "@/app/(main)/editor/[stageId]/_components/providers/editor-types";
 import { getStageById } from "@/server/data/stage";
 import { db } from "@/server/db";
 import { stage } from "@/server/db/schema";
-import { OutputData } from "@editorjs/editorjs";
+import { EditorData } from "@editorjs/editorjs";
 import { eq } from "drizzle-orm";
 
-export async function testData(outputData: OutputData) {
+export async function testData(outputData: EditorData) {
     console.log(outputData)
 
 }
 
-export async function saveStageContent(stageId: number, content: BlockComponent[]) {
+export async function saveStageContent(stageId: number, content: EditorData) {
     try {
         const saveStage = await getStageById(stageId);
         if (!saveStage) {

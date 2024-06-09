@@ -1,29 +1,17 @@
-import { BlockComponent, DeviceTypes } from "./editor-types"
+import { Block, EditorData } from "@editorjs/editorjs"
+import { DeviceTypes } from "./editor-types"
 
 export type EditorAction =
     | {
-        type: 'ADD_BLOCK'
+        type: 'UPDATE_DATA'
         payload: {
-            containerId: string
-            blockDetails: BlockComponent
-        }
-    }
-    | {
-        type: 'UPDATE_BLOCK'
-        payload: {
-            blockDetails: BlockComponent[]
-        }
-    }
-    | {
-        type: 'DELETE_BLOCK'
-        payload: {
-            blockDetails: BlockComponent
+            editorDetails: EditorData
         }
     }
     | {
         type: 'CHANGE_SELECTED_BLOCK'
         payload: {
-            blockDetails?: BlockComponent | null
+            blockDetails?: Block | null
         }
     }
     | {
@@ -46,7 +34,7 @@ export type EditorAction =
     | {
         type: 'LOAD_DATA'
         payload: {
-            blocks: BlockComponent[]
+            editorDetails: EditorData
             withLive: boolean
         }
     }
@@ -58,53 +46,17 @@ export type EditorAction =
     }
 
 /**
- * This function probably isn't required as editorJS handles adding and moving blocks
- * @param editorArray 
- * @param action 
- * @returns 
- */
-export const addBlock = (
-    editorArray: BlockComponent[],
-    action: EditorAction
-): BlockComponent[] => {
-    if (action.type !== 'ADD_BLOCK') {
-        throw Error('Wrong action type to the Add Block editor state')
-    }
-    // Add block logic
-    return editorArray;
-
-}
-
-/**
  * 
  * @param editorArray 
  * @param action 
  * @returns 
  */
-export const updateBlock = (
-    editorArray: BlockComponent[],
+export const updateData = (
     action: EditorAction
-): BlockComponent[] => {
-    if (action.type !== 'UPDATE_BLOCK') {
+): EditorData => {
+    if (action.type !== 'UPDATE_DATA') {
         throw Error('Wrong action type to the update Block editor state')
     }
     // Update block logic 
-    return action.payload.blockDetails;
-}
-
-/**
- * This function probably isn't required as editorJS handles deleting blocks
- * @param editorArray 
- * @param action 
- * @returns 
- */
-export const deleteBlock = (
-    editorArray: BlockComponent[],
-    action: EditorAction
-): BlockComponent[] => {
-    if (action.type !== 'DELETE_BLOCK') {
-        throw Error('Wrong action type to the delete Block editor state')
-    }
-    // Delete block logic   
-    return editorArray.filter(block => { block.id !== action.payload.blockDetails.id; })
+    return action.payload.editorDetails;
 }

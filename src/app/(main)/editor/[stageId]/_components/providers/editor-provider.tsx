@@ -1,13 +1,20 @@
 'use client'
 import { Dispatch, createContext, useContext, useReducer } from "react";
-import { EditorAction, addBlock, deleteBlock, updateBlock } from "./editor-actions";
+import { EditorAction, updateData } from "./editor-actions";
 import { EditorProps, EditorState, HistoryState } from "./editor-types";
 import { Stage } from "@/server/db/types";
+import { EditorData } from "@editorjs/editorjs";
+import { EDITORJS_VERSION } from "@/lib/constants/editorjs-constants";
 
+const initialData: EditorData = {
+    time: new Date().getTime(),
+    blocks: [],
+    version: EDITORJS_VERSION,
+};
 
 const initialEditorState: EditorState['editor'] = {
     liveMode: false,
-    blocks: [],
+    data: initialData,
     selectedBlock: null,
     device: 'Desktop',
     previewMode: false,
@@ -29,34 +36,12 @@ const editorReducer = (
     action: EditorAction
 ): EditorState => {
     switch (action.type) {
-        case "ADD_BLOCK":
-            const updatedEditorStateAfterAdd = {
-                ...state.editor,
-                blocks: addBlock(state.editor.blocks, action),
-            }
-            const updatedHistoryAfterAdd = [
-                ...state.history.history.slice(0, state.history.currentIndex + 1),
-                { ...updatedEditorStateAfterAdd }, // Save the updated editor state
-            ]
-
-            const newEditorStateAfterAdd = {
-                ...state,
-                editor: updatedEditorStateAfterAdd,
-                history: {
-                    ...state.history,
-                    history: updatedHistoryAfterAdd,
-                    currentIndex: updatedHistoryAfterAdd.length - 1,
-                },
-            }
-
-            return newEditorStateAfterAdd;
-
-        case "UPDATE_BLOCK":
-/*             const updatedBlockIsSelected = state.editor.selectedBlock?.id === action.payload.blockDetails.id */
+        case "UPDATE_DATA":
+            /*             const updatedBlockIsSelected = state.editor.selectedBlock?.id === action.payload.blockDetails.id */
 
             const updatedEditorStateAfterUpdate = {
                 ...state.editor,
-                blocks: updateBlock(state.editor.blocks, action),
+                data: updateData(action),
                 /* selectedBlock: updatedBlockIsSelected ? action.payload.blockDetails : null, */
             }
 
@@ -74,32 +59,11 @@ const editorReducer = (
                     currentIndex: updatedHistoryAfterUpdate.length - 1,
                 },
             }
-
+            console.log('Updated data:', state.editor.data)
             return newEditorStateAfterUpdate;
 
-        case "DELETE_BLOCK":
-            const updatedEditorStateAfterDelete = {
-                ...state.editor,
-                blocks: deleteBlock(state.editor.blocks, action),
-            }
-            const updatedHistoryAfterDelete = [
-                ...state.history.history.slice(0, state.history.currentIndex + 1),
-                { ...updatedEditorStateAfterDelete }, // Save the updated editor state
-            ]
-
-            const newEditorStateAfterDelete = {
-                ...state,
-                editor: updatedEditorStateAfterDelete,
-                history: {
-                    ...state.history,
-                    history: updatedHistoryAfterDelete,
-                    currentIndex: updatedHistoryAfterDelete.length - 1,
-                },
-            }
-
-            return newEditorStateAfterDelete;
-
         case "CHANGE_SELECTED_BLOCK":
+            // TODO: Add logic to update selected block. Requires onSelectionChange to be implemented in the editor
             const selectedState = {
                 ...state,
                 editor: {
@@ -184,11 +148,12 @@ const editorReducer = (
             return state
 
         case "LOAD_DATA":
+            console.log('first load:', action.payload.editorDetails)
             return {
                 ...initialState,
                 editor: {
                     ...initialState.editor,
-                    blocks: action.payload.blocks || initialEditorState.blocks,
+                    data: action.payload.editorDetails || initialEditorState.data,
                     liveMode: !!action.payload.withLive,
                 },
             }

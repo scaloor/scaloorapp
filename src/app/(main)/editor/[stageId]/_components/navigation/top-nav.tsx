@@ -7,20 +7,21 @@ import { cn } from "@/lib/utils";
 import { ArrowLeftCircle, EyeIcon, EyeOff, Laptop, Redo2, Smartphone, Tablet, Undo2 } from "lucide-react";
 import Link from "next/link";
 import { FocusEventHandler, useEffect, useState } from "react";
-import ExitPreviewButton from "../exit-preview-button";
 import { useEditor } from "../providers/editor-provider";
 import { Stage } from "@/server/db/types";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Input } from "@/app/_components/ui/input";
 import { updateStage } from "@/server/data/stage";
-import { Switch } from "@/app/_components/ui/switch";
 import { DeviceTypes } from "../providers/editor-types";
+import { saveStageContent } from "@/server/actions/editor";
 
 type EditorNavigationProps = {
     // Funnel ID goes here
     // Account ID maybe goes here
     stageDetails: Stage
+    handleUndo: () => void
+    handleRedo: () => void
 }
 
 const options: Intl.DateTimeFormatOptions = {
@@ -33,9 +34,8 @@ const options: Intl.DateTimeFormatOptions = {
     hour12: true,
 };
 
-export default function EditorNavigation({ stageDetails }: EditorNavigationProps) {
+export default function EditorNavigation({ stageDetails, handleUndo, handleRedo }: EditorNavigationProps) {
     const { state, dispatch } = useEditor();
-    const router = useRouter();
 
     const updatedAt = stageDetails.updatedAt
     let formattedUpdatedAt = ''
@@ -43,8 +43,6 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
         formattedUpdatedAt = new Date(updatedAt).toLocaleString('en-US', options)
 
     }
-
-
 
     useEffect(() => {
         dispatch({
@@ -67,7 +65,7 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
             toast('Success', {
                 description: 'Saved Funnel Page title',
             })
-            router.refresh()
+
         } else {
             toast('Oppse!', {
                 description: 'You need to have a title!',
@@ -81,20 +79,17 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
         /* dispatch({ type: 'TOGGLE_LIVE_MODE' }) */ // This causes the editor to not update
     }
 
-    const handleOnSave = async () => { }
-
-    const handleUndo = () => {
-        dispatch({ type: 'UNDO' })
-    }
-
-    const handleRedo = () => {
-        dispatch({ type: 'REDO' })
+    const handleOnSave = async () => {
+        await saveStageContent(state.editor.stageId, state.editor.data);
+        toast('Success', {
+            description: 'Saved Stage Contents !',
+        })
     }
 
     const currentBlocks = () => {
-        console.log('Current blocks:', state.editor.blocks)
+        //console.log('Current blocks:', state.editor.data)
+        console.log('History:', state.history)
     }
-
 
     return (
         <TooltipProvider>
@@ -208,8 +203,8 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                     >
                         <Redo2 />
                     </Button>
-                    {/* <Button onClick={handleOnSave}>Save</Button>
-                    <div className="flex flex-col item-center mr-4">
+                    <Button onClick={handleOnSave}>Save</Button>
+                    {/* <div className="flex flex-col item-center mr-4">
                         <span className="text-muted-foreground text-sm">
                             Last updated {formattedUpdatedAt}
                         </span>

@@ -1,4 +1,5 @@
 import { Stage } from "@/server/db/types";
+import { Block, EditorData } from "@editorjs/editorjs";
 
 /**
  * Different views for funnel stages
@@ -6,16 +7,7 @@ import { Stage } from "@/server/db/types";
 export type DeviceTypes = 'Desktop' | 'Tablet' | 'Mobile';
 
 /**
- * Block component
- */
-export type BlockComponent = {
-    id: string;
-    type: string;
-    data: object;
-};
-
-/**
- * Type of block component
+ * Type of blocks
  */
 export type BlockTypes = 'paragraph' | 'header' | 'imageBlock'
 
@@ -24,8 +16,8 @@ export type BlockTypes = 'paragraph' | 'header' | 'imageBlock'
  */
 export type Editor = {
     liveMode: boolean;
-    blocks: BlockComponent[];
-    selectedBlock: BlockComponent | null;
+    data: EditorData;
+    selectedBlock: Block | null;
     device: DeviceTypes;
     previewMode: boolean;
     stageId: number;

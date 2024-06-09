@@ -4,43 +4,47 @@ import { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
 import { Button } from "@/app/_components/ui/button";
 import { saveStageContent, testData } from "@/server/actions/editor/index";
-import { OutputData } from "@editorjs/editorjs";
-import ImageBlock from "../_tools/image-block/tool";
+import { EditorData, Block } from "@editorjs/editorjs";
 import StylesSidebar from "./navigation/style/styles-sidebar";
 import StructureSidebar from "./navigation/structure/structure-sidebar";
 import { useEditor } from "./providers/editor-provider";
 import { cn } from "@/lib/utils";
+import toolsObject from "../_tools";
+import { Stage } from "@/server/db/types";
+import { EDITORJS_VERSION } from "@/lib/constants/editorjs-constants";
+import EditorNavigation from "./navigation/top-nav";
 
 
+type EditorProps = {
+    stageDetails: Stage
+}
 
-
-export default function Editor() {
+export default function Editor({ stageDetails }: EditorProps) {
     const { state, dispatch } = useEditor();
     const [isMounted, setIsMounted] = useState(false);
     const [data, setData] = useState<string[] | null>(null);
     const ref = useRef<EditorJS>();
     const [toolsVisible, setToolsVisible] = useState(false);
 
+    // Default data for editor
+    let initialData: EditorData = {
+        time: new Date().getTime(),
+        blocks: [],
+        version: EDITORJS_VERSION,
+    };
+
+    // If stage content is available, use that as initial data
+    if (!!stageDetails.content) {
+        initialData = stageDetails.content as EditorData;
+    }
+
     // Initialize the editor
     const initializeEditor = async () => {
-        const EditorJS = (await import("@editorjs/editorjs")).default;
-        const Header = (await import("@editorjs/header")).default;
-        /* const Table = (await import("@editorjs/table")).default; */
-
         if (!ref.current) {
             const editor = new EditorJS({
                 holder: 'editorjs',
                 placeholder: 'Start building your funnel',
-                tools: {
-                    header: {
-                        class: Header,
-                        inlineToolbar: true
-                    },
-                    imageBlock: {
-                        class: ImageBlock,
-                        inlineToolbar: false,
-                    },
-                },
+                tools: toolsObject,
                 onReady: () => {
                     console.log('EditorJS loaded')
                     const editorElement = document.getElementById('editorjs');
@@ -50,9 +54,11 @@ export default function Editor() {
                     }
                 },
                 onChange: handleChange,
+                data: initialData,
             });
             ref.current = editor;
         }
+        dispatch({ type: 'SET_STAGE_ID', payload: { stageId: stageDetails.id } })
     }
 
     // Use effect to check if the editor is mounted
@@ -66,6 +72,7 @@ export default function Editor() {
     useEffect(() => {
         const init = async () => {
             await initializeEditor();
+            dispatch({ type: 'LOAD_DATA', payload: { editorDetails: initialData, withLive: false } })
         };
 
         if (!!isMounted) {
@@ -80,37 +87,19 @@ export default function Editor() {
     }, [isMounted]);
 
     // Handle update block
+    // If using autosave, this will be called on every change
     const handleChange = async () => {
+        console.log('handleChange called');
         if (ref.current) {
             try {
                 const savedData = await ref.current.save();
                 if (savedData.blocks.length > 0) {
-                    dispatch({ type: "UPDATE_BLOCK", payload: { blockDetails: savedData.blocks } });
+                    dispatch({ type: "UPDATE_DATA", payload: { editorDetails: savedData } });
                 }
             } catch (error) {
-                console.error('Saving failed: ', error);
+                console.error('Failed to update data: ', error);
             }
         }
-    };
-
-    // Save the editor data
-    const save = async () => {
-        // Access the editor instance directly
-        if (!!ref.current) {
-            ref.current.save().then((outputData: OutputData) => {
-                console.log("Article data: ", outputData);
-                console.log("Type of Article data: ", typeof outputData);
-                /* alert(JSON.stringify(outputData)); */
-                testData(outputData);
-            })
-            const savedData = await ref.current.save();
-            console.log('Save SavedData:', savedData.blocks);
-            saveStageContent(state.editor.stageId, savedData.blocks);
-        }
-        // Save from the editorContext state
-        console.log('Editor state:', state.editor);
-
-
     };
 
     // Handle text selection
@@ -145,20 +134,25 @@ export default function Editor() {
         console.log('selected block:', state.editor.selectedBlock)
     } */
 
+    // UseEffect to render the editor
+    /* useEffect(() => {
+        if (!!ref.current && state.history.history[state.history.currentIndex]) {
+          ref.current.render(state.history.history[state.history.currentIndex].data)
+          .catch(console.error);
+        }
+      }, [state.history.currentIndex, state.history]); */
 
+    const handleUndo = () => {
+        dispatch({ type: 'UNDO' })
+
+    }
+    const handleRedo = () => {
+        dispatch({ type: 'REDO' })
+    }
 
     return (
-        <div className={cn(
-            'border',
-            {
-                '!p-0 !mr-0':
-                    state.editor.previewMode === true || state.editor.liveMode === true,
-                '!w-[850px]': state.editor.device === 'Tablet',
-                '!w-[420px]': state.editor.device === 'Mobile',
-                'w-full': state.editor.device === 'Desktop',
-            }
-        )}
-            /* onClick={handleClick} */>
+        <>
+            <EditorNavigation stageDetails={stageDetails} handleUndo={handleUndo} handleRedo={handleRedo} />
             <StructureSidebar />
             <StylesSidebar
                 tools={[
@@ -168,12 +162,23 @@ export default function Editor() {
                 ]}
                 visible={toolsVisible}
             />
-            <div className="">
-                <div id="editorjs" className="text-black"></div>
+            <div className="container max-w-5xl">
+                <div className={cn(
+                    'border',
+                    {
+                        '!p-0 !mr-0':
+                            state.editor.previewMode === true || state.editor.liveMode === true,
+                        '!w-[850px]': state.editor.device === 'Tablet',
+                        '!w-[420px]': state.editor.device === 'Mobile',
+                        'w-full': state.editor.device === 'Desktop',
+                    }
+                )}
+            /* onClick={handleClick} */>
+                    <div className="">
+                        <div id="editorjs" className="text-black"></div>
+                    </div>
+                </div>
             </div>
-            <Button onClick={save} className="">
-                Save
-            </Button>
-        </div>
+        </>
     )
 }

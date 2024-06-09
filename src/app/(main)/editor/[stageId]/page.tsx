@@ -2,7 +2,7 @@ import { getStageById } from "@/server/data/stage"
 import Editor from "./_components/editor"
 import EditorNavigation from "./_components/navigation/top-nav"
 import EditorProvider from "./_components/providers/editor-provider"
-import ExitPreviewButton from "./_components/exit-preview-button"
+import { EditorData } from "@editorjs/editorjs"
 
 
 type FunnelEditorProps = {
@@ -17,7 +17,6 @@ export default async function FunnelEditor({ params }: FunnelEditorProps) {
     const { businessId, funnelId, stageId } = params;
     const stage = await getStageById(stageId);
 
-
     if (!stage) {
         return <div>Stage not found</div>
     }
@@ -28,9 +27,9 @@ export default async function FunnelEditor({ params }: FunnelEditorProps) {
             funnelId={funnelId}
             pageDetails={stage}>
             <div className="fixed top-0 bottom-0 left-0 right-0 z-[20] bg-white overflow-hidden">
-                <EditorNavigation stageDetails={stage} />
-                <div className="container max-w-4xl">
-                    <Editor />
+                {/* <EditorNavigation stageDetails={stage} /> */}
+                <div className="">
+                    <Editor stageDetails={stage} />
                 </div>
             </div>
         </EditorProvider>
