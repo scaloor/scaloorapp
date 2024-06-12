@@ -1,8 +1,6 @@
 import { getStageById } from "@/server/data/stage"
-import Editor from "./_components/editor"
-import EditorNavigation from "./_components/navigation/top-nav"
-import EditorProvider from "./_components/providers/editor-provider"
-import { EditorData } from "@editorjs/editorjs"
+import StageEditor from "./_components/stage-editor"
+import StageEditorProvider from "./_components/providers/editor-provider"
 
 
 type FunnelEditorProps = {
@@ -22,16 +20,11 @@ export default async function FunnelEditor({ params }: FunnelEditorProps) {
     }
 
     return (
-        <EditorProvider
+        <StageEditorProvider
             businessId={businessId}
             funnelId={funnelId}
             pageDetails={stage}>
-            <div className="fixed top-0 bottom-0 left-0 right-0 z-[20] bg-white overflow-hidden">
-                {/* <EditorNavigation stageDetails={stage} /> */}
-                <div className="">
-                    <Editor stageDetails={stage} />
-                </div>
-            </div>
-        </EditorProvider>
+            <StageEditor stage={stage} />
+        </StageEditorProvider>
     )
 }

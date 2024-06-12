@@ -22,7 +22,6 @@ export function ResizableSidebar({ children, business }: ResizableSidebarProps) 
     const defaultLayout = [265, 440, 655]
     const navCollapsedSize = 4;
 
-    console.log(business)
     let sidebarLogo = business?.businessLogo || "/assets/scaloor_cropped.jpg";
 
     return (

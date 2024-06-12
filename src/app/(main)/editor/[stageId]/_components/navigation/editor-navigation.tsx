@@ -1,56 +1,27 @@
 'use client';
-
-import { Button } from "@/app/_components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/app/_components/ui/tabs";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/app/_components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { ArrowLeftCircle, EyeIcon, EyeOff, Laptop, Redo2, Smartphone, Tablet, Undo2 } from "lucide-react";
-import Link from "next/link";
-import { FocusEventHandler, useEffect, useState } from "react";
-import { useEditor } from "../providers/editor-provider";
-import { Stage } from "@/server/db/types";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { Input } from "@/app/_components/ui/input";
-import { updateStage } from "@/server/data/stage";
-import { DeviceTypes } from "../providers/editor-types";
-import { saveStageContent } from "@/server/actions/editor";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip'
+import React, { FocusEventHandler } from 'react'
+import { useStageEditor } from '../providers/editor-provider';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { ArrowLeftCircle, EyeIcon } from 'lucide-react';
+import { Input } from '@/app/_components/ui/input';
+import { Stage } from '@/server/db/types';
+import { updateStage } from '@/server/data/stage';
+import { toast } from 'sonner';
+import { Tabs, TabsList, TabsTrigger } from '@/app/_components/ui/tabs';
+import { DeviceTypes } from '../providers/editor-types';
+import { DesktopIcon, LaptopIcon, MobileIcon, PlayIcon } from '@radix-ui/react-icons';
+import { Button } from '@/app/_components/ui/button';
 
 type EditorNavigationProps = {
-    // Funnel ID goes here
-    // Account ID maybe goes here
     stageDetails: Stage
-    handleUndo: () => void
-    handleRedo: () => void
 }
 
-const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    hour12: true,
-};
+export default function EditorNavigation({ stageDetails }: EditorNavigationProps) {
+    const { state, dispatch } = useStageEditor();
 
-export default function EditorNavigation({ stageDetails, handleUndo, handleRedo }: EditorNavigationProps) {
-    const { state, dispatch } = useEditor();
-
-    const updatedAt = stageDetails.updatedAt
-    let formattedUpdatedAt = ''
-    if (!!updatedAt) {
-        formattedUpdatedAt = new Date(updatedAt).toLocaleString('en-US', options)
-
-    }
-
-    useEffect(() => {
-        dispatch({
-            type: 'SET_STAGE_ID',
-            payload: { stageId: stageDetails.id },
-        })
-    }, [stageDetails])
-
+    // This function is used to update the stage name
     const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
         event
     ) => {
@@ -67,34 +38,30 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
             })
 
         } else {
-            toast('Oppse!', {
+            toast('Oops!', {
                 description: 'You need to have a title!',
             })
             event.target.value = stageDetails.name
         }
     }
 
+    // This function is used to toggle the preview mode
     const handlePreviewClick = () => {
         dispatch({ type: 'TOGGLE_PREVIEW_MODE' })
-        /* dispatch({ type: 'TOGGLE_LIVE_MODE' }) */ // This causes the editor to not update
     }
 
     const handleOnSave = async () => {
-        await saveStageContent(state.editor.stageId, state.editor.data);
+        // TODO: Add logic to save stage content
+        /* await saveStageContent(state.editor.stageId, state.editor.data);
         toast('Success', {
             description: 'Saved Stage Contents !',
-        })
-    }
-
-    const currentBlocks = () => {
-        //console.log('Current blocks:', state.editor.data)
-        console.log('History:', state.history)
+        }) */
     }
 
     return (
         <TooltipProvider>
             <nav className={cn('border-b-[1px] grid grid-cols-3 transition-all bg-background overflow-hidden h-[50px]',
-                { '!h-0 !p-0 !overflow-hidden': state.editor.previewMode }
+                { '!h-0 !p-0 !overflow-hidden': state.previewMode }
             )}>
                 <aside className="flex justify-start items-center gap-4 max-w-[260px] w-[300px]">
                     <Link href={'/account/funnel'} className="">
@@ -115,7 +82,7 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
                     <Tabs
                         defaultValue="Desktop"
                         className="flex w-fit justify-center"
-                        value={state.editor.device}
+                        value={state.device}
                         onValueChange={(value) => {
                             dispatch({
                                 type: 'CHANGE_DEVICE',
@@ -130,7 +97,7 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
                                         value="Desktop"
                                         className="data-[state=active]:bg-muted w-10 h-10 p-0"
                                     >
-                                        <Laptop />
+                                        <DesktopIcon />
                                     </TabsTrigger>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -140,14 +107,14 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
                             <Tooltip>
                                 <TooltipTrigger>
                                     <TabsTrigger
-                                        value="Tablet"
+                                        value="Laptop"
                                         className="w-10 h-10 p-0 data-[state=active]:bg-muted"
                                     >
-                                        <Tablet />
+                                        <LaptopIcon />
                                     </TabsTrigger>
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    <p>Tablet</p>
+                                    <p>Laptop</p>
                                 </TooltipContent>
                             </Tooltip>
                             <Tooltip>
@@ -156,7 +123,7 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
                                         value="Mobile"
                                         className="w-10 h-10 p-0 data-[state=active]:bg-muted"
                                     >
-                                        <Smartphone />
+                                        <MobileIcon />
                                     </TabsTrigger>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -175,44 +142,23 @@ export default function EditorNavigation({ stageDetails, handleUndo, handleRedo 
                                 className="hover:bg-slate-800"
                                 onClick={handlePreviewClick}
                             >
-                                <EyeIcon />
+                                <PlayIcon />
                             </Button>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>Preview stage</p>
                         </TooltipContent>
                     </Tooltip>
-                    <Button
-                        disabled={!(state.history.currentIndex > 0)}
-                        onClick={handleUndo}
 
-                        variant={'ghost'}
-                        size={'icon'}
-                        className="hover:bg-slate-800"
-                    >
-                        <Undo2 />
-                    </Button>
-                    <Button
-                        disabled={
-                            !(state.history.currentIndex < state.history.history.length - 1)
-                        }
-                        onClick={handleRedo}
-                        variant={'ghost'}
-                        size={'icon'}
-                        className="hover:bg-slate-800 mr-4"
-                    >
-                        <Redo2 />
-                    </Button>
                     <Button onClick={handleOnSave}>Save</Button>
                     {/* <div className="flex flex-col item-center mr-4">
                         <span className="text-muted-foreground text-sm">
                             Last updated {formattedUpdatedAt}
                         </span>
                     </div> */}
-                    <Button onClick={currentBlocks}>Current</Button>
                 </aside>
             </nav>
-            {!!state.editor.previewMode && (
+            {!!state.previewMode && (
                 <Button
                     variant={'outline'}
                     className='fixed bottom-6 left-1/2 transform -translate-x-1/2 rounded-3xl bg-transparent border-primary text-primary'

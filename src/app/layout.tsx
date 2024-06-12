@@ -6,6 +6,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/app/_components/providers/theme-provider";
 import ModalProvider from "@/app/_components/providers/modal-provider";
 import { Toaster } from "@/app/_components/ui/sonner";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className, '')}>
         <SessionProvider>
           <ThemeProvider
             attribute="class"
