@@ -16,7 +16,7 @@ export default async function FunnelEditor({ params }: FunnelEditorProps) {
     const stage = await getStageById(stageId);
 
     if (!stage) {
-        return <div>Stage not found</div>
+        return <div className="flex justify-center items-center h-screen">Stage not found</div>
     }
 
     return (

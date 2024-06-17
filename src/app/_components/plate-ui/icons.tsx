@@ -62,6 +62,7 @@ import {
   WrapText,
   X,
 } from 'lucide-react';
+import { FontBoldIcon, FontItalicIcon, PilcrowIcon, StrikethroughIcon, UnderlineIcon } from '@radix-ui/react-icons';
 
 import type { LucideIcon } from 'lucide-react';
 
@@ -166,7 +167,7 @@ export const Icons = {
   arrowDown: ChevronDown,
   bg: PaintBucket,
   blockquote: Quote,
-  bold: Bold,
+  bold: FontBoldIcon,
   borderAll,
   borderBottom,
   borderLeft,
@@ -199,7 +200,7 @@ export const Icons = {
   h6: Heading6,
   image: Image,
   indent: Indent,
-  italic: Italic,
+  italic: FontItalicIcon,
   kbd: Keyboard,
   lineHeight: WrapText,
   link: Link2,
@@ -207,19 +208,19 @@ export const Icons = {
   more: MoreHorizontal,
   ol: ListOrdered,
   outdent: Outdent,
-  paragraph: Pilcrow,
+  paragraph: PilcrowIcon,
   refresh: RotateCcw,
   row: RectangleHorizontal,
   search: Search,
   settings: Settings,
-  strikethrough: Strikethrough,
+  strikethrough: StrikethroughIcon,
   subscript: Subscript,
   superscript: Superscript,
   table: Table,
   text: Text,
   trash: Trash,
   ul: List,
-  underline: Underline,
+  underline: UnderlineIcon,
   unlink: Link2Off,
   viewing: Eye,
 

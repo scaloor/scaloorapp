@@ -2,6 +2,7 @@
 import { Tabs, TabsContent } from '@/app/_components/ui/tabs'
 import React from 'react'
 import RightTabList from './right-tab-list'
+import StylesTab from './styles-tab';
 
 type Props = {}
 
@@ -16,8 +17,8 @@ export default function RightSidebar({ }: Props) {
             </div>
             <div className='flex flex-row w-full'>
                 {/* Tab Contents */}
-                <TabsContent value="Styles">
-                    Styles
+                <TabsContent value="Styles" className='w-full'>
+                    <StylesTab />
                 </TabsContent>
                 <TabsContent value="Media">
                     Media

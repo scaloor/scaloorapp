@@ -6,9 +6,8 @@ import { stage } from "@/server/db/schema";
 import { Value } from "@udecode/plate-common/server";
 import { eq } from "drizzle-orm";
 
-export async function testData(outputData: Value) {
-    console.log(outputData)
-
+export async function serverData(data: Value) {
+    console.log(data[0].children)
 }
 
 export async function saveStageContent(stageId: number, content: Value) {
