@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function Hero() {
     return (
-        < h1 className="text-6xl bg-gradient text-transparent bg-clip-text font-bold" >
+        < h1 className="text-6xl font-bold" >
             Some incredible copy here.
         </h1 >
     )

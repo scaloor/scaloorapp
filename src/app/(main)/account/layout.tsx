@@ -1,6 +1,5 @@
-import { Sidebar } from "@/app/(main)/_components/navigation/sidebar"
-import { NavigationBar } from "@/app/(main)/_components/navigation/navigation-bar"
-import { BlurPage } from "../_components/blur-page"
+import React from "react"
+import AccountSidebar from "../_components/navigation/account-sidebar"
 
 
 interface SettingsLayoutProps {
@@ -9,17 +8,11 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
     return (
-        <div className="h-screen overflow-hidden">
-            <Sidebar type="BUSINESS" />
-            <div className="md:pl-[300px]">
-                <NavigationBar />
-                <div className="relative">
-                    <BlurPage>
-                        {children}
-                    </BlurPage>
-                </div>
-            </div>
-        </div>
+        <div className="flex h-screen overflow-hidden">
+            <AccountSidebar />
+            {/* Content */}
+            {children}
+        </div >
 
 
     )
