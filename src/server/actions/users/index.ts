@@ -10,3 +10,4 @@ export async function getAuthUserDetails() {
     const user = await getUserById(session?.user?.id);
     return user
 }
+
