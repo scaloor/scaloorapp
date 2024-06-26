@@ -2,8 +2,6 @@ import Link from "next/link"
 import Image from "next/image";
 import MaxWidthWrapper from "../../../_components/common/max-width-wrapper"
 import { NavigationOptions } from "./navigation-options"
-import { MobileNavigation } from "./mobile-navigation";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
 
