@@ -1,4 +1,4 @@
-'use client';
+/* 'use client';
 
 import { handleImageUpload } from "@/server/storage";
 import { UploadCloud } from "lucide-react";
@@ -39,4 +39,4 @@ export default function ImageUpload() {
             </div>
         </div>
     )
-}
+} */
