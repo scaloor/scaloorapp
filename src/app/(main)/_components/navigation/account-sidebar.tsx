@@ -9,9 +9,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react'
 
-type AccountSidebarProps = {
-    children: React.ReactNode
-}
+
 const SidebarItems = [
     {
         text: 'Dashboard',
@@ -42,8 +40,8 @@ export default function AccountSidebar() {
                 <ul className='flex-1 px-3'>
                     <TooltipProvider>
                         {SidebarItems.map((item) => (
-                            <Link href={item.href}>
-                                <li key={item.text}
+                            <Link key={item.text} href={item.href}>
+                                <li
                                     className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors
                               ${pathname === item.href ? 'bg-primary text-white hover:bg-green-400' : 'hover:bg-green-400 '}`}>
                                     <Tooltip>
