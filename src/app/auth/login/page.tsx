@@ -1,10 +1,8 @@
 import { LoginForm } from "@/app/auth/login/login-form";
 
 
-const LoginPage = () => {
+export default async function LoginPage() {
     return (
         <LoginForm />
     )
 }
-
-export default LoginPage;

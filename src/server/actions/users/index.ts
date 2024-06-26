@@ -1,13 +1,15 @@
-import { auth } from "@/auth";
-import { getUserById } from "@/server/data/users";
+
+import { getSessionUser } from "@/app/auth/provider/authenticated-route";
+import { getUserByEmail, getUserById } from "@/server/data/users";
 
 export async function getAuthUserDetails() {
-    const session = await auth();
-    if (!session?.user?.id) {
-        console.log("Not Authenticated");
-        return null;
+    const { user } = await getSessionUser()
+    try {
+        const dbUser = await getUserByEmail(user?.email!)
+        return dbUser;
+    } catch (error) {
+        console.log('Error fetching user from db:', error)
+        return null
     }
-    const user = await getUserById(session?.user?.id);
-    return user
 }
 

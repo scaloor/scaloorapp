@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/app/_components/providers/theme-provider";
 import ModalProvider from "@/app/_components/providers/modal-provider";
 import { Toaster } from "@/app/_components/ui/sonner";
@@ -24,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, '')}>
-        <SessionProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
@@ -32,12 +29,10 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ModalProvider>
-
               {children}
               <Toaster />
             </ModalProvider>
           </ThemeProvider>
-        </SessionProvider>
       </body>
     </html >
   );

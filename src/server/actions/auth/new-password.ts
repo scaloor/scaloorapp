@@ -1,57 +1,29 @@
-"use server";
+'use server';
+import { NewPasswordSchema } from "@/app/auth/_components/schemas";
+import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
-import * as z from "zod";
-import bcrypt from "bcryptjs";
 
-import { NewPasswordSchema } from "@/server/actions/auth/schemas";
-import { getPasswordResetTokenByToken } from "@/server/actions/auth/password-reset-token";
-import { getUserByEmail } from "@/server/data/users";
-import { db } from "@/server/db";
-import { passwordResetTokens, users } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+export async function newPassword(data: z.infer<typeof NewPasswordSchema>) {
+    const supabase = createClient()
 
-export const newPassword = async (
-    values: z.infer<typeof NewPasswordSchema>,
-    token?: string | null,
-) => {
-    if (!token) {
-        return { error: "Missing token!" };
+    const validation = NewPasswordSchema.safeParse(data)
+    if (!validation.success) {
+        console.log("Failed server validation")
+        return { error: "Something went wrong!" }
     }
 
-    const validatedFields = NewPasswordSchema.safeParse(values);
+    const { error } = await supabase.auth.updateUser({
+        password: data.password,
+    })
 
-    if (!validatedFields.success) {
-        return { error: "Invalid fields!" };
+    if (error) {
+        console.log(error)
+        return { error: "Something went wrong!" }
     }
 
-    const { password } = validatedFields.data;
-
-    const existingToken = await getPasswordResetTokenByToken(token);
-
-    if (!existingToken) {
-        return { error: "Invalid token!" };
-    }
-
-    const hasExpired = new Date(existingToken.expires) < new Date();
-
-    if (hasExpired) {
-        return { error: "Token has expired!" };
-    }
-
-    const existingUser = await getUserByEmail(existingToken.email);
-
-    if (!existingUser) {
-        return { error: "Email does not exist!" }
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await db.update(users)
-        .set({ password: hashedPassword })
-        .where(eq(users.id, existingUser.id));
-
-    await db.delete(passwordResetTokens)
-        .where(eq(passwordResetTokens.identifier, existingToken.identifier));
-
-    return { success: "Password updated!" };
-};
+    revalidatePath('/', 'layout')
+    redirect('/account')
+}

@@ -13,20 +13,20 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/app/_components/ui/navigation-menu"
-import { LoginButton } from "@/app/auth/_components/login-button"
-import { LogoutButton } from "@/app/auth/_components/logout-button"
+import { signOut } from "@/server/actions/auth/sign-out"
+
 
 export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolean }) {
     return (
         <NavigationMenu>
             <NavigationMenuList>
-                {!isAuthenticated &&
+                {/* {!isAuthenticated &&
                     <LoginButton asChild mode="redirect">
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                             Sign In
                         </NavigationMenuLink>
                     </LoginButton>
-                }
+                } */}
                 {!!isAuthenticated &&
                     <>
                         <Link  href='/account' legacyBehavior passHref>
@@ -34,11 +34,9 @@ export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolea
                                 Dashboard
                             </NavigationMenuLink>
                         </Link>
-                        <LogoutButton>
-                            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                            <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "hover:cursor-pointer")} onClick={() => signOut()}>
                                 Sign Out
                             </NavigationMenuLink>
-                        </LogoutButton>
                     </>
                 }
             </NavigationMenuList>

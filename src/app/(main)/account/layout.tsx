@@ -1,6 +1,5 @@
 import React from "react"
 import AccountSidebar from "../_components/navigation/account-sidebar"
-import { auth } from "@/auth"
 
 
 interface SettingsLayoutProps {

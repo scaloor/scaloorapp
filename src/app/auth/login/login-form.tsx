@@ -3,11 +3,9 @@
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-
-import { LoginSchema } from "@/server/actions/auth/schemas";
+import { LoginSchema } from "../_components/schemas";
 import { Input } from "@/app/_components/ui/input";
 import {
     Form,
@@ -17,26 +15,16 @@ import {
     FormLabel,
     FormMessage,
 } from "@/app/_components/ui/form";
-import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
-import { FormSuccess } from "@/app/_components/common/form-success";
 import { login } from "@/server/actions/auth/login";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import { FcGoogle } from "react-icons/fc";
+import { loginWithGoogle } from "@/server/actions/auth/login-google";
 
 
 export const LoginForm = () => {
-    const searchParams = useSearchParams();
-    const callbackUrl = searchParams.get("callbackUrl");
-    const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-        ? "Email already in use with different provider!"
-        : "";
-
-
-
-    const [showTwoFactor, setShowTwoFactor] = useState(false);
     const [error, setError] = useState<string | undefined>("");
-    const [success, setSuccess] = useState<string | undefined>("");
     const [isPending, startTransition] = useTransition();
 
     const form = useForm<z.infer<typeof LoginSchema>>({
@@ -47,66 +35,45 @@ export const LoginForm = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+    const onSubmit = (data: z.infer<typeof LoginSchema>) => {
         setError("");
-        setSuccess("");
 
         startTransition(() => {
-            console.log('callback:', callbackUrl);
-            login(values, callbackUrl)
+            // Call login function with form data
+            login(data)
                 .then((data) => {
                     if (data?.error) {
-                        form.reset();
                         setError(data.error);
                     }
-
-                    if (data?.success) {
-                        form.reset();
-                        setSuccess(data.success);
-                    }
-
-                    /* if (data?.twoFactor) {
-                        setShowTwoFactor(true);
-                    } */
                 })
                 .catch(() => setError("Something went wrong"));
-        });
+        })
+    };
+
+    const handleGoogleLogin = () => {
+        setError("");
+        startTransition(async () => {
+            const { error } = await loginWithGoogle()
+            setError(error);
+        })
     };
 
     return (
-        <CardWrapper
-            headerLabel="Welcome back"
-            backButtonLabel="Don't have an account?"
-            backButtonHref="/auth/register"
-            showSocial
-        >
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                >
-                    <div className="space-y-4">
-                        {showTwoFactor && (
-                            <FormField
-                                control={form.control}
-                                name="code"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Two Factor Code</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                {...field}
-                                                disabled={isPending}
-                                                placeholder="123456"
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        )}
-                        {!showTwoFactor && (
-                            <>
+        <section className="h-[calc(100vh-57px)] flex justify-center items-center">
+            <Card className="mx-auto max-w-md">
+                <CardHeader>
+                    <CardTitle className="text-2xl">Login</CardTitle>
+                    <CardDescription>
+                        Enter your email below to login to your account
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="grid gap-4"
+                        >
+                            <div className="grid gap-2">
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -153,20 +120,39 @@ export const LoginForm = () => {
                                         </FormItem>
                                     )}
                                 />
-                            </>
-                        )}
-                    </div>
-                    <FormError message={error ?? urlError} />
-                    <FormSuccess message={success} />
+                            </div>
+                            <FormError message={error} />
+                            <Button
+                                disabled={isPending}
+                                type="submit"
+                                className="w-full"
+                            >
+                                Login
+                            </Button>
+                        </form>
+                    </Form>
                     <Button
-                        disabled={isPending}
-                        type="submit"
+                        size="lg"
                         className="w-full"
+                        variant="outline"
+                        onClick={handleGoogleLogin}
                     >
-                        {showTwoFactor ? "Confirm" : "Login"}
+                        <FcGoogle className="h-5 w-5 mr-2" />
+                        Sign in with Google
                     </Button>
-                </form>
-            </Form>
-        </CardWrapper>
+                    <Button
+                        variant="link"
+                        className="font-normal w-full"
+                        size="sm"
+                        asChild
+                    >
+                        <Link href="/auth/register">
+                            Don&apos;t have an account?
+                        </Link>
+                    </Button>
+                </CardContent>
+            </Card>
+        </section>
+
     );
 }

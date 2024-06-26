@@ -4,8 +4,7 @@ import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { ResetSchema } from "@/server/actions/auth/schemas";
+import { ResetSchema } from "../_components/schemas";
 import { Input } from "@/app/_components/ui/input";
 import {
     Form,
@@ -15,10 +14,10 @@ import {
     FormLabel,
     FormMessage,
 } from "@/app/_components/ui/form";
-import { CardWrapper } from "@/app/auth/_components/card-wrapper"
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { resetPassword } from "@/server/actions/auth/reset-password";
 
 export const ResetForm = () => {
@@ -33,63 +32,66 @@ export const ResetForm = () => {
         },
     });
 
-    const onSubmit = (values: z.infer<typeof ResetSchema>) => {
+    const onSubmit = (data: z.infer<typeof ResetSchema>) => {
         setError("");
         setSuccess("");
 
         startTransition(() => {
-            resetPassword(values)
+            resetPassword(data)
                 .then((data) => {
-                    setError(data?.error);
                     setSuccess(data?.success);
-                }).catch(() => {
-                    throw new Error('error')
-                });
+                }).catch(() => () => setError("Something went wrong"));
         });
     };
 
     return (
-        <CardWrapper
-            headerLabel="Forgot your password?"
-            backButtonLabel="Back to login"
-            backButtonHref="/auth/login"
-        >
-            <Form {...form}>
-                <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-6"
-                >
-                    <div className="space-y-4">
-                        <FormField
-                            control={form.control}
-                            name="email"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            disabled={isPending}
-                                            placeholder="john.doe@example.com"
-                                            type="email"
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <FormError message={error} />
-                    <FormSuccess message={success} />
-                    <Button
-                        disabled={isPending}
-                        type="submit"
-                        className="w-full"
-                    >
-                        Send reset email
-                    </Button>
-                </form>
-            </Form>
-        </CardWrapper>
+        <section className="h-[calc(100vh-57px)] flex justify-center items-center">
+            <Card className="mx-auto max-w-md min-w-[400px]">
+                <CardHeader>
+                    <CardTitle className="text-2xl">Forgot Password</CardTitle>
+                    <CardDescription>
+                        Enter an email linked to your account.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="flex flex-col gap-4">
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            className="grid gap-4"
+                        >
+                            <div className="grid gap-2">
+                                <FormField
+                                    control={form.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Email</FormLabel>
+                                            <FormControl>
+                                                <Input
+                                                    {...field}
+                                                    disabled={isPending}
+                                                    placeholder="john.doe@example.com"
+                                                    type="email"
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <FormError message={error} />
+                            <FormSuccess message={success} />
+                            <Button
+                                disabled={isPending}
+                                type="submit"
+                                className="w-full"
+                            >
+                                Send reset email
+                            </Button>
+                        </form>
+                    </Form>
+                </CardContent>
+            </Card>
+        </section>
     );
 };

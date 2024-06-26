@@ -3,7 +3,7 @@ import { Avatar, AvatarFallback } from '@/app/_components/ui/avatar'
 import { Button } from '@/app/_components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/app/_components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip';
-import { logout } from '@/server/actions/auth/logout';
+import { signOut } from '@/server/actions/auth/sign-out';
 import { ChevronFirst, ChevronLast, Filter, LayoutDashboard, LucideIcon, MoreVertical } from 'lucide-react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -83,7 +83,7 @@ export default function AccountSidebar() {
                         <DropdownMenuLabel>Account</DropdownMenuLabel>
                         <DropdownMenuItem>Account Details</DropdownMenuItem>
                         <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => logout()}>Logout</DropdownMenuItem>
+                        <DropdownMenuItem onSelect={() => signOut()}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
 
                 </DropdownMenu>
