@@ -13,7 +13,7 @@ export const users = pgTable("user", {
 
 export const business = pgTable("business", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
+	id: serial("id").primaryKey().notNull(),
 	name: text("name").notNull(),
 	businessLogo: text("business_logo"),
 	businessEmail: text("business_email").notNull(),

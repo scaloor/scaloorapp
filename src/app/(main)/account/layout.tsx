@@ -13,10 +13,14 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
     if (!user?.businessId || !user) {
         redirect('/account-setup');
     }
-    
+
     return (
         <div className="flex h-screen overflow-hidden">
-            <AccountSidebar />
+            <AccountSidebar
+                user_email={user.email}
+                first_name={user.firstName}
+                last_name={user.lastName}
+            />
             {/* Content */}
             {children}
         </div >

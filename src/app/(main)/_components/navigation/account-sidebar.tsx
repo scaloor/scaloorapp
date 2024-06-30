@@ -12,7 +12,7 @@ import React, { useState } from 'react'
 
 const SidebarItems = [
     {
-        text: 'Dashboard',
+        text: 'Account',
         icon: <LayoutDashboard />,
         href: '/account'
     },
@@ -23,7 +23,13 @@ const SidebarItems = [
     },
 ]
 
-export default function AccountSidebar() {
+type AccountSidebarProps = {
+    user_email: string,
+    first_name: string,
+    last_name: string,
+}
+
+export default function AccountSidebar({ user_email, first_name, last_name }: AccountSidebarProps) {
     const pathname = usePathname()
     const [isOpen, setIsOpen] = useState(true)
     return (
@@ -66,12 +72,12 @@ export default function AccountSidebar() {
                     <DropdownMenuTrigger className='flex p-3 border-t'>
                         <>
                             <Avatar>
-                                <AvatarFallback>JD</AvatarFallback>
+                                <AvatarFallback>{first_name[0]}{last_name[0]}</AvatarFallback>
                             </Avatar>
                             <div className={`flex justify-between items-center overflow-hidden transition-all leading-4 ${isOpen ? 'w-52 ml-3 ' : 'w-0'}`}>
                                 <div>
-                                    <p className='font-semibold text-start'>John Doe</p>
-                                    <span className='text-muted-foreground text-xs'>johndoe@example.com</span>
+                                    <p className='font-semibold text-start'>{first_name} {last_name}</p>
+                                    <span className='text-muted-foreground text-xs'>{user_email}</span>
                                 </div>
                                 <MoreVertical size={20} />
                             </div>
