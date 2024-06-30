@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export const getSessionUser = async () => {
     const supabase = createClient();
@@ -7,7 +8,7 @@ export const getSessionUser = async () => {
     return { user: data?.user, error: error }
 }
 
-export async function AuthenicatedRoute({ children }: { children: React.ReactNode }) {
+export default async function AuthenicatedRoute({ children }: { children: React.ReactNode }) {
     const { user, error } = await getSessionUser()
     if (error || !user) {
         redirect('/auth/login')

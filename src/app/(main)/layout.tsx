@@ -1,4 +1,5 @@
-import { AuthenicatedRoute } from "../auth/provider/authenticated-route";
+import AuthenicatedRoute from "../auth/provider/authenticated-route";
+import React from "react";
 
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
