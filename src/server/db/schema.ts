@@ -27,10 +27,8 @@ export const business = pgTable("business", {
 });
 
 export const funnel = pgTable("funnel", {
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	businessId: bigint("business_id", { mode: "number" }).notNull().references(() => business.id),
+	id: serial("id").primaryKey().notNull(),
+	businessId: serial("business_id").notNull().references(() => business.id),
 	name: text("name").notNull(),
 	description: text("description"),
 	published: boolean("published").default(false).notNull(),
@@ -47,9 +45,9 @@ export const funnel = pgTable("funnel", {
 
 export const stage = pgTable("stage", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
+	id: serial("id").primaryKey().notNull(),
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	funnelId: bigint("funnel_id", { mode: "number" }).notNull().references(() => funnel.id),
+	funnelId: serial("funnel_id").notNull().references(() => funnel.id),
 	name: text("name").notNull(),
 	pathName: text("path_name").notNull(),
 	content: json("content").notNull(),

@@ -8,6 +8,7 @@ import { ChevronFirst, ChevronLast, Filter, LayoutDashboard, LucideIcon, MoreVer
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react'
+import { NavigationBar } from './navigation-bar';
 
 
 const SidebarItems = [
@@ -24,74 +25,76 @@ const SidebarItems = [
 ]
 
 type AccountSidebarProps = {
-    user_email: string,
     first_name: string,
     last_name: string,
 }
 
-export default function AccountSidebar({ user_email, first_name, last_name }: AccountSidebarProps) {
+export default function AccountSidebar({ first_name, last_name }: AccountSidebarProps) {
     const pathname = usePathname()
     const [isOpen, setIsOpen] = useState(true)
+    const isPath = pathname.includes
     return (
-        <aside className='h-screen max-w-60'>
-            <nav className='h-full flex flex-col bg-background border-r shadow-sm'>
-                <div className='p-4 pb-2 flex justify-between items-center'>
-                    <div className={`overflow-hidden transition-all ${isOpen ? 'w-32' : 'w-0'}`}>
-                        Scaloor
+        <>
+            <aside className='h-screen max-w-60'>
+                <nav className='h-full flex flex-col bg-background border-r shadow-sm'>
+                    <div className='p-4 pb-2 flex justify-between items-center'>
+                        <div className={`overflow-hidden transition-all ${isOpen ? 'w-32' : 'w-0'}`}>
+                            Scaloor
+                        </div>
+                        <Button variant='ghost' size='sm' onClick={() => setIsOpen(!isOpen)}>
+                            {isOpen ? <ChevronFirst /> : <ChevronLast />}
+                        </Button>
                     </div>
-                    <Button variant='ghost' size='sm' onClick={() => setIsOpen(!isOpen)}>
-                        {isOpen ? <ChevronFirst /> : <ChevronLast />}
-                    </Button>
-                </div>
-                <ul className='flex-1 px-3'>
-                    <TooltipProvider>
-                        {SidebarItems.map((item) => (
-                            <Link key={item.text} href={item.href}>
-                                <li
-                                    className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors
+                    <ul className='flex-1 px-3'>
+                        <TooltipProvider>
+                            {SidebarItems.map((item) => (
+                                <Link key={item.text} href={item.href}>
+                                    <li
+                                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors
                               ${pathname === item.href ? 'bg-primary text-white hover:bg-green-400' : 'hover:bg-green-400 '}`}>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            {item.icon}
-                                        </TooltipTrigger>
-                                        {!isOpen && (
-                                            <TooltipContent>
-                                                {item.text}
-                                            </TooltipContent>
-                                        )}
-                                    </Tooltip>
-                                    <span className={`overflow-hidden transition-all ${isOpen ? 'w-52 ml-3' : 'w-0'}`}>{item.text}</span>
-                                </li>
-                            </Link>
-                        ))}
-                    </TooltipProvider>
-                </ul>
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                {item.icon}
+                                            </TooltipTrigger>
+                                            {!isOpen && (
+                                                <TooltipContent>
+                                                    {item.text}
+                                                </TooltipContent>
+                                            )}
+                                        </Tooltip>
+                                        <span className={`overflow-hidden transition-all ${isOpen ? 'w-52 ml-3' : 'w-0'}`}>{item.text}</span>
+                                    </li>
+                                </Link>
+                            ))}
+                        </TooltipProvider>
+                    </ul>
 
 
-                <DropdownMenu>
-                    <DropdownMenuTrigger className='flex p-3 border-t'>
-                        <>
-                            <Avatar>
-                                <AvatarFallback>{first_name[0]}{last_name[0]}</AvatarFallback>
-                            </Avatar>
-                            <div className={`flex justify-between items-center overflow-hidden transition-all leading-4 ${isOpen ? 'w-52 ml-3 ' : 'w-0'}`}>
-                                <div>
-                                    <p className='font-semibold text-start'>{first_name} {last_name}</p>
-                                    <span className='text-muted-foreground text-xs'>{user_email}</span>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className='flex p-3 border-t items-center'>
+                            <>
+                                <Avatar>
+                                    <AvatarFallback>{first_name[0].toLocaleUpperCase()}{last_name[0].toLocaleUpperCase()}</AvatarFallback>
+                                </Avatar>
+                                <div className={`flex justify-between items-center overflow-hidden transition-all leading-4 ${isOpen ? 'w-52 ml-3 ' : 'w-0'}`}>
+                                    <div>
+                                        <p className='font-semibold text-start'>{first_name} {last_name}</p>
+                                    </div>
+                                    <MoreVertical size={20} />
                                 </div>
-                                <MoreVertical size={20} />
-                            </div>
-                        </>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Account</DropdownMenuLabel>
-                        <DropdownMenuItem>Account Details</DropdownMenuItem>
-                        <DropdownMenuItem>Billing</DropdownMenuItem>
-                        <DropdownMenuItem onSelect={() => signOut()}>Logout</DropdownMenuItem>
-                    </DropdownMenuContent>
+                            </>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Account</DropdownMenuLabel>
+                            <DropdownMenuItem>Account Details</DropdownMenuItem>
+                            <DropdownMenuItem>Billing</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => signOut()}>Logout</DropdownMenuItem>
+                        </DropdownMenuContent>
 
-                </DropdownMenu>
-            </nav>
-        </aside>
+                    </DropdownMenu>
+                </nav>
+            </aside>
+            <NavigationBar isOpen={isOpen} />
+        </>
     )
 }

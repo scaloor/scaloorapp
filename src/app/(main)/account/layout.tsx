@@ -2,6 +2,7 @@ import React from "react"
 import AccountSidebar from "../_components/navigation/account-sidebar"
 import { getAuthUserDetails } from "@/server/actions/users"
 import { redirect } from "next/navigation"
+import { NavigationBar } from "../_components/navigation/navigation-bar"
 
 
 interface SettingsLayoutProps {
@@ -17,12 +18,13 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
     return (
         <div className="flex h-screen overflow-hidden">
             <AccountSidebar
-                user_email={user.email}
                 first_name={user.firstName}
                 last_name={user.lastName}
             />
             {/* Content */}
-            {children}
+            <div className="mt-20 w-full">
+                {children}
+            </div>
         </div >
 
 

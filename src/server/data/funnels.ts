@@ -20,6 +20,7 @@ export async function addFunnel(funnelDetails: Funnel) {
         return console.log('Unable to add funnel');
     }
 }
+
 /**
  * Update funnel
  * @param funnelDetails 
@@ -30,13 +31,10 @@ export async function updateFunnel(funnelDetails: Funnel) {
         await db
             .update(funnel)
             .set({
-                name: funnelDetails.name,
-                description: funnelDetails.description,
-                published: funnelDetails.published,
-                subDomainName: funnelDetails.subDomainName,
-                favicon: funnelDetails.favicon,
+                ...funnelDetails,
+                updatedAt: new Date().toISOString()
             })
-            .where(eq(funnel.id, funnelDetails.id));
+            .where(eq(funnel.id, funnelDetails.id!));
 
         return true
     } catch {
@@ -44,6 +42,19 @@ export async function updateFunnel(funnelDetails: Funnel) {
     }
 }
 
+/**
+ * Delete funnel
+ * @param funnel_id 
+ * @returns 
+ */
+export async function deleteFunnel(funnel_id: number) {
+    try {
+        await db.delete(funnel).where(eq(funnel.id, funnel_id));
+        return true
+    } catch {
+        return console.log('Unable to delete funnel');
+    }
+}
 
 /**
  * Find funnel object by id.
@@ -61,16 +72,13 @@ export async function getFunnelById(funnel_id: number) {
     }
 }
 
-/**
- * Delete funnel
- * @param funnel_id 
- * @returns 
- */
-export async function deleteFunnel(funnel_id: number) {
+export async function getFunnelsByBusinessId(businessId: number) {
     try {
-        await db.delete(funnel).where(eq(funnel.id, funnel_id));
-        return true
+        const funnels = await db.select().from(funnel).where(
+            eq(funnel.businessId, businessId)
+        ).then(res => res);
+        return funnels
     } catch {
-        return console.log('Unable to delete funnel');
+        throw new Error('Unable to get funnels by business id');
     }
 }

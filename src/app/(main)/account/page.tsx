@@ -1,14 +1,23 @@
 
 import { getAuthUserDetails } from "@/server/actions/users";
+import AccountPage from "../_components/account-page";
+import { getBusinessById } from "@/server/data/business";
 
 
 export default async function Account() {
   const user = await getAuthUserDetails();
+  if (!user) {
+    return <div>User not found</div>
+  }
+  const business = await getBusinessById(user.businessId!)
+  if (!business) {
+    return <div>Business not found</div>
+  }
   return (
-    <div>
-      Account
-      <h2>Super Secret Stuff</h2>
-      <p>{JSON.stringify(user)}</p>
+    <div className="flex w-full">
+      <AccountPage
+        user={user}
+        business={business} />
     </div>
   )
 }

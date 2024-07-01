@@ -22,7 +22,6 @@ export default function ImageUpload({ form, className }: ImageUploadProps) {
         console.log('Image upload component:', acceptedFiles[0]);
         form?.setValue('businessLogo', acceptedFiles[0]); // If there is a form, set the value of the form field to the uploaded file
         setPreviewURL(URL.createObjectURL(acceptedFiles[0])); // Set the image URL to the URL of the uploaded file
-        // wait 3 second then set loading to false
         setIsLoading(false);
     }, []);
 
