@@ -1,4 +1,4 @@
-
+'use server'
 import { getSessionUser } from "@/app/auth/provider/authenticated-route";
 import { getUserByEmail, getUserById } from "@/server/data/users";
 

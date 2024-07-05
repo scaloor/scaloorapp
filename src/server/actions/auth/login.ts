@@ -28,5 +28,5 @@ export async function login(data: z.infer<typeof LoginSchema>) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/account')
+  redirect('/account/settings')
 }

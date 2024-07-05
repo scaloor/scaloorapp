@@ -2,7 +2,7 @@
 import { AlertDialog } from '@/app/_components/ui/alert-dialog'
 import { ScrollArea } from '@/app/_components/ui/scroll-area'
 import { Stage } from '@/server/db/types'
-import { Check } from 'lucide-react'
+import { Check, ExternalLink, FilterIcon, HandCoins, LucideEdit, ShoppingBag } from 'lucide-react'
 import React, { useState } from 'react'
 import {
     DragDropContext,
@@ -13,6 +13,12 @@ import {
 import StageStepCard from './stage-step-card'
 import { updateStage } from '@/server/data/stage';
 import { toast } from 'sonner';
+import CreateStageDialog from './create-stage-dialog';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/app/_components/ui/card';
+import Link from 'next/link';
+import Placeholder from './placeholder';
+
+
 
 type StageListProps = {
     stages: Stage[]
@@ -69,11 +75,12 @@ export default function StageList({ stages }: StageListProps) {
     }
 
     return (
-        <AlertDialog>
-            <div className='flex border-[1px] rounded-lg flex-col p-6'>
+
+        <div className='flex border-[1px] rounded-lg flex-col p-6'>
+            <aside className='flex flex-col gap-4'>
                 <ScrollArea className='h-full'>
                     <div className='flex gap-4 items-center'>
-                        <Check />
+                        <ShoppingBag />
                         Funnel Stages
                     </div>
                     {pagesState.length ? (
@@ -115,7 +122,51 @@ export default function StageList({ stages }: StageListProps) {
                         </div>
                     )}
                 </ScrollArea>
-            </div>
-        </AlertDialog>
+                <CreateStageDialog />
+            </aside>
+            <aside className='p-4'>
+                {!!stages.length ? (
+                    <Card className="h-full flex justify-between flex-col">
+                        <CardHeader>
+                            <p className="text-sm text-muted-foreground">Stage name</p>
+                            <CardTitle>{selectedStage?.name}</CardTitle>
+                            <CardDescription className="flex flex-col gap-4">
+                                <div className="border-2 rounded-lg sm:w-80 w-full  overflow-clip">
+                                    <Link
+                                        href={`/editor/${selectedStage?.id}`}
+                                        className="relative group"
+                                    >
+                                        <div className="cursor-pointer group-hover:opacity-30 w-full">
+                                            <Placeholder />
+                                        </div>
+                                        <LucideEdit
+                                            size={50}
+                                            className="!text-muted-foreground absolute top-1/2 left-1/2 opacity-0 transofrm -translate-x-1/2 -translate-y-1/2 group-hover:opacity-100 transition-all duration-100"
+                                        />
+                                    </Link>
+
+                                    <Link
+                                        target="_blank"
+                                        href={`/editor/${selectedStage?.id}`}
+                                        className="group flex items-center justify-start p-2 gap-2 hover:text-primary transition-colors duration-200"
+                                    >
+                                        <ExternalLink size={15} />
+                                        <div className="w-64 overflow-hidden overflow-ellipsis ">
+                                            path
+                                        </div>
+                                    </Link>
+                                </div>
+
+                                {/* CreateFunnelPage */}
+                            </CardDescription>
+                        </CardHeader>
+                    </Card>
+                ) : (
+                    <div className="h-[600px] flex items-center justify-center text-muted-foreground">
+                        Create a page to view page settings.
+                    </div>
+                )}
+            </aside>
+        </div>
     )
 }

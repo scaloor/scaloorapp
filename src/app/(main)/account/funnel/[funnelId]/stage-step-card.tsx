@@ -13,7 +13,7 @@ type StageStepCardProps = {
 
 export default function StageStepCard({ stage, index, activePage }: StageStepCardProps) {
   let portal = document.getElementById('funnel-page')
-  console.log(stage.id)
+
   return (
     <Draggable
       draggableId={stage.id!.toString()}

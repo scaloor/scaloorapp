@@ -17,10 +17,6 @@ export default async function FunnelPage({ params }: FunnelPageProps) {
     }
     return (
         <div id='funnel-page'>
-            <div>
-                <div>FunnelPage</div>
-                <div>{funnelId}</div>
-            </div>
             <div className='p-6'>
                 <StageList stages={stages} />
             </div>

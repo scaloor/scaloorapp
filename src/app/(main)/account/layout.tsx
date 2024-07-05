@@ -2,7 +2,8 @@ import React from "react"
 import AccountSidebar from "../_components/navigation/account-sidebar"
 import { getAuthUserDetails } from "@/server/actions/users"
 import { redirect } from "next/navigation"
-import { NavigationBar } from "../_components/navigation/navigation-bar"
+import { getBusinessById } from "@/server/data/business"
+import AccountLayout from "../_components/navigation/account-layout"
 
 
 interface SettingsLayoutProps {
@@ -10,21 +11,13 @@ interface SettingsLayoutProps {
 }
 
 export default async function SettingsLayout({ children }: SettingsLayoutProps) {
-    const user = await getAuthUserDetails()
-    if (!user?.businessId || !user) {
-        redirect('/account-setup');
-    }
-
     return (
-        <div className="flex h-screen overflow-hidden">
-            <AccountSidebar
-                first_name={user.firstName}
-                last_name={user.lastName}
-            />
-            {/* Content */}
-            <div className="mt-20 w-full">
-                {children}
-            </div>
+        <div className="flex h-screen overflow-hidden w-full">
+            <AccountLayout>
+                <div className="w-full">
+                    {children}
+                </div>
+            </AccountLayout>
         </div >
 
 

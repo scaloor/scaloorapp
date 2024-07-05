@@ -11,8 +11,8 @@ import { usePathname } from 'next/navigation';
 
 export default function Breadcrumbs() {
     const pathname = usePathname()
-    const pages = pathname.split('/')
-    pages.shift()
+    const pages = pathname.split('/').splice(0, 2)
+    console.log(pages)
     let pageUrl = '/'
     return (
         <Breadcrumb>

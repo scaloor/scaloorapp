@@ -4,97 +4,91 @@ import { Button } from '@/app/_components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/app/_components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip';
 import { signOut } from '@/server/actions/auth/sign-out';
-import { ChevronFirst, ChevronLast, Filter, LayoutDashboard, LucideIcon, MoreVertical } from 'lucide-react'
+import { ChevronFirst, ChevronLast, Filter, LayoutDashboard, LucideIcon, MoreVertical, Settings } from 'lucide-react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import React, { useState } from 'react'
-import { NavigationBar } from './navigation-bar';
+import React from 'react'
+import { cn } from '@/lib/utils';
+import { HamburgerMenuIcon } from '@radix-ui/react-icons';
+import Profile from './profile';
+import { useAccountNavigation } from './navigation-provider';
 
 
-const SidebarItems = [
+const sidebarOptions = [
     {
-        text: 'Account',
-        icon: <LayoutDashboard />,
-        href: '/account'
+        name: 'Settings',
+        icon: <Settings className='h-3 w-3' />,
+        href: '/account/settings'
     },
     {
-        text: 'Funnels',
-        icon: <Filter />,
+        name: 'Dashboard',
+        icon: <LayoutDashboard className='h-3 w-3' />,
+        href: '/account/dashboard'
+    },
+    {
+        name: 'Funnels',
+        icon: <Filter className='h-3 w-3' />,
         href: '/account/funnel',
     },
 ]
 
 type AccountSidebarProps = {
-    first_name: string,
-    last_name: string,
+    firstName: string,
+    lastName: string,
+    businessName: string,
 }
 
-export default function AccountSidebar({ first_name, last_name }: AccountSidebarProps) {
+export default function AccountSidebar({ firstName, lastName, businessName }: AccountSidebarProps) {
     const pathname = usePathname()
-    const [isOpen, setIsOpen] = useState(true)
+    const { isOpen, toggleOpen } = useAccountNavigation()
     const isPath = pathname.includes
     return (
         <>
-            <aside className='h-screen max-w-60'>
-                <nav className='h-full flex flex-col bg-background border-r shadow-sm'>
-                    <div className='p-4 pb-2 flex justify-between items-center'>
-                        <div className={`overflow-hidden transition-all ${isOpen ? 'w-32' : 'w-0'}`}>
-                            Scaloor
-                        </div>
-                        <Button variant='ghost' size='sm' onClick={() => setIsOpen(!isOpen)}>
-                            {isOpen ? <ChevronFirst /> : <ChevronLast />}
+            <div className="lg:block hidden border-r h-full">
+                <div className="flex h-full max-h-screen flex-col gap-2 justify-between">
+                    <div className="flex h-[55px] items-center justify-between border-b px-3 w-full">
+                        <Link className={`flex items-center gap-2 font-semibold ml-1 overflow-hidden transition-all ${isOpen ? 'w-32' : 'w-0'}`} href="/">
+                            <span className="">Scaloor</span>
+                        </Link>
+                        <Button variant='ghost' size='sm' onClick={toggleOpen}>
+                            <HamburgerMenuIcon />
                         </Button>
                     </div>
-                    <ul className='flex-1 px-3'>
-                        <TooltipProvider>
-                            {SidebarItems.map((item) => (
-                                <Link key={item.text} href={item.href}>
-                                    <li
-                                        className={`relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors
-                              ${pathname === item.href ? 'bg-primary text-white hover:bg-green-400' : 'hover:bg-green-400 '}`}>
+                    <div className="flex-1 overflow-auto py-2 items-center justify-center">
+                        <nav className="grid justify-center text-sm font-medium">
+
+                            <TooltipProvider>
+                                {sidebarOptions.map((option) => (
+                                    <Link
+                                        className={cn("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
+                                            "flex items-center gap-2 rounded-lg px-3 py-2 text-gray-900  transition-all hover:text-gray-900 bg-primary dark:text-gray-50 dark:hover:text-gray-50": pathname.includes(option.href)
+                                        })}
+                                        href={option.href}
+                                    >
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                {item.icon}
+                                                <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
+                                                    {option.icon}
+                                                </div>
                                             </TooltipTrigger>
                                             {!isOpen && (
                                                 <TooltipContent>
-                                                    {item.text}
+                                                    {option.name}
                                                 </TooltipContent>
                                             )}
                                         </Tooltip>
-                                        <span className={`overflow-hidden transition-all ${isOpen ? 'w-52 ml-3' : 'w-0'}`}>{item.text}</span>
-                                    </li>
-                                </Link>
-                            ))}
-                        </TooltipProvider>
-                    </ul>
+                                        <span className={`overflow-hidden transition-all ${isOpen ? 'w-52 ml-3' : 'w-0'}`}>{option.name}</span>
+                                    </Link>
+                                ))}
+                            </TooltipProvider>
 
-
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className='flex p-3 border-t items-center'>
-                            <>
-                                <Avatar>
-                                    <AvatarFallback>{first_name[0].toLocaleUpperCase()}{last_name[0].toLocaleUpperCase()}</AvatarFallback>
-                                </Avatar>
-                                <div className={`flex justify-between items-center overflow-hidden transition-all leading-4 ${isOpen ? 'w-52 ml-3 ' : 'w-0'}`}>
-                                    <div>
-                                        <p className='font-semibold text-start'>{first_name} {last_name}</p>
-                                    </div>
-                                    <MoreVertical size={20} />
-                                </div>
-                            </>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Account</DropdownMenuLabel>
-                            <DropdownMenuItem>Account Details</DropdownMenuItem>
-                            <DropdownMenuItem>Billing</DropdownMenuItem>
-                            <DropdownMenuItem onSelect={() => signOut()}>Logout</DropdownMenuItem>
-                        </DropdownMenuContent>
-
-                    </DropdownMenu>
-                </nav>
-            </aside>
-            <NavigationBar isOpen={isOpen} />
+                        </nav>
+                    </div>
+                    <div>
+                        <Profile firstName={firstName} lastName={lastName} businessName={businessName} isOpen={isOpen} />
+                    </div>
+                </div>
+            </div>
         </>
     )
 }
