@@ -58,12 +58,13 @@ export default function AccountSidebar({ firstName, lastName, businessName }: Ac
                         <nav className="grid justify-center text-sm font-medium">
 
                             <TooltipProvider>
-                                {sidebarOptions.map((option) => (
+                                {sidebarOptions.map((option, index) => (
                                     <Link
                                         className={cn("flex items-center gap-2 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50", {
                                             "flex items-center gap-2 rounded-lg px-3 py-2 text-gray-900  transition-all hover:text-gray-900 bg-primary dark:text-gray-50 dark:hover:text-gray-50": pathname.includes(option.href)
                                         })}
                                         href={option.href}
+                                        key={index}
                                     >
                                         <Tooltip>
                                             <TooltipTrigger>
