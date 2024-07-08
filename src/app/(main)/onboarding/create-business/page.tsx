@@ -13,7 +13,10 @@ export default async function AccountSetup() {
   if (!user) {
     return redirect('/auth/login')
   }
-  
+  if (user.businessId) {
+    return redirect('/account/settings')
+  }
+
   return (
     <div>
       <OnboardingSteps

@@ -1,4 +1,4 @@
-import { pgTable, pgEnum, bigint, text, timestamp, foreignKey, unique, boolean, json } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, bigint, text, timestamp, unique, boolean, json, serial } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const keyStatus = pgEnum("key_status", ['default', 'valid', 'invalid', 'expired'])
@@ -31,7 +31,7 @@ export const funnel = pgTable("funnel", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	businessId: bigint("business_id", { mode: "number" }).notNull().references(() => business.id),
+	businessId: bigint("business_id", { mode: "number" }).notNull(),
 	name: text("name").notNull(),
 	description: text("description"),
 	published: boolean("published").default(false).notNull(),
@@ -50,7 +50,7 @@ export const stage = pgTable("stage", {
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
 	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	funnelId: bigint("funnel_id", { mode: "number" }).notNull().references(() => funnel.id),
+	funnelId: bigint("funnel_id", { mode: "number" }).notNull(),
 	name: text("name").notNull(),
 	pathName: text("path_name").notNull(),
 	content: json("content").notNull(),
@@ -67,13 +67,12 @@ export const stage = pgTable("stage", {
 });
 
 export const user = pgTable("user", {
-	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	id: bigint("id", { mode: "number" }).primaryKey().notNull(),
+	id: serial("id").primaryKey().notNull(),
 	firstName: text("first_name").notNull(),
 	lastName: text("last_name").notNull(),
 	email: text("email").notNull(),
 	// You can use { mode: "bigint" } if numbers are exceeding js number limitations
-	businessId: bigint("business_id", { mode: "number" }).references(() => business.id),
+	businessId: bigint("business_id", { mode: "number" }),
 	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });

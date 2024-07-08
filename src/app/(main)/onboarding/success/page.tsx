@@ -14,9 +14,6 @@ export default function SuccessPage({ }: Props) {
                 message='Your account is setup!'
                 Icon={CircleCheck}
             />
-            <p>
-                You can now start scaling !
-            </p>
             <Link href={'/account/settings'}>
                 <Button className='mt-4 bg-primary p-4 text-white' >
                     Go to account

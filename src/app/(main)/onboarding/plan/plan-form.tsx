@@ -1,9 +1,11 @@
 import { Card, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import React from 'react'
 
-type Props = {}
+type PlanFormProps = {
+    
+}
 
-export default function PlanForm({ }: Props) {
+export default function PlanForm({ }: PlanFormProps) {
     return (
         <Card>
             <CardHeader>

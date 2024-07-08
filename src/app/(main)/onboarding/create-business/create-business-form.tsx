@@ -18,6 +18,7 @@ import { addBusiness } from "@/server/data/business";
 import { useRouter } from "next/navigation";
 import { updateUser } from "@/server/data/users";
 import { User } from "@/server/db/types";
+import { stripeSession } from "@/server/actions/stripe";
 
 type createBusinessFormProps = {
     user: User
@@ -42,6 +43,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
         startTransition(async () => {
             // Upload the business logo to supabase storage
             const { data, error } = await uploadFile(file, path);
+            console.log('Data:', error);
             if (error) return setFormError(error.message);
             // Create the business in the database
             if (!!data) {
@@ -49,7 +51,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                     ...formData,
                     businessLogo: data.path,
                 }
-                console.log('Business created:');
+
                 const dbBusiness = await addBusiness(businessDetails);
                 if (!dbBusiness) setFormError("Unable to create business");
                 const newUser = {
@@ -59,11 +61,16 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                 const dbUser = await updateUser(newUser)
                 if (!dbUser) setFormError("Unable to update user");
 
-                router.push('/account');
+                // This should be updated to be dynamic for production
+                const url = await stripeSession('funnels');
+                if (!url) {
+                    setFormError("Unable to create subscription");
+                    return;
+                };
+                router.push(url);
             }
         });
     }
-
 
     return (
         <Card className="mt-5">
@@ -229,6 +236,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                             <FormError message={formError} />
                             <Button type="submit"
                                 disabled={isPending}
+                                className="dark:text-white"
                             >
                                 Next
                             </Button>

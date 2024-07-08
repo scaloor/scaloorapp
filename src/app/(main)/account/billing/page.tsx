@@ -1,7 +1,19 @@
+import { getAuthUserDetails } from "@/server/actions/users";
+import BillingForm from "./billing-form";
+import ErrorPage from "@/app/_components/common/error-page";
+import { getBusinessById } from "@/server/data/business";
+import { getSubscriptionById } from "@/server/data/subscription";
 
 
-export default function Billing() {
+export default async function Billing() {
+  const user = await getAuthUserDetails();
+  if (!user) return <ErrorPage errorMessage="User not found" />
+  const business = await getBusinessById(user.businessId!)
+  if (!business) return <ErrorPage errorMessage="Business not found" />
+  const subscription = await getSubscriptionById(business.currentSubscriptionId!)
+  if (!subscription) return <ErrorPage errorMessage="Subscription not found" />
+
   return (
-    <div>Billing</div>
+    <BillingForm subscription={subscription} />
   )
 }

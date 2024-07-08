@@ -16,6 +16,9 @@ export default async function AccountLayout({ children }: { children: React.Reac
     if (!business) {
         return <ErrorPage errorMessage="Business not found" />
     }
+    if (!business.currentSubscriptionId) {
+        redirect('/onboarding/cancel');
+    }
     return (
         <AccountNavigationProvider>
             <AccountSidebar

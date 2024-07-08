@@ -3,9 +3,7 @@ import OnboardingSteps from '../onboarding-steps'
 import { Lock } from 'lucide-react'
 import PlanForm from './plan-form'
 
-type Props = {}
-
-export default function PlanPage({ }: Props) {
+export default function PlanPage() {
     return (
         <div>
             <OnboardingSteps
