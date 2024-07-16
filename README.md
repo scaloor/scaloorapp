@@ -5,11 +5,11 @@ Scaloor is a unique funnel builder based on the ideaology that building funnels 
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - Full stack web development framework for React.
-- [Auth.js](https://authjs.dev/) - Open source authentication with OAuth support.
+- [Supabase](https://supabase.com/) - Postgres database + Authentication and storage.
 - [Drizzle ORM](https://orm.drizzle.team/) - Typesafe database ORM. Configured in this project for postgres.
-- [Amazon SES](https://aws.amazon.com/ses/) - Email server for developers used for password reset and account verification.
+- [Amazon SES](https://aws.amazon.com/ses/) - Email server for developers .
 - [Shadcn/ui](https://ui.shadcn.com/) - Customizable react components.
-- [EditorJS](https://editorjs.io/) - Open source block based text editor
+- [PlateJS](https://platejs.org/) - Open source rich text editor
 
 ## Roadmap
 - Funnel Creator
