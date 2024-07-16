@@ -31,11 +31,16 @@ export async function stripeSession(plan_slug: string) {
             success_url: `${process.env.NEXT_PUBLIC_URL}/onboarding/success`,
             cancel_url: `${process.env.NEXT_PUBLIC_URL}/onboarding/cancel`,
             customer_email: dbBusiness.businessEmail,
+            subscription_data: {
+                metadata: {
+                    business_id: dbBusiness.id,
+                },
+            },
             metadata: {
                 business_id: dbBusiness.id,
             },
         });
-        
+
         return stripeSession.url;
     }
 
@@ -48,4 +53,10 @@ export async function stripeSession(plan_slug: string) {
 
     return stripeSession.url;
 
+}
+
+
+export async function cancelStripeSubscription(subscriptionId: string) {
+    console.log('Cancelling subscription')
+    await stripe.subscriptions.cancel(subscriptionId);
 }

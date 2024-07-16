@@ -50,7 +50,7 @@ export async function updateBusiness(businessDetails: Business) {
     }
 }
 
-export async function updateBusinessSubscription(businessId: number, subscriptionId: number) {
+export async function updateBusinessSubscription(businessId: number, subscriptionId: number | null) {
     try {
         await db
             .update(business)

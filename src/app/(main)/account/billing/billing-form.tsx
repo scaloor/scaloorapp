@@ -2,10 +2,12 @@
 import { Button } from '@/app/_components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { formatDate } from '@/lib/utils'
-import { stripeSession } from '@/server/actions/stripe'
+import { cancelStripeSubscription, stripeSession } from '@/server/actions/stripe'
 import { Subscription } from '@/server/db/types'
 import { useRouter } from 'next/navigation'
 import React from 'react'
+import { stripe } from '@/lib/stripe'
+
 
 type BillingFormProps = {
     subscription: Subscription
@@ -19,6 +21,10 @@ export default function BillingForm({ subscription }: BillingFormProps) {
         router.push(url!)
     }
 
+    const cancelSubscriptionButton = async () => {
+        await cancelStripeSubscription(subscription.subscriptionId!)
+        router.refresh()
+    }
     return (
         <Card>
             <CardHeader>
@@ -33,6 +39,9 @@ export default function BillingForm({ subscription }: BillingFormProps) {
                     <p>Your current subscription will expire on {formatDate(new Date(subscription.currentPeriodEndDate))}.</p>
                     <Button className='dark:text-white max-w-[200px]' onClick={manageSubscription}>
                         Manage subscription
+                    </Button>
+                    <Button className='dark:text-white max-w-[200px]' onClick={cancelSubscriptionButton}>
+                        Cancel subscription
                     </Button>
                 </div>
             </CardContent>
