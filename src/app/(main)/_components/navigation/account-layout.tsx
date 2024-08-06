@@ -8,11 +8,11 @@ import ErrorPage from "@/app/_components/common/error-page";
 
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
-    const user = await getAuthUserDetails();
+    const { dbUser: user } = await getAuthUserDetails();
     if (!user?.businessId || !user) {
         redirect('/onboarding/create-business');
     }
-    const business = await getBusinessById(user.businessId)
+    const { dbBusiness: business } = await getBusinessById(user.businessId)
     if (!business) {
         return <ErrorPage errorMessage="Business not found" />
     }

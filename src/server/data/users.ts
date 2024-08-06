@@ -3,23 +3,24 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { users } from "@/server/db/schema";
-import { User } from "../db/types";
+import { InsertUser } from "../db/schema";
 
 /**
  * Add new user
- * @param {user}
+ * @param {InsertUser}
  * 
  */
-export async function addUser(userDetails: User) {
+export async function addUser(userDetails: InsertUser) {
     try {
-        const insertUser = async (user: User) => {
+        const insertUser = async (user: InsertUser) => {
             return await db.insert(users).values(user).returning().then(res => res[0])
         }
-        const user_id = insertUser(userDetails)
+        const dbUser = insertUser(userDetails)
 
-        return user_id
-    } catch {
-        throw Error('Unable to add user');
+        return { dbUser }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -28,36 +29,38 @@ export async function addUser(userDetails: User) {
  * @param param0 
  * @returns 
  */
-export async function updateUser(userDetails: User) {
+export async function updateUser(userDetails: InsertUser) {
     try {
-        await db
+        const dbUser = await db
             .update(users)
-            .set({ 
+            .set({
                 ...userDetails,
                 updatedAt: new Date().toISOString()
-             })
+            })
             .where(eq(users.id, userDetails.id!))
-
-    } catch {
-        return Error('Unable to update user');
+            .returning().then(res => res[0]);
+        return { dbUser }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 
 }
-
 
 /**
  * Find user object by id.
  * @param id
  * @returns {user}
  */
-export async function getUserById(user_id: number) {
+export async function getUserById(user_id: string) {
     try {
         const user = await db.select().from(users).where(
             eq(users.id, user_id)
         ).then(res => res[0]);
-        return user
-    } catch {
-        throw Error('Unable to find user');
+        return { user }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -68,11 +71,12 @@ export async function getUserById(user_id: number) {
  */
 export async function getUserByEmail(email: string) {
     try {
-        const user = await db.select().from(users).where(
+        const dbUser = await db.select().from(users).where(
             eq(users.email, email)
         ).then(res => res[0]);
-        return user
-    } catch {
-        throw Error('Unable to find user');
+        return { dbUser }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }

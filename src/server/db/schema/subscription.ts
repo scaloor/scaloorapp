@@ -1,5 +1,5 @@
-import { bigint, boolean, pgEnum, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
-import { createId } from "./create-id";
+import { boolean, pgEnum, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { scaloorId } from "./scaloor-id";
 
 export const planEnum = pgEnum("plan_enum", ['funnels'])
 
@@ -7,8 +7,8 @@ export const subscription = pgTable("subscription", {
     id: text("id")
         .primaryKey()
         .notNull()
-        .$defaultFn(() => createId('sub')),
-    businessId: bigint("business_id", { mode: "number" }).notNull(),
+        .$defaultFn(() => scaloorId('sub')),
+    businessId: text("business_id").notNull(),
     plan: planEnum("plan").notNull(),
     price: text("price").notNull(),
     active: boolean("active").default(false).notNull(),
@@ -24,3 +24,6 @@ export const subscription = pgTable("subscription", {
             subscriptionIdKey: unique("subscription_id_key").on(table.id),
         }
     });
+
+export type InsertSubscription = typeof subscription.$inferInsert;
+export type SelectSubscription = typeof subscription.$inferSelect;

@@ -17,7 +17,7 @@ export async function signup(data: z.infer<typeof RegisterSchema>) {
   const { first_name, last_name, email, password } = data;
 
   // Check that the email is not already in use
-  const existingUser = await getUserByEmail(email.toLowerCase());
+  const { dbUser: existingUser } = await getUserByEmail(email.toLowerCase());
   if (!!existingUser) {
     return { error: "Email already in use!" };
   }

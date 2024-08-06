@@ -2,7 +2,7 @@ import { getAuthUserDetails } from "@/server/actions/users";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
-    const user = await getAuthUserDetails();
+    const { dbUser: user } = await getAuthUserDetails();
     if (user) {
         return redirect('/account/settings')
     }

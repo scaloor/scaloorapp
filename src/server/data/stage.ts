@@ -3,21 +3,22 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { stage } from "../db/schema";
-import { Stage } from "../db/types";
+import { InsertStage, SelectStage } from "../db/schema";
 
 /**
  * Add new stage
  */
-export async function addStage(stageDetails: Stage) {
+export async function addStage(stageDetails: InsertStage) {
     try {
-        const insertStage = async (stageDetails: Stage) => {
+        const insertStage = async (stageDetails: InsertStage) => {
             return await db.insert(stage).values(stageDetails).returning().then(res => res[0])
         }
-        const stage_id = insertStage(stageDetails)
+        const dbStage = insertStage(stageDetails)
 
-        return stage_id
-    } catch {
-        return console.log('Unable to add stage');
+        return { dbStage }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }
 
@@ -26,19 +27,21 @@ export async function addStage(stageDetails: Stage) {
  * @param stageDetails 
  * @returns 
  */
-export async function updateStage(stageDetails: Stage) {
+export async function updateStage(stageDetails: InsertStage) {
     try {
-        await db
+        const dbStage = await db
             .update(stage)
             .set({
                 ...stageDetails,
                 updatedAt: new Date().toISOString(),
             })
-            .where(eq(stage.id, stageDetails.id!));
+            .where(eq(stage.id, stageDetails.id!))
+            .returning().then(res => res[0]);
 
-        return true
-    } catch {
-        return console.log('Unable to update stage');
+        return { dbStage }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }
 
@@ -47,14 +50,15 @@ export async function updateStage(stageDetails: Stage) {
  * @param stage_id 
  * @returns 
  */
-export async function getStageById(stage_id: number) {
+export async function getStageById(stage_id: string) {
     try {
         const findStage = await db.select().from(stage).where(
             eq(stage.id, stage_id)
         ).then(res => res[0]);
-        return findStage
-    } catch {
-        return console.log('Unable to find stage');
+        return { findStage }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }
 
@@ -63,22 +67,24 @@ export async function getStageById(stage_id: number) {
  * @param stage_id 
  * @returns 
  */
-export async function deleteStage(stage_id: number) {
+export async function deleteStage(stage_id: string) {
     try {
         await db.delete(stage).where(eq(stage.id, stage_id));
-        return true
-    } catch {
-        return console.log('Unable to delete stage');
+        return { success: true }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }
 
-export async function getStagesByFunnelId(funnel_id: number) {
+export async function getStagesByFunnelId(funnel_id: string) {
     try {
         const stages = await db.select().from(stage).where(
             eq(stage.funnelId, funnel_id)
         ).then(res => res);
-        return stages
-    } catch {
-        return console.log('Unable to get stages by funnel id');
+        return { stages }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }

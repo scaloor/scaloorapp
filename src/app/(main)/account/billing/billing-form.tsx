@@ -3,14 +3,14 @@ import { Button } from '@/app/_components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { formatDate } from '@/lib/utils'
 import { cancelStripeSubscription, stripeSession } from '@/server/actions/stripe'
-import { Subscription } from '@/server/db/types'
+import { SelectSubscription } from '@/server/db/schema'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import { stripe } from '@/lib/stripe'
 
 
 type BillingFormProps = {
-    subscription: Subscription
+    subscription: SelectSubscription
 }
 
 export default function BillingForm({ subscription }: BillingFormProps) {

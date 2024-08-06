@@ -3,21 +3,22 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { funnel } from "../db/schema";
-import { Funnel } from "../db/types";
+import { InsertFunnel } from "../db/schema";
 
 /**
  * Add new funnel
  */
-export async function addFunnel(funnelDetails: Funnel) {
+export async function addFunnel(funnelDetails: InsertFunnel) {
     try {
-        const insertFunnel = async (funnelDetails: Funnel) => {
+        const insertFunnel = async (funnelDetails: InsertFunnel) => {
             return await db.insert(funnel).values(funnelDetails).returning().then(res => res[0])
         }
-        const funnel_id = insertFunnel(funnelDetails)
+        const dbFunnel = insertFunnel(funnelDetails)
 
-        return funnel_id
-    } catch {
-        return console.log('Unable to add funnel');
+        return { dbFunnel }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -26,9 +27,9 @@ export async function addFunnel(funnelDetails: Funnel) {
  * @param funnelDetails 
  * @returns 
  */
-export async function updateFunnel(funnelDetails: Funnel) {
+export async function updateFunnel(funnelDetails: InsertFunnel) {
     try {
-        await db
+        const dbFunnel = await db
             .update(funnel)
             .set({
                 ...funnelDetails,
@@ -36,9 +37,10 @@ export async function updateFunnel(funnelDetails: Funnel) {
             })
             .where(eq(funnel.id, funnelDetails.id!));
 
-        return true
-    } catch {
-        return console.log('Unable to update funnel');
+        return { dbFunnel }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -47,12 +49,13 @@ export async function updateFunnel(funnelDetails: Funnel) {
  * @param funnel_id 
  * @returns 
  */
-export async function deleteFunnel(funnel_id: number) {
+export async function deleteFunnel(funnel_id: string) {
     try {
         await db.delete(funnel).where(eq(funnel.id, funnel_id));
-        return true
-    } catch {
-        return console.log('Unable to delete funnel');
+        return { success: true }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -61,24 +64,26 @@ export async function deleteFunnel(funnel_id: number) {
  * @param funnel_id {number}
  * @returns {Funnel}
  */
-export async function getFunnelById(funnel_id: number) {
+export async function getFunnelById(funnel_id: string) {
     try {
-        const findFunnel = await db.select().from(funnel).where(
+        const dbFunnel = await db.select().from(funnel).where(
             eq(funnel.id, funnel_id)
         ).then(res => res[0]);
-        return findFunnel
-    } catch {
-        return console.log('Unable to find funnel');
+        return { dbFunnel }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
-export async function getFunnelsByBusinessId(businessId: number) {
+export async function getFunnelsByBusinessId(businessId: string) {
     try {
         const funnels = await db.select().from(funnel).where(
             eq(funnel.businessId, businessId)
         ).then(res => res);
-        return funnels
-    } catch {
-        throw new Error('Unable to get funnels by business id');
+        return { funnels }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }

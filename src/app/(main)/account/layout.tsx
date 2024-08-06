@@ -1,8 +1,4 @@
 import React from "react"
-import AccountSidebar from "../_components/navigation/account-sidebar"
-import { getAuthUserDetails } from "@/server/actions/users"
-import { redirect } from "next/navigation"
-import { getBusinessById } from "@/server/data/business"
 import AccountLayout from "../_components/navigation/account-layout"
 
 

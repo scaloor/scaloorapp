@@ -26,7 +26,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 const checkoutSession = event.data.object ;
                 const checkoutSubscription = await stripe.subscriptions.retrieve(checkoutSession.subscription as string);
                 await addSubscription({ stripeSubscription: checkoutSubscription });
-                return NextResponse.json({ status: 200, event: event.type })
+                return NextResponse.json({ status: 'Success', event: event.type })
             case 'invoice.payment_succeeded': // Renewed subscription // WIP
                 console.log('Invoice payment succeeded')
                 const invoiceSession = event.data.object;

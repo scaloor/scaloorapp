@@ -10,7 +10,7 @@ export async function serverData(data: Value) {
     console.log(data[0].children)
 }
 
-export async function saveStageContent(stageId: number, content: Value) {
+export async function saveStageContent(stageId: string, content: Value) {
     try {
         const saveStage = await getStageById(stageId);
         if (!saveStage) {

@@ -1,12 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { Input } from '@/app/_components/ui/input'
 import { Label } from '@/app/_components/ui/label'
-import { Business, User } from '@/server/db/types'
+import { InsertUser, InsertBusiness } from '@/server/db/schema'
 import React from 'react'
 
 type AccountPageProps = {
-    user: User
-    business: Business
+    user: InsertUser
+    business: InsertBusiness
 }
 
 export default function AccountPage({ user, business }: AccountPageProps) {

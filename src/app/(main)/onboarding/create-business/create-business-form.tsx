@@ -17,11 +17,11 @@ import { FormError } from "@/app/_components/common/form-error";
 import { addBusiness } from "@/server/data/business";
 import { useRouter } from "next/navigation";
 import { updateUser } from "@/server/data/users";
-import { User } from "@/server/db/types";
+import { business, InsertUser } from "@/server/db/schema";
 import { stripeSession } from "@/server/actions/stripe";
 
 type createBusinessFormProps = {
-    user: User
+    user: InsertUser
 }
 
 export default function CreateBusinessForm({ user }: createBusinessFormProps) {
@@ -39,36 +39,41 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
         setFormError("");
         const file = form.getValues('businessLogo');
         const path = `business-logo/${formData.name}`;
-        if (!file) return setFormError("Please upload a business logo");
+        let businessLogoPath: string | undefined;
+        //if (!file) return setFormError("Please upload a business logo");
         startTransition(async () => {
-            // Upload the business logo to supabase storage
-            const { data, error } = await uploadFile(file, path);
-            console.log('Data:', error);
-            if (error) return setFormError(error.message);
-            // Create the business in the database
-            if (!!data) {
-                const businessDetails = {
-                    ...formData,
-                    businessLogo: data.path,
-                }
-
-                const dbBusiness = await addBusiness(businessDetails);
-                if (!dbBusiness) setFormError("Unable to create business");
-                const newUser = {
-                    ...user,
-                    businessId: dbBusiness.id,
-                }
-                const dbUser = await updateUser(newUser)
-                if (!dbUser) setFormError("Unable to update user");
-
-                // This should be updated to be dynamic for production
-                const url = await stripeSession('funnels');
-                if (!url) {
-                    setFormError("Unable to create subscription");
-                    return;
-                };
-                router.push(url);
+            if (!!file) {
+                // Upload the business logo to supabase storage
+                const { data, error } = await uploadFile(file, path);
+                console.log('Data:', error);
+                if (error) return setFormError(error?.message);
+                if (!data) return setFormError("Unable to upload business logo");
+                businessLogoPath = data.path;
             }
+            // Create the business in the database
+
+            const businessDetails = {
+                ...formData,
+                ...(businessLogoPath ? { businessLogo: businessLogoPath } : { businessLogo: null }),
+            }
+
+            const { dbBusiness } = await addBusiness(businessDetails);
+            if (!dbBusiness) return setFormError("Unable to create business");
+            const newUser = {
+                ...user,
+                businessId: dbBusiness.id,
+            }
+            const { dbUser } = await updateUser(newUser)
+            if (!dbUser) setFormError("Unable to update user");
+
+            // This should be updated to be dynamic for production
+            const url = await stripeSession('funnels');
+            if (!url) {
+                setFormError("Unable to create subscription");
+                return;
+            };
+            router.push(url);
+
         });
     }
 

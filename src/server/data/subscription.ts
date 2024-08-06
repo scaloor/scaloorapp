@@ -1,20 +1,21 @@
 import { eq } from "drizzle-orm";
 import { business, subscription } from "../db/schema";
 import { db } from "../db";
-import { Business, Subscription } from "../db/types";
+import { InsertBusiness, InsertSubscription } from "../db/schema";
 import Stripe from "stripe";
 import { updateBusinessSubscription } from "./business";
 
 
 
-export async function getSubscriptionById(subscription_id: number) {
+export async function getSubscriptionById(subscription_id: string) {
     try {
         const dbSubscription = await db.select().from(subscription).where(
             eq(subscription.id, subscription_id)
         ).then(res => res[0]);
-        return dbSubscription
-    } catch {
-        throw Error('Unable to find subscription');
+        return { dbSubscription }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }
 
@@ -24,7 +25,7 @@ export async function addSubscription({
     stripeSubscription: Stripe.Response<Stripe.Subscription>,
 }) {
     try {
-        const businessId = parseInt(stripeSubscription.metadata.business_id);
+        const businessId = stripeSubscription.metadata.business_id;
         const insertSubscription = async (subscriptionDetails: Stripe.Response<Stripe.Subscription>) => {
             return await db.insert(subscription).values({
                 plan: 'funnels',
@@ -39,10 +40,11 @@ export async function addSubscription({
             }).returning().then(res => res[0])
         }
         const dbSubscription = await insertSubscription(stripeSubscription)
-        const success = await updateBusinessSubscription(businessId, dbSubscription.id)
-        return success
-    } catch {
-        throw Error('Unable to add subscription');
+        const { success } = await updateBusinessSubscription(businessId, dbSubscription.id)
+        return { success }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
     }
 }
 
@@ -53,7 +55,7 @@ export async function updateSubscription({
     stripeSubscription: Stripe.Response<Stripe.Subscription>,
 }) {
     try {
-        const businessId = parseInt(stripeSubscription.metadata.business_id);
+        const businessId = stripeSubscription.metadata.business_id;
         const updateSubscription = async (subscriptionDetails: Stripe.Response<Stripe.Subscription>) => {
             return await db.update(subscription).set({
                 plan: 'funnels',
@@ -68,10 +70,11 @@ export async function updateSubscription({
             }).where(eq(subscription.id, business.currentSubscriptionId)).returning().then(res => res[0])
         }
         const dbSubscription = await updateSubscription(stripeSubscription)
-        const success = await updateBusinessSubscription(businessId, dbSubscription.id)
-        return success
-    } catch {
-        throw Error('Unable to update subscription');
+        const { success } = await updateBusinessSubscription(businessId, dbSubscription.id)
+        return { success }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message };
     }
 }
 
@@ -80,8 +83,9 @@ export async function getSubscriptionByStripeId(subscriptionId: string) {
         const dbSubscription = await db.select().from(subscription).where(
             eq(subscription.subscriptionId, subscriptionId)
         ).then(res => res[0]);
-        return dbSubscription
-    } catch {
-        throw Error('Unable to find subscription');
+        return { dbSubscription }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }

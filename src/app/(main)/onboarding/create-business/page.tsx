@@ -9,7 +9,7 @@ import { BriefcaseBusiness } from 'lucide-react';
 
 
 export default async function AccountSetup() {
-  const user = await getAuthUserDetails();
+  const { dbUser: user } = await getAuthUserDetails();
   if (!user) {
     return redirect('/auth/login')
   }

@@ -19,8 +19,9 @@ export async function cancelSubscription({
             updatedAt: new Date().toDateString(),
         }).where(eq(business.id, businessId))
         console.log('Subscription cancelled')
-        return true
-    } catch {
-        throw Error('Unable to cancel subscription');
+        return { success: true }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
     }
 }

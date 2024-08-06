@@ -6,11 +6,11 @@ import { getSubscriptionById } from "@/server/data/subscription";
 
 
 export default async function Billing() {
-  const user = await getAuthUserDetails();
+  const { dbUser: user } = await getAuthUserDetails();
   if (!user) return <ErrorPage errorMessage="User not found" />
-  const business = await getBusinessById(user.businessId!)
+  const { dbBusiness: business } = await getBusinessById(user.businessId!)
   if (!business) return <ErrorPage errorMessage="Business not found" />
-  const subscription = await getSubscriptionById(business.currentSubscriptionId!)
+  const { dbSubscription: subscription } = await getSubscriptionById(business.currentSubscriptionId!)
   if (!subscription) return <ErrorPage errorMessage="Subscription not found" />
 
   return (

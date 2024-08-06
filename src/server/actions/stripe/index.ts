@@ -9,11 +9,11 @@ import { PLANS } from "@/lib/stripe/plans";
 
 export async function stripeSession(plan_slug: string) {
     const plan = PLANS.find(plan => plan.slug === plan_slug);
-    const dbUser = await getAuthUserDetails();
+    const { dbUser } = await getAuthUserDetails();
     if (!dbUser?.businessId) {
         throw new Error('No user found');
     }
-    const dbBusiness = await getBusinessById(dbUser.businessId);
+    const { dbBusiness } = await getBusinessById(dbUser.businessId);
     if (!dbBusiness) {
         throw new Error('No business found');
     }
@@ -44,7 +44,11 @@ export async function stripeSession(plan_slug: string) {
         return stripeSession.url;
     }
 
-    const subscription = await getSubscriptionById(dbBusiness.currentSubscriptionId);
+    const { dbSubscription: subscription } = await getSubscriptionById(dbBusiness.currentSubscriptionId);
+
+    if (!subscription) {
+        throw new Error('No subscription found');
+    }
 
     const stripeSession = await stripe.billingPortal.sessions.create({
         customer: subscription.customerId,
