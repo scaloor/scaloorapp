@@ -17,17 +17,17 @@ import { useAccountNavigation } from './navigation-provider';
 const sidebarOptions = [
     {
         name: 'Settings',
-        icon: <Settings className='h-3 w-3' />,
+        icon: <Settings className='' />,
         href: '/account/settings'
     },
     {
         name: 'Dashboard',
-        icon: <LayoutDashboard className='h-3 w-3' />,
+        icon: <LayoutDashboard className='' />,
         href: '/account/dashboard'
     },
     {
         name: 'Funnels',
-        icon: <Filter className='h-3 w-3' />,
+        icon: <Filter className='' />,
         href: '/account/funnel',
     },
 ]
@@ -68,7 +68,7 @@ export default function AccountSidebar({ firstName, lastName, businessName }: Ac
                                     >
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <div className="border rounded-lg dark:bg-black dark:border-gray-800 border-gray-400 p-1 bg-white">
+                                                <div className="h-15 w-18">
                                                     {option.icon}
                                                 </div>
                                             </TooltipTrigger>
