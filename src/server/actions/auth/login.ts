@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { LoginSchema } from '@/app/auth/_components/schemas'
+import { LoginSchema } from '@/app/app/(auth)/_components/schemas'
 import { z } from 'zod'
 
 export async function login(data: z.infer<typeof LoginSchema>) {
@@ -28,5 +28,5 @@ export async function login(data: z.infer<typeof LoginSchema>) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/account/settings')
+  redirect('/dashboard')
 }

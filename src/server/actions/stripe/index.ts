@@ -5,8 +5,6 @@ import { getSubscriptionById } from "@/server/data/subscription";
 import { stripe } from "@/lib/stripe";
 import { PLANS } from "@/lib/stripe/plans";
 
-
-
 export async function stripeSession(plan_slug: string) {
     const plan = PLANS.find(plan => plan.slug === plan_slug);
     const { dbUser } = await getAuthUserDetails();
@@ -28,8 +26,8 @@ export async function stripeSession(plan_slug: string) {
                     quantity: 1,
                 },
             ],
-            success_url: `${process.env.NEXT_PUBLIC_URL}/onboarding/success`,
-            cancel_url: `${process.env.NEXT_PUBLIC_URL}/onboarding/cancel`,
+            success_url: `http://app.${process.env.NEXT_PUBLIC_DOMAIN}/success`, // This needs to be changed
+            cancel_url: `http://app.${process.env.NEXT_PUBLIC_DOMAIN}/cancel`,
             customer_email: dbBusiness.businessEmail,
             subscription_data: {
                 metadata: {
@@ -51,7 +49,7 @@ export async function stripeSession(plan_slug: string) {
     }
 
     const stripeSession = await stripe.billingPortal.sessions.create({
-        customer: subscription.customerId,
+        customer: subscription.stripeCustomerId,
         return_url: `${process.env.NEXT_PUBLIC_URL}/account/billing`,
     })
 

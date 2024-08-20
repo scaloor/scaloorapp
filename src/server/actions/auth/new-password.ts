@@ -1,5 +1,5 @@
 'use server';
-import { NewPasswordSchema } from "@/app/auth/_components/schemas";
+import { NewPasswordSchema } from "@/app/app/(auth)/_components/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -25,5 +25,5 @@ export async function newPassword(data: z.infer<typeof NewPasswordSchema>) {
     }
 
     revalidatePath('/', 'layout')
-    redirect('/account')
+    redirect('/dashboard')
 }

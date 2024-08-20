@@ -10,12 +10,9 @@ export const business = pgTable("business", {
     name: text("name").notNull(),
     businessLogo: text("business_logo"),
     businessEmail: text("business_email").notNull(),
-    address: text("address"),
-    city: text("city"),
-    postCode: text("post_code"),
-    state: text("state"),
     country: text("country"),
     currentSubscriptionId: text("subscription_id").references(() => subscription.id),
+    stripeAccountId: text("stripe_account_id"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => {

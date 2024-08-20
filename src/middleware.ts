@@ -5,11 +5,24 @@ import { NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   // This code makes /site the root path for the site
   const url = request.nextUrl
+
+  let hostname = request.headers.get('host')!
+
+  const searchParams = request.nextUrl.searchParams.toString();
+  // Get the pathname of the request (e.g. /, /about, /blog/first-post)
+  const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
+    }`;
+
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
 
-  
+  if (hostname == `app.${process.env.NEXT_PUBLIC_DOMAIN}`) {
+    return NextResponse.rewrite(new URL(`/app${path === "/" ? "" : path}`, request.url));
+  }
+
+
+
   return await updateSession(request)
 }
 

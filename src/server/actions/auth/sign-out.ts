@@ -10,5 +10,5 @@ export async function signOut() {
         redirect('/error')
       }
 
-    redirect('/auth/login')
+    redirect('/login')
 }

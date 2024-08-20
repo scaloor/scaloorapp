@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { RegisterSchema } from '@/app/auth/_components/schemas'
+import { RegisterSchema } from '@/app/app/(auth)/_components/schemas'
 import { z } from 'zod'
 import { addUser, getUserByEmail } from '@/server/data/users'
 
@@ -22,11 +22,10 @@ export async function signup(data: z.infer<typeof RegisterSchema>) {
     return { error: "Email already in use!" };
   }
 
-  await addUser({
-    firstName: first_name.toLowerCase(),
-    lastName: last_name.toLowerCase(),
-    email: email.toLowerCase(),
-  })
+  // Capitalize first and last name
+  const firstName = first_name.toLowerCase().charAt(0).toUpperCase() + first_name.toLowerCase().slice(1);
+  const lastName = last_name.toLowerCase().charAt(0).toUpperCase() + last_name.toLowerCase().slice(1);
+
 
   const { error } = await supabase.auth.signUp({
     email: email.toLowerCase(),
@@ -37,6 +36,12 @@ export async function signup(data: z.infer<typeof RegisterSchema>) {
     console.log(error)
     return { error: "Invalid details!" }
   }
+
+  await addUser({
+    firstName,
+    lastName,
+    email: email.toLowerCase(),
+  })
 
   return { success: "Verification email sent!" };
 }

@@ -31,10 +31,10 @@ export async function addSubscription({
                 plan: 'funnels',
                 price: `${subscriptionDetails.items.data[0].price.unit_amount! / 100}`,
                 active: true,
-                priceId: subscriptionDetails.items.data[0].price.id,
-                customerId: subscriptionDetails.customer as string,
+                stripePriceId: subscriptionDetails.items.data[0].price.id,
+                stripeCustomerId: subscriptionDetails.customer as string,
                 currentPeriodEndDate: new Date(subscriptionDetails.current_period_end * 1000).toDateString(),
-                subscriptionId: subscriptionDetails.id,
+                stripeSubscriptionId: subscriptionDetails.id,
                 businessId,
                 updatedAt: new Date().toDateString(),
             }).returning().then(res => res[0])
@@ -61,10 +61,10 @@ export async function updateSubscription({
                 plan: 'funnels',
                 price: `${subscriptionDetails.items.data[0].price.unit_amount! / 100}`,
                 active: true,
-                priceId: subscriptionDetails.items.data[0].price.id,
-                customerId: subscriptionDetails.customer as string,
+                stripePriceId: subscriptionDetails.items.data[0].price.id,
+                stripeCustomerId: subscriptionDetails.customer as string,
                 currentPeriodEndDate: new Date(subscriptionDetails.current_period_end * 1000).toDateString(),
-                subscriptionId: subscriptionDetails.id,
+                stripeSubscriptionId: subscriptionDetails.id,
                 businessId,
                 updatedAt: new Date().toDateString(),
             }).where(eq(subscription.id, business.currentSubscriptionId)).returning().then(res => res[0])
@@ -81,7 +81,7 @@ export async function updateSubscription({
 export async function getSubscriptionByStripeId(subscriptionId: string) {
     try {
         const dbSubscription = await db.select().from(subscription).where(
-            eq(subscription.subscriptionId, subscriptionId)
+            eq(subscription.stripeSubscriptionId, subscriptionId)
         ).then(res => res[0]);
         return { dbSubscription }
     } catch (error: any) {
