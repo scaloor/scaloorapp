@@ -16,18 +16,19 @@ export async function stripeSession(plan_slug: string) {
         throw new Error('No business found');
     }
 
+    // Check if the user has a subscription
     if (!dbBusiness.currentSubscriptionId) {
         const stripeSession = await stripe.checkout.sessions.create({
             mode: 'subscription',
             billing_address_collection: 'auto',
             line_items: [
                 {
-                    price: plan?.price.priceIds.test, // Update for production
+                    price: plan?.price.priceIds.test, // WIP: Update for production
                     quantity: 1,
                 },
             ],
-            success_url: `http://app.${process.env.NEXT_PUBLIC_DOMAIN}/success`, // This needs to be changed
-            cancel_url: `http://app.${process.env.NEXT_PUBLIC_DOMAIN}/cancel`,
+            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
             customer_email: dbBusiness.businessEmail,
             subscription_data: {
                 metadata: {
@@ -48,9 +49,10 @@ export async function stripeSession(plan_slug: string) {
         throw new Error('No subscription found');
     }
 
+    // Redirect to the billing portal if the user has an active subscription
     const stripeSession = await stripe.billingPortal.sessions.create({
         customer: subscription.stripeCustomerId,
-        return_url: `${process.env.NEXT_PUBLIC_URL}/account/billing`,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/account`,
     })
 
     return stripeSession.url;

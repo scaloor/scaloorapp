@@ -1,172 +1,134 @@
-'use client';
-import { AlertDialog } from '@/app/_components/ui/alert-dialog'
-import { ScrollArea } from '@/app/_components/ui/scroll-area'
-import { Stage } from '@/server/db/types'
-import { Check, ExternalLink, FilterIcon, HandCoins, LucideEdit, ShoppingBag } from 'lucide-react'
-import React, { useState } from 'react'
-import {
-    DragDropContext,
-    DragStart,
-    DropResult,
-    Droppable,
-} from 'react-beautiful-dnd'
-import StageStepCard from './stage-step-card'
-import { updateStage } from '@/server/data/stage';
-import { toast } from 'sonner';
-import CreateStageDialog from './create-stage-dialog';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/app/_components/ui/card';
+"use client"
+
+import { useEffect, useState } from 'react';
+import { createSwapy } from 'swapy';
+import StageItem from './_components/stage-item';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card';
+import { Button } from '@/app/_components/ui/button';
+import { ExternalLink, LucideEdit, StickyNote } from 'lucide-react';
+import Placeholder from './_components/placeholder';
+import Image from 'next/image';
 import Link from 'next/link';
-import Placeholder from './placeholder';
 
-
-
-type StageListProps = {
-    stages: Stage[]
+export type StageListDetails = {
+    id: string;
+    name: string;
+    order: number;
+    pathName: string;
+    previewImage?: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
-export default function StageList({ stages }: StageListProps) {
-    const [selectedStage, setSelectedStage] = useState<Stage | null>(stages[0]);
-    const [pagesState, setPagesState] = useState(stages);
+type StageListProps = {
+    stages: StageListDetails[]
+    funnelName: string;
+}
 
-    const onDragStart = (event: DragStart) => {
-        const { draggableId } = event
-        const value = pagesState.find((page) => page.id!.toString() === draggableId)
-    }
+export default function StageList({ stages, funnelName }: StageListProps) {
+    // Use this if you want to add local storage
+    /* const defaultSlotItems = stages.reduce((acc, stage, index) => {
+        acc[stage.id] = ALPHABET[index];
+        return acc;
+    }, {} as Record<string, string>); */
+    /* const slotItems = const slotItems: Record<string, 'a' | 'b' | 'c' | 'd' | null> = localStorage.getItem('slotItem')
+    ? JSON.parse(localStorage.getItem('slotItem')!)
+    : defaultSlotItems; */
 
-    const onDragEnd = (dropResult: DropResult) => {
-        const { destination, source } = dropResult
+    const [selectedStage, setSelectedStage] = useState<StageListDetails>(stages[0]);
 
-        //no destination or same position
-        if (
-            !destination ||
-            (destination.droppableId === source.droppableId &&
-                destination.index === source.index)
-        ) {
-            return
-        }
-        //change state
-        const newPageOrder = [...pagesState]
-            .toSpliced(source.index, 1)
-            .toSpliced(destination.index, 0, pagesState[source.index])
-            .map((page, idx) => {
-                return { ...page, order: idx }
-            })
+    // Create a config for the items
+    const itemsConfig = stages.map(stage => ({
+        id: stage.id,
+        label: stage.name
+    }));
 
-        setPagesState(newPageOrder)
-        newPageOrder.forEach(async (stage, index) => {
-            try {
-                const newStage = {
-                    ...stage,
-                    order: index,
-                }
-                await updateStage(newStage);
-            } catch (error) {
-                console.log(error) // This should be handled better
-                toast('Failed', {
-                    description: 'Could not save stage order',
-                })
-                return
-            }
-        })
+    // By reducing the itemsConfig, we create a new object with each component, this ensures that the components are both recreated and re-rendered
+    // and fixes the type error: Cannot read properties of null (reading 'element')
+    const ItemComponents = itemsConfig.reduce((components, { id, label }) => {
+        components[id] = () => (
+            <StageItem id={id}
+                label={label}
+                setSelectedStage={() => setSelectedStage(stages.find(stage => stage.id === id)!)}
+            />
+        );
+        return components;
+    }, {} as Record<string, () => React.JSX.Element>);
 
-        toast('Success', {
-            description: 'Saved stage order',
-        })
-    }
+    useEffect(() => {
+        const container = document.querySelector('.container')!;
+        const swapy = createSwapy(container);
+        swapy.onSwap(({ data }) => {
+            localStorage.setItem('slotItem', JSON.stringify(data.object));
+            console.log("slotItem", localStorage.getItem('slotItem'))
+        });
+    }, []);
 
     return (
-
-        <div className='flex border-[1px] rounded-lg flex-col p-6'>
-            <aside className='flex flex-col gap-4'>
-                <ScrollArea className='h-full'>
-                    <div className='flex gap-4 items-center'>
-                        <ShoppingBag />
-                        Funnel Stages
-                    </div>
-                    {pagesState.length ? (
-                        <DragDropContext
-                            onDragEnd={onDragEnd}
-                            onDragStart={onDragStart}
-                        >
-                            <Droppable
-                                droppableId="funnels"
-                                direction="vertical"
-                                key="funnels"
-                            >
-                                {(provided) => (
-                                    <div
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}
-                                    >
-                                        {pagesState.map((stage, idx) => (
-                                            <div
-                                                className="relative"
-                                                key={stage.id}
-                                                onClick={() => setSelectedStage(stage)}
-                                            >
-                                                <StageStepCard
-                                                    stage={stage}
-                                                    index={idx}
-                                                    key={stage.id}
-                                                    activePage={stage.id === selectedStage?.id}
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
-                    ) : (
-                        <div className="text-center text-muted-foreground py-6">
-                            No Stages
-                        </div>
-                    )}
-                </ScrollArea>
-                <CreateStageDialog />
-            </aside>
-            <aside className='p-4'>
-                {!!stages.length ? (
-                    <Card className="h-full flex justify-between flex-col">
-                        <CardHeader>
-                            <p className="text-sm text-muted-foreground">Stage name</p>
-                            <CardTitle>{selectedStage?.name}</CardTitle>
-                            <CardDescription className="flex flex-col gap-4">
-                                <div className="border-2 rounded-lg sm:w-80 w-full  overflow-clip">
-                                    <Link
-                                        href={`/editor/${selectedStage?.id}`}
-                                        className="relative group"
-                                    >
-                                        <div className="cursor-pointer group-hover:opacity-30 w-full">
+        <div className='grid grid-cols-2 gap-4 mt-4'>
+            {/* Stage List */}
+            <div className="grid grid-cols-1 gap-2 !px-0 container">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Stages:</CardTitle>
+                    </CardHeader>
+                    <CardContent className='grid grid-cols-1 gap-2 p-4'>
+                        {stages.map((stage, index) => (
+                            <div key={stage.id} className="bg-gray-800 rounded-[20px]" data-swapy-slot={`${index + 1}`}>
+                                {ItemComponents[stage.id] ? ItemComponents[stage.id]() : null}
+                            </div>
+                        ))}
+                        <Button className='my-4'>
+                            Save Stage Order
+                        </Button>
+                    </CardContent>
+                </Card>
+            </div>
+            {/* Stage Details */}
+            <Card>
+                <CardHeader>
+                    <CardTitle>{selectedStage.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className='flex flex-col gap-4'>
+                        <div className='flex justify-between'>
+                            <div>
+                                
+                            </div>
+                            <div className="border-2 rounded-lg sm:w-80 w-full  overflow-clip">
+                                <Link
+                                    href={`/editor/${selectedStage.id}`}
+                                    className="relative group"
+                                >
+                                    <div className="cursor-pointer group-hover:opacity-30 w-full">
+                                        {selectedStage.previewImage ? (
+                                            <Image src={selectedStage.previewImage} alt={selectedStage.name} width={100} height={100} />
+                                        ) : (
                                             <Placeholder />
-                                        </div>
-                                        <LucideEdit
-                                            size={50}
-                                            className="!text-muted-foreground absolute top-1/2 left-1/2 opacity-0 transofrm -translate-x-1/2 -translate-y-1/2 group-hover:opacity-100 transition-all duration-100"
-                                        />
-                                    </Link>
-
-                                    <Link
-                                        target="_blank"
-                                        href={`/editor/${selectedStage?.id}`}
-                                        className="group flex items-center justify-start p-2 gap-2 hover:text-primary transition-colors duration-200"
-                                    >
-                                        <ExternalLink size={15} />
-                                        <div className="w-64 overflow-hidden overflow-ellipsis ">
-                                            path
-                                        </div>
-                                    </Link>
-                                </div>
-
-                                {/* CreateFunnelPage */}
-                            </CardDescription>
-                        </CardHeader>
-                    </Card>
-                ) : (
-                    <div className="h-[600px] flex items-center justify-center text-muted-foreground">
-                        Create a page to view page settings.
+                                        )}
+                                    </div>
+                                    <LucideEdit
+                                        size={50}
+                                        className="!text-muted-foreground absolute top-1/2 left-1/2 opacity-0 transofrm -translate-x-1/2 -translate-y-1/2 group-hover:opacity-100 transition-all duration-100"
+                                    />
+                                </Link>
+                                <Link
+                                    target="_blank"
+                                    href={`preview link`}
+                                    className="group flex items-center justify-start p-2 gap-2 hover:text-primary transition-colors duration-200"
+                                >
+                                    <ExternalLink size={15} />
+                                    <div className="w-64 overflow-hidden overflow-ellipsis ">
+                                        Preview link
+                                    </div>
+                                </Link>
+                            </div>
+                        </div>
                     </div>
-                )}
-            </aside>
+
+                </CardContent>
+
+            </Card>
         </div>
-    )
+    );
 }

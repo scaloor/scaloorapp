@@ -1,5 +1,5 @@
 import { pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
-import { scaloorId } from "./scaloor-id";
+import { scaloorId } from "./defaults";
 import { business } from "./business";
 
 export const users = pgTable("user", {

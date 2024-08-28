@@ -2,16 +2,20 @@
 
 import { stripe } from "@/lib/stripe";
 
+export type StripeConnectReturnUrl = 'account' | 'dashboard'
+
 type CreateStripeAccountLinkOptions = {
     accountId: string;
+    returnUrl: StripeConnectReturnUrl;
 }
 
-export async function createStripeAccountLink({ accountId }: CreateStripeAccountLinkOptions) {
+
+export async function createStripeAccountLink({ accountId, returnUrl }: CreateStripeAccountLinkOptions) {
     try {
         const accountLink = await stripe.accountLinks.create({
             account: accountId,
-            refresh_url: `${process.env.NEXT_PUBLIC_URL!}/account/dashboard`,
-            return_url: `${process.env.NEXT_PUBLIC_URL!}/account/dashboard`,
+            refresh_url: `${process.env.NEXT_PUBLIC_APP_URL}/${returnUrl}`,
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/${returnUrl}`,
             type: 'account_onboarding',
         });
 

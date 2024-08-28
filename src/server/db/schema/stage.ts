@@ -1,6 +1,6 @@
 import { bigint, json, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { funnel } from "./funnel";
-import { scaloorId } from "./scaloor-id";
+import { scaloorId } from "./defaults";
 
 export const stage = pgTable("stage", {
     id: text("id")
@@ -10,9 +10,9 @@ export const stage = pgTable("stage", {
     funnelId: text("funnel_id").notNull().references(() => funnel.id),
     name: text("name").notNull(),
     pathName: text("path_name").notNull(),
-    content: json("content").notNull(),
+    content: json("content"),
     order: bigint("order", { mode: "number" }).notNull(),
-    previewImage: text("preview_image").notNull(),
+    previewImage: text("preview_image"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 },

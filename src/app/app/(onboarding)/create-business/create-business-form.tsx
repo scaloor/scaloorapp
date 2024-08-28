@@ -20,6 +20,7 @@ import { updateUser } from "@/server/data/users";
 import { business, InsertUser } from "@/server/db/schema";
 import { stripeSession } from "@/server/actions/stripe";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
+import { capitalizeFirstLetter } from "@/lib/utils";
 
 type createBusinessFormProps = {
     user: InsertUser
@@ -52,9 +53,11 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                 businessLogoPath = data.path;
             }
             // Create the business in the database
+            const country = capitalizeFirstLetter(formData.country);
 
             const businessDetails = {
                 ...formData,
+                country,
                 ...(businessLogoPath ? { businessLogo: businessLogoPath } : { businessLogo: null }),
             }
 
@@ -126,22 +129,6 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                                         <FormMessage />
                                     </FormItem>
                                 )} />
-                            {/* <FormField
-                                    control={form.control}
-                                    name="businessPhone"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-col items-start">
-                                            <FormLabel className="text-left">Phone Number</FormLabel>
-                                            <FormDescription className="text-left">
-                                                Enter a phone number
-                                            </FormDescription>
-                                            <FormControl className="w-full">
-                                                <PhoneInput placeholder="Enter a phone number" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                /> */}
                             <FormField
                                 control={form.control}
                                 name="country"

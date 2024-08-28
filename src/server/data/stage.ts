@@ -46,6 +46,44 @@ export async function updateStage(stageDetails: InsertStage) {
 }
 
 /**
+ * Update stage
+ */
+type UpdateStageColumns = {
+    id: string;
+    name?: string;
+    pathName?: string;
+    order?: number;
+    previewImage?: string;
+    funnelId?: string;
+};
+
+/**
+ * Update specific columns of a stage
+ * @param stageDetails 
+ * @returns 
+ */
+export async function updateStageColumns(stageDetails: UpdateStageColumns) {
+    try {
+        const { id, ...updateData } = stageDetails;
+        const dbStage = await db
+            .update(stage)
+            .set({
+                ...updateData,
+                updatedAt: new Date().toISOString(),
+            })
+            .where(eq(stage.id, id))
+            .returning()
+            .then(res => res[0]);
+
+        return { dbStage }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
+    }
+}
+
+
+/**
  * Get stage by id
  * @param stage_id 
  * @returns 

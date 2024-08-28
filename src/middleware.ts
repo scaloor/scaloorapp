@@ -13,11 +13,11 @@ export async function middleware(request: NextRequest) {
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
 
-  if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_DOMAIN) {
+  if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
 
-  if (hostname == `app.${process.env.NEXT_PUBLIC_DOMAIN}`) {
+  if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     return NextResponse.rewrite(new URL(`/app${path === "/" ? "" : path}`, request.url));
   }
 

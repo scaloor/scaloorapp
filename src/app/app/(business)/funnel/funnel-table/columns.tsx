@@ -1,7 +1,7 @@
 'use client';
 import React from 'react'
 import { ColumnDef } from "@tanstack/react-table"
-import { Funnel } from '@/server/db/types'
+import { SelectFunnel } from '@/server/db/schema'
 import { Button } from '@/app/_components/ui/button';
 import { ArrowUpDown, ExternalLink, MoreHorizontal } from 'lucide-react';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
@@ -17,7 +17,7 @@ export default function Columns({ }: FunnelColumnProps) {
     )
 }
 
-export const columns: ColumnDef<Funnel>[] = [
+export const columns: ColumnDef<SelectFunnel>[] = [
     {
         accessorKey: 'name',
         header: 'Name',
@@ -26,7 +26,7 @@ export const columns: ColumnDef<Funnel>[] = [
             return (
                 <Link
                     className="flex gap-2 items-center"
-                    href={`/account/funnel/${row.original.id}`}
+                    href={`/funnel/${row.original.id}`}
                 >
                     {row.getValue('name')}
                     <ExternalLink size={15} />

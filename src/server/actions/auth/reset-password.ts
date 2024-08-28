@@ -14,10 +14,10 @@ export async function resetPassword(data: z.infer<typeof ResetSchema>) {
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: `app.${process.env.NEXT_PUBLIC_URL}/new-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/new-password`,
     })
 
-    console.log('Email sent to:', data.email, ' url:', `app.${process.env.NEXT_PUBLIC_URL}/new-password`)
+    console.log('Email sent to:', data.email, ' url:', `${process.env.NEXT_PUBLIC_APP_URL}/new-password`)
 
     if (error) {
         console.log(error)

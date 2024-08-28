@@ -1,5 +1,5 @@
 import { boolean, pgEnum, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
-import { scaloorId } from "./scaloor-id";
+import { scaloorId } from "./defaults";
 
 export const planEnum = pgEnum("plan_enum", ['funnels'])
 

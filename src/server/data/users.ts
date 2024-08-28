@@ -2,7 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
-import { users } from "@/server/db/schema";
+import { SelectUser, users } from "@/server/db/schema";
 import { InsertUser } from "../db/schema";
 
 /**
@@ -45,6 +45,46 @@ export async function updateUser(userDetails: InsertUser) {
         return { error: error.message }
     }
 
+}
+
+type UpdateUserOptions = {
+    id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    mobile?: string;
+}
+
+/**
+ * Update user columns
+ */
+export async function updateUserColumns({
+    id,
+    firstName,
+    lastName,
+    email,
+    mobile,
+}: UpdateUserOptions) {
+    try {
+        const userDetails = {
+            id,
+            ...(firstName ? { firstName } : {}),
+            ...(lastName ? { lastName } : {}),
+            ...(email ? { email } : {}),
+            ...(mobile ? { mobile } : {}),
+            updatedAt: new Date().toISOString(),
+        }
+        const dbUser = await db
+            .update(users)
+            .set({ ...userDetails })
+            .where(eq(users.id, userDetails.id!))
+            .returning().then(res => res[0]);
+
+        return { dbUser }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
+    }
 }
 
 /**

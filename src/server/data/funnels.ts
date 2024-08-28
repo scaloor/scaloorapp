@@ -44,6 +44,46 @@ export async function updateFunnel(funnelDetails: InsertFunnel) {
     }
 }
 
+type UpdateFunnelColumns = {
+    id: string;
+    name?: string;
+    description?: string;
+    subDomainName?: string;
+    published?: boolean;
+    favicon?: string;
+}
+
+/**
+ * Update funnel
+ */
+export async function updateFunnelColumns({
+    id,
+    name,
+    description,
+    subDomainName,
+    published,
+    favicon,
+}: UpdateFunnelColumns) {
+    try {
+        const dbFunnel = await db
+            .update(funnel)
+            .set({
+                ...(name ? { name } : {}),
+                ...(description ? { description } : {}),
+                ...(subDomainName ? { subDomainName } : {}),
+                ...(published ? { published } : {}),
+                ...(favicon ? { favicon } : {}),
+                updatedAt: new Date().toISOString()
+            })
+            .where(eq(funnel.id, id));
+
+        return { dbFunnel }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
+    }
+}
+
 /**
  * Delete funnel
  * @param funnel_id 

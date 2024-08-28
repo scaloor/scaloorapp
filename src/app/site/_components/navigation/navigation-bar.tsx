@@ -6,9 +6,6 @@ import { createClient } from "@/lib/supabase/server";
 
 
 export default async function NavigationBar() {
-    const supabase = createClient()
-
-    const { data, error } = await supabase.auth.getUser()
     return (
         <nav className="sticky h-14 inset-x-0 z-30 w-full border-b border-gray-200 bg-background backdrop-blur-lg transition-all px-3 md:px-0">
             <MaxWidthWrapper>
@@ -22,16 +19,18 @@ export default async function NavigationBar() {
                             alt={"Scaloor logo"}
                         />
                     </Link>
-
+                    <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/login`} className='flex z-40 font-bold pl-5'>
+                        Login
+                    </Link>
                     {/* <MobileNavigation /> */}
 
-                    <div className="hidden items-center space-x-4 sm:flex">
+                    {/* <div className="hidden items-center space-x-4 sm:flex">
                         <>
-                            <NavigationOptions isAuthenticated={!!data?.user} />
+                            <NavigationOptions isAuthenticated={false} />
 
-                            {/* <ModeToggle /> */}
+                            {/* <ModeToggle />
                         </>
-                    </div>
+                    </div> */}
                 </div>
             </MaxWidthWrapper>
         </nav >

@@ -1,6 +1,6 @@
 import { bigint, boolean, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { business } from "./business";
-import { scaloorId } from "./scaloor-id";
+import { scaloorId } from "./defaults";
 
 export const funnel = pgTable("funnel", {
     id: text("id")

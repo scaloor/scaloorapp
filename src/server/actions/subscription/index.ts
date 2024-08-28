@@ -12,7 +12,7 @@ export async function cancelSubscription({
         const { businessId } = await db.update(subscription).set({
             active: false,
             updatedAt: new Date().toDateString(),
-        }).where(eq(subscription.subscriptionId, stripeSubscriptionId)).returning({ businessId: subscription.businessId })
+        }).where(eq(subscription.stripeSubscriptionId, stripeSubscriptionId)).returning({ businessId: subscription.businessId })
             .then(res => res[0])
         await db.update(business).set({
             currentSubscriptionId: null,

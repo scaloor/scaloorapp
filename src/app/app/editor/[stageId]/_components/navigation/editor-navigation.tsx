@@ -6,20 +6,21 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { ArrowLeftCircle, EyeIcon } from 'lucide-react';
 import { Input } from '@/app/_components/ui/input';
-import { Stage } from '@/server/db/types';
 import { updateStage } from '@/server/data/stage';
 import { toast } from 'sonner';
 import { Tabs, TabsList, TabsTrigger } from '@/app/_components/ui/tabs';
 import { DeviceTypes } from '../providers/editor-types';
 import { DesktopIcon, LaptopIcon, MobileIcon, PlayIcon } from '@radix-ui/react-icons';
 import { Button } from '@/app/_components/ui/button';
+import { SelectStage } from '@/server/db/schema';
 
 type EditorNavigationProps = {
-    stageDetails: Stage
+    stageDetails: SelectStage
 }
 
 export default function EditorNavigation({ stageDetails }: EditorNavigationProps) {
     const { state, dispatch } = useStageEditor();
+    console.log(stageDetails.funnelId)
 
     // This function is used to update the stage name
     const handleOnBlurTitleChange: FocusEventHandler<HTMLInputElement> = async (
@@ -64,7 +65,7 @@ export default function EditorNavigation({ stageDetails }: EditorNavigationProps
                 { '!h-0 !p-0 !overflow-hidden': state.previewMode }
             )}>
                 <aside className="flex justify-start items-center gap-4 max-w-[260px] w-[300px]">
-                    <Link href={'/account/funnel'} className="">
+                    <Link href={`/funnel/${stageDetails.funnelId}`} className="">
                         <ArrowLeftCircle className="ml-4" />
                     </Link>
                     <div className="flex flex-col w-full ">

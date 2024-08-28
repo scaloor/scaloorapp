@@ -21,13 +21,14 @@ import { UseFormReturn } from "react-hook-form";
 interface CountryDropdownProps {
     disabled?: boolean;
     form?: UseFormReturn<any>
+    defaultValue?: string;
 }
 
 const lowerCase = (str: string): string => {
     return str.charAt(0).toLowerCase() + str.slice(1).toLowerCase();
 };
 
-const CountryDropdown = ({ disabled, form }: CountryDropdownProps) => {
+const CountryDropdown = ({ disabled, form, defaultValue }: CountryDropdownProps) => {
     const { countryValue, setCountryValue, openCountryDropdown, setOpenCountryDropdown } = useDropdownStore();
     const C = countries as CountryProps[];
 
@@ -66,7 +67,9 @@ const CountryDropdown = ({ disabled, form }: CountryDropdownProps) => {
             </PopoverTrigger>
             <PopoverContent className="w-[300px] rounded-[6px] border border-[#27272a] p-0">
                 <Command>
-                    <CommandInput placeholder="Search country..." />
+                    <CommandInput
+                        placeholder="Search country..."
+                        defaultValue={defaultValue} />
                     <CommandEmpty>No country found.</CommandEmpty>
                     <CommandGroup>
                         <ScrollArea className="h-[300px] w-full">

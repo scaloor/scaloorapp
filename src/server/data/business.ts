@@ -54,6 +54,51 @@ export async function updateBusiness(businessDetails: InsertBusiness) {
     }
 }
 
+type UpdateBusinessOptions = {
+    id: string;
+    name?: string;
+    businessEmail?: string;
+    businessLogo?: string;
+    country?: string;
+    currentSubscriptionId?: string;
+    stripeAccountId?: string;
+}
+
+export async function updateBusinessColumn({
+    id,
+    name,
+    businessEmail,
+    businessLogo,
+    country,
+    currentSubscriptionId,
+    stripeAccountId,
+}: UpdateBusinessOptions) {
+    try {
+        const businessDetails = {
+            id,
+            ...(name ? { name } : {}),
+            ...(businessEmail ? { businessEmail } : {}),
+            ...(businessLogo ? { businessLogo } : {}),
+            ...(country ? { country } : {}),
+            ...(currentSubscriptionId ? { currentSubscriptionId } : {}),
+            ...(stripeAccountId ? { stripeAccountId } : {}),
+            updatedAt: new Date().toDateString(),
+        }
+        const dbBusiness = await db
+            .update(business)
+            .set({ ...businessDetails })
+            .where(eq(business.id, businessDetails.id!))
+            .returning().then(res => res[0]);
+
+        return { dbBusiness }
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message }
+    }
+}
+
+
+
 export async function updateBusinessSubscription(businessId: string, subscriptionId: string | null) {
     try {
         await db
