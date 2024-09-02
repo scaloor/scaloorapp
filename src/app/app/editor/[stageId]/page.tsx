@@ -1,30 +1,11 @@
-import { getStageById } from "@/server/data/stage"
-import StageEditor from "./_components/stage-editor"
-import StageEditorProvider from "./_components/providers/editor-provider"
+import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
+import ScaloorEditor from "./_components/scaloor-editor";
 
-
-type FunnelEditorProps = {
-    params: {
-        businessId: number
-        funnelId: number
-        stageId: number
-    }
-}
-
-export default async function FunnelEditor({ params }: FunnelEditorProps) {
-    const { businessId, funnelId, stageId } = params;
-    const stage = await getStageById(stageId);
-
-    if (!stage) {
-        return <div className="flex justify-center items-center h-screen">Stage not found</div>
-    }
+export default function StageEditor({ params }: { params: { stageId: string } }) {
 
     return (
-        <StageEditorProvider
-            businessId={businessId}
-            funnelId={funnelId}
-            pageDetails={stage}>
-            <StageEditor stage={stage} />
-        </StageEditorProvider>
+        <MaxWidthWrapper className="flex flex-col mt-24">
+            <ScaloorEditor />
+        </MaxWidthWrapper>
     )
 }

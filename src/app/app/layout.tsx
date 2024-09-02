@@ -1,4 +1,3 @@
-import AuthenicatedRoute from "@/app/app/(auth)/provider/authenticated-route";
 import React from "react";
 
 

@@ -51,7 +51,7 @@ export default function StageList({ stages }: StageListProps) {
         components[id] = () => (
             <StageItem id={id}
                 label={label}
-                selected={selectedStage.id === id}
+                selected={selectedStage.id == id}
                 setSelectedStage={() => { setSelectedStage(stages.find(stage => stage.id === id)!); }}
             />
         );

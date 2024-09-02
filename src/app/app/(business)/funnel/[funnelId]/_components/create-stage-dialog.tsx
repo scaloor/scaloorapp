@@ -4,7 +4,7 @@ import { Button } from '@/app/_components/ui/button';
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogClose } from '@/app/_components/ui/dialog';
 import { Input } from '@/app/_components/ui/input';
 import { useRouter } from 'next/navigation';
-import { CreateStageSchema } from './schema';
+import { EditStageSchema } from './schema';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -23,11 +23,11 @@ export default function CreateStageDialog({ funnelId, next_stage }: CreateStageD
     const [isOpen, setIsOpen] = useState(false);
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
-    const form = useForm<z.infer<typeof CreateStageSchema>>({
-        resolver: zodResolver(CreateStageSchema),
+    const form = useForm<z.infer<typeof EditStageSchema>>({
+        resolver: zodResolver(EditStageSchema),
     });
 
-    const onSubmit = async (data: z.infer<typeof CreateStageSchema>) => {
+    const onSubmit = async (data: z.infer<typeof EditStageSchema>) => {
         setFormError("");
         console.log('Data:', data, next_stage);
         const stageDetails = {
