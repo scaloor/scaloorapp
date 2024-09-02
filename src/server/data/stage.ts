@@ -90,10 +90,10 @@ export async function updateStageColumns(stageDetails: UpdateStageColumns) {
  */
 export async function getStageById(stage_id: string) {
     try {
-        const findStage = await db.select().from(stage).where(
+        const dbStage = await db.select().from(stage).where(
             eq(stage.id, stage_id)
         ).then(res => res[0]);
-        return { findStage }
+        return { dbStage }
     } catch (error: any) {
         console.log(error);
         return { error: error.message }

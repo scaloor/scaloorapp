@@ -62,24 +62,65 @@
   }
 
   h1 {
-    @apply text-7xl
+    display: block;
+    font-size: 2em;
+    margin-top: 0.67em;
+    margin-bottom: 0.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
   }
 
   h2 {
-    @apply text-6xl
+    display: block;
+    font-size: 1.5em;
+    margin-top: 0.83em;
+    margin-bottom: 0.83em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
   }
 
   h3 {
-    @apply text-5xl
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
   }
 
   h4 {
-    @apply text-4xl
+    display: block;
+    font-size: 1em;
+    margin-top: 1.33em;
+    margin-bottom: 1.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
   }
 
-  .bg-gradient {
-    background: var(--gradient)
+  h5 {
+    display: block;
+    font-size: 0.83em;
+    margin-top: 1.67em;
+    margin-bottom: 1.67em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
   }
+
+  h6 {
+    display: block;
+    font-size: 0.67em;
+    margin-top: 2.33em;
+    margin-bottom: 2.33em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+  }
+
 }
 
 @layer utilities {
@@ -95,24 +136,6 @@
     /* IE and Edge */
     scrollbar-width: none;
     /* Firefox */
-  }
-
-  .editorjs-container .ce-toolbar__plus {
-    @apply absolute left-2 top-2;
-    /* Use Tailwind utilities for positioning */
-    right: auto;
-    /* Override the default right position */
-  }
-
-  .editorjs-container .ce-toolbar__plus .ce-toolbar__plus-button {
-    @apply ml-0 mr-auto;
-    /* Use Tailwind utilities for margin */
-  }
-
-  /* Optional: Ensure the toolbar appears correctly */
-  .editorjs-container .ce-toolbar {
-    @apply flex justify-start;
-    /* Use Tailwind utilities for flex layout */
   }
 
   .use-automation-zoom-in {
