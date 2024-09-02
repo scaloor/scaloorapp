@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, useTransition } from 'react';
-import { createSwapy, type SwapEventArray } from 'swapy';
+import { createSwapy } from 'swapy';
 import StageItem from './stage-item';
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card';
 import { Button } from '@/app/_components/ui/button';
@@ -10,6 +10,7 @@ import EditStage from './edit-stage';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { updateStageColumns } from '@/server/data/stage';
+import { SwapEventArray } from '@/lib/types';
 
 export type StageListDetails = {
     id: string;
