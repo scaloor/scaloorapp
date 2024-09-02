@@ -9,15 +9,12 @@ export async function middleware(request: NextRequest) {
   let hostname = request.headers
     .get("host")!
     .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
-  console.log('hostname:', hostname)
-  console.log('request.url:', request.url)
 
   const searchParams = request.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
 
-  console.log('New Url:', new URL(`/app${path === "/" ? "" : path}`, request.url).toString())
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }

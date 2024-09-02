@@ -38,7 +38,7 @@ export default function Novel() {
                 className=''
                 editorProps={{
                     attributes: {
-                        class: 'prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full leading-10'
+                        class: 'prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full'
                     }
                 }}
 

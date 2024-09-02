@@ -18,7 +18,7 @@ import { Command, renderItems } from "novel/extensions";
 // import { uploadFn } from "./image-upload";
 
 export const suggestionItems = createSuggestionItems([
-  {
+  /* {
     title: "Send Feedback",
     description: "Let us know how we can improve.",
     icon: <MessageSquarePlus size={18} />,
@@ -26,7 +26,7 @@ export const suggestionItems = createSuggestionItems([
       editor.chain().focus().deleteRange(range).run();
       window.open("/feedback", "_blank");
     },
-  },
+  }, */
   {
     title: "Text",
     description: "Just start typing with plain text.",
@@ -104,6 +104,34 @@ export const suggestionItems = createSuggestionItems([
     searchTerms: ["codeblock"],
     icon: <Code size={18} />,
     command: ({ editor, range }) => editor.chain().focus().deleteRange(range).toggleCodeBlock().run(),
+  },
+  {
+    title: "Youtube",
+    description: "Embed a Youtube video.",
+    searchTerms: ["video", "youtube", "embed"],
+    icon: <Youtube size={18} />,
+    command: ({ editor, range }) => {
+      const videoLink = prompt("Please enter Youtube Video Link");
+      //From https://regexr.com/3dj5t
+      const ytregex = new RegExp(
+        /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/,
+      );
+
+      if (ytregex.test(videoLink!)) {
+        editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .setYoutubeVideo({
+            src: videoLink!,
+          })
+          .run();
+      } else {
+        if (videoLink !== null) {
+          alert("Please enter a correct Youtube Video Link");
+        }
+      }
+    },
   },
   /* {
     title: "Image",
