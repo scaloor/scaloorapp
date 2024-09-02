@@ -20,13 +20,13 @@ export default function StripeConnectCard({ business }: StripeConnectCardProps) 
             <CardContent className='flex flex-col justify-between'>
                 <div className='flex gap-2 items-center'>
                     <p>Status:</p>
-                    <p className='text-sm text-muted-foreground'>
+                    <div className='text-sm text-muted-foreground'>
                         {business.stripeAccountId ?
                             <Badge className='dark:text-white'>Connected</Badge>
                             :
                             <Badge className='dark:text-white' variant={'destructive'}>Not connected</Badge>
                         }
-                    </p>
+                    </div>
                 </div>
 
                 <div className='absolute bottom-4 right-4'>

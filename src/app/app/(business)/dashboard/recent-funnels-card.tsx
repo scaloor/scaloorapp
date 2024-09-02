@@ -1,3 +1,4 @@
+'use client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { SelectFunnel } from '@/server/db/schema'
 import React from 'react'

@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
   const url = request.nextUrl
 
   let hostname = request.headers.get('host')!
+  console.log(hostname)
 
   const searchParams = request.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
