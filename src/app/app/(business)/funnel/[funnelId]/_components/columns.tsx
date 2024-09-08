@@ -8,6 +8,7 @@ import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/app/_components/ui/dropdown-menu';
 import Link from 'next/link';
 import { Badge } from '@/app/_components/ui/badge';
+import { formatDate } from '@/lib/utils';
 
 type FunnelColumnProps = {}
 
@@ -17,7 +18,7 @@ export default function Columns({ }: FunnelColumnProps) {
     )
 }
 
-export const columns: ColumnDef<SelectFunnel>[] = [
+export const funnelColumns: ColumnDef<SelectFunnel>[] = [
     {
         accessorKey: 'name',
         header: 'Name',
@@ -52,7 +53,11 @@ export const columns: ColumnDef<SelectFunnel>[] = [
         },
         cell: ({ row }) => {
             const date = new Date(row.getValue('updatedAt'));
-            return <div className='text-right'>some date</div>
+            return (
+                <div className='text-right'>
+                    {formatDate(date)}
+                </div>
+            )
         },
     },
     {

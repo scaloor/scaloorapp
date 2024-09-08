@@ -28,8 +28,8 @@ export default function AccountPage({ user, business, subscription }: AccountPag
     return (
         <MaxWidthWrapper>
             <div className='flex flex-col gap-4 justify-center px-5 mt-5'>
-                <div className='flex justify-between'>
-                    <div className='flex'>
+                <div className='flex justify-between items-center'>
+                    <div className='flex items-center'>
                         <Avatar>
                             <AvatarFallback>{user.firstName[0].toLocaleUpperCase()}{user.lastName[0].toLocaleUpperCase()}</AvatarFallback>
                         </Avatar>

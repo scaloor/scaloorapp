@@ -2,8 +2,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { SelectFunnel } from '@/server/db/schema'
 import React from 'react'
-import FunnelTable from '@/app/app/(business)/funnel/funnel-table'
-import { columns } from "@/app/app/(business)/funnel/funnel-table/columns";
+import { DataTable } from '@/app/_components/ui/data-table'
+import { funnelColumns } from '@/app/app/(business)/funnel/[funnelId]/_components/columns';
+import FunnelList from '../funnels/funnel-list'
+import { Separator } from '@/app/_components/ui/separator'
 
 type RecentFunnelsCardProps = {
   funnels: SelectFunnel[]
@@ -15,12 +17,9 @@ export default function RecentFunnelsCard({ funnels }: RecentFunnelsCardProps) {
       <CardHeader>
         <CardTitle>Recent Funnels</CardTitle>
       </CardHeader>
+      <div className="w-full h-px bg-gray-200 mb-4"></div>
       <CardContent>
-        {funnels.length > 0 ? (
-          <FunnelTable columns={columns} data={funnels} />
-        ) : (
-          <p>No funnels found</p>
-        )}
+        <FunnelList />
       </CardContent>
     </Card>
   )

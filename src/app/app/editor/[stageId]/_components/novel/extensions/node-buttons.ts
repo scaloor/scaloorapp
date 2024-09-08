@@ -314,12 +314,12 @@ export function NodeButtonsPlugin(
             y: event.clientY,
           });
 
-          const notDragging = node?.closest('.not-draggable');
+          const notDraggable = node?.closest('.no-drag-handle');
 
           if (
             !(node instanceof Element) ||
             node.matches('ul, ol') ||
-            notDragging
+            notDraggable
           ) {
             hideDragHandle();
             hidePlusButton();

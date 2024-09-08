@@ -2,6 +2,11 @@
   @apply p-12 px-8 sm:px-12;
 }
 
+.no-drag-handle .drag-handle,
+.no-drag-handle .plus-button {
+  display: none !important;
+}
+
 .ProseMirror .is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;

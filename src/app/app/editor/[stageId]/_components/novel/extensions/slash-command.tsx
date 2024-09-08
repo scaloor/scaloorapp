@@ -12,10 +12,13 @@ import {
   TextQuote,
   Twitter,
   Youtube,
+  Blocks,
 } from "lucide-react";
 import { createSuggestionItems } from "novel/extensions";
 import { Command, renderItems } from "novel/extensions";
+import Card from "./card";
 // import { uploadFn } from "./image-upload";
+
 
 export const suggestionItems = createSuggestionItems([
   /* {
@@ -25,6 +28,15 @@ export const suggestionItems = createSuggestionItems([
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       window.open("/feedback", "_blank");
+    },
+  }, */
+  /* {
+    title: "Card",
+    description: "Create a card.",
+    searchTerms: ["card"],
+    icon: <Blocks size={18} />,
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).toggleNode("card", "card").run();
     },
   }, */
   {

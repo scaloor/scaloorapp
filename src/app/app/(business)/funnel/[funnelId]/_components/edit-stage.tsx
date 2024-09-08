@@ -102,12 +102,14 @@ export default function EditStage({ key, id, name, pathName }: EditStageProps) {
                             )}
                         />
                         {formError && <FormError message={formError} />}
-                        <Button type="submit"
-                            disabled={false}
-                            className="dark:text-white"
-                        >
-                            Save
-                        </Button>
+                        <div className="flex justify-end">
+                            <Button type="submit"
+                                disabled={false}
+                                className="dark:text-white"
+                            >
+                                Save
+                            </Button>
+                        </div>
                     </form>
                 </Form>
             </CardContent>

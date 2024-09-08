@@ -16,7 +16,6 @@ export default async function EditorLayout({ children, params }: EditorLayoutPro
     if (!dbStage) {
         return <ErrorPage errorMessage='Unable to find stage' />
     }
-    console.log(dbStage.name)
     return (
         <AuthenticatedRoute>
             <EditorNavigation 

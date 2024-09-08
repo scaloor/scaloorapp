@@ -2,11 +2,11 @@ import { Button } from "@/app/_components/ui/button";
 import { getFunnelById, getFunnelsByBusinessId } from "@/server/data/funnels";
 import { getStagesByFunnelId } from "@/server/data/stage";
 import Link from "next/link";
-import FunnelTable from "./funnel-table";
 import { getAuthUserDetails } from "@/server/actions/users";
 import ErrorPage from "@/app/_components/common/error-page";
-import { columns } from "./funnel-table/columns";
+import { funnelColumns } from "./[funnelId]/_components/columns";
 import CreateFunnelDialog from "./_components/create-funnel-dialog";
+import { DataTable } from "@/app/_components/ui/data-table";
 
 
 export default async function Funnels() {
@@ -25,7 +25,7 @@ export default async function Funnels() {
         </div>
       </div>
       <div className="px-2">
-        <FunnelTable columns={columns} data={funnels} />
+        <DataTable columns={funnelColumns} data={funnels} />
       </div>
     </div>
   )

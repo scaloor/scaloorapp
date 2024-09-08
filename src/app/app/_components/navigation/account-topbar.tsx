@@ -22,13 +22,14 @@ export default function AccountTopbar({ children }: AccountTopbarProps) {
         <div className='w-full'>
             <div
                 className={cn(
-                    'flex h-14 lg:h-[55px] items-center gap-4 border-b px-3 w-full transition-all',
+                    'flex h-14 lg:h-[55px] items-center gap-4 px-3 w-full transition-all',
                     isOpen ? 'left-[307px]' : 'left-20'
                 )}
             >
                 <div className='flex justify-between items-center w-full'>
-                    <div></div>
-                    {/* <Breadcrumbs /> */}
+                    <div>
+                        <Breadcrumbs />
+                    </div>
                     {/* WIP: Notifications */}
                     <ModeToggle />
                 </div>

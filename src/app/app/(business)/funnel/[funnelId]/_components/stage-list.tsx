@@ -111,16 +111,18 @@ export default function StageList({ stages }: StageListProps) {
                     </CardHeader>
                     <CardContent className='grid grid-cols-1 gap-2 p-4'>
                         {stages.map((stage, index) => (
-                            <div key={stage.id} className="bg-gray-800 rounded-[20px]" data-swapy-slot={`${index + 1}`}>
+                            <div key={stage.id} className="bg-gray-200 dark:bg-gray-800 rounded-[20px]" data-swapy-slot={`${index + 1}`}>
                                 {ItemComponents[stage.id] ? ItemComponents[stage.id]() : null}
                             </div>
                         ))}
-                        <Button
-                            className='my-4'
-                            disabled={isPending}
-                            onClick={handleSaveStageOrder}>
-                            Save Stage Order
-                        </Button>
+                        <div className='flex my-4'>
+                            <Button
+                                className=''
+                                disabled={isPending}
+                                onClick={handleSaveStageOrder}>
+                                Save Stage Order
+                            </Button>
+                        </div>
                     </CardContent>
                 </Card>
             </div>

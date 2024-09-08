@@ -48,7 +48,7 @@ export default function CreateFunnelDialog({ businessId }: CreateFunnelDialogPro
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button className='dark:text-white'>
+        <Button size="sm" className='dark:text-white'>
           Create New Funnel
           <Plus className="ml-2 h-4 w-4" />
         </Button>
