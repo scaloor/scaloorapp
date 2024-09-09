@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { RegisterSchema } from '@/app/app/(auth)/_components/schemas'
 import { z } from 'zod'
 import { addUser, getUserByEmail } from '@/server/data/users'
+import { capitalizeFirstLetter } from '@/lib/utils'
 
 export async function signup(data: z.infer<typeof RegisterSchema>) {
   const supabase = createClient()
@@ -16,15 +17,24 @@ export async function signup(data: z.infer<typeof RegisterSchema>) {
 
   const { first_name, last_name, email, password } = data;
 
+  const supaUser = await supabase.auth.getUser()
+  const verified = supaUser.data.user?.email_confirmed_at
+
   // Check that the email is not already in use
   const { dbUser: existingUser } = await getUserByEmail(email.toLowerCase());
+
+
   if (!!existingUser) {
+    if (!verified) {
+      await supabase.auth.resend({ type: "signup", email })
+      return { success: "Verification email resent!" }
+    }
     return { error: "Email already in use!" };
   }
 
   // Capitalize first and last name
-  const firstName = first_name.toLowerCase().charAt(0).toUpperCase() + first_name.toLowerCase().slice(1);
-  const lastName = last_name.toLowerCase().charAt(0).toUpperCase() + last_name.toLowerCase().slice(1);
+  const firstName = capitalizeFirstLetter(first_name)
+  const lastName = capitalizeFirstLetter(last_name)
 
 
   const { error } = await supabase.auth.signUp({

@@ -1,4 +1,4 @@
-import { bigint, boolean, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { business } from "./business";
 import { scaloorId } from "./defaults";
 
@@ -9,9 +9,8 @@ export const funnel = pgTable("funnel", {
         .$defaultFn(() => scaloorId('fun')),
     businessId: text("business_id").notNull().references(() => business.id),
     name: text("name").notNull(),
-    description: text("description"),
+    pathName: text("path_name").notNull(),
     published: boolean("published").default(false).notNull(),
-    subDomainName: text("sub_domain_name"),
     favicon: text("favicon"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),

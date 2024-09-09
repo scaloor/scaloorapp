@@ -4,7 +4,7 @@ import { SelectFunnel } from '@/server/db/schema'
 import React from 'react'
 import { DataTable } from '@/app/_components/ui/data-table'
 import { funnelColumns } from '@/app/app/(business)/funnel/[funnelId]/_components/columns';
-import FunnelList from '../funnels/funnel-list'
+import FunnelList from '../funnels/_components/funnel-list'
 import { Separator } from '@/app/_components/ui/separator'
 
 type RecentFunnelsCardProps = {
@@ -13,13 +13,13 @@ type RecentFunnelsCardProps = {
 
 export default function RecentFunnelsCard({ funnels }: RecentFunnelsCardProps) {
   return (
-    <Card>
+    <Card className='p-0'>
       <CardHeader>
         <CardTitle>Recent Funnels</CardTitle>
+        <div className="w-full h-px bg-gray-200 mb-4"></div>
       </CardHeader>
-      <div className="w-full h-px bg-gray-200 mb-4"></div>
       <CardContent>
-        <FunnelList />
+        <FunnelList funnels={funnels} />
       </CardContent>
     </Card>
   )

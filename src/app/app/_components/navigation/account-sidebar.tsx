@@ -1,10 +1,6 @@
 'use client';
-import { Avatar, AvatarFallback } from '@/app/_components/ui/avatar'
 import { Button } from '@/app/_components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/app/_components/ui/dropdown-menu';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip';
-import { signOut } from '@/server/actions/auth/sign-out';
-import { ChevronFirst, ChevronLast, CircleUser, Filter, Globe, LayoutDashboard, LucideIcon, MoreVertical, PackageSearch, Settings, ShoppingCart } from 'lucide-react'
+import { Filter, Globe, LayoutDashboard, PackageSearch, Settings } from 'lucide-react'
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useState } from 'react'

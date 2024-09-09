@@ -1,15 +1,18 @@
-'use server';
-
+import 'server-only'
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { funnel } from "../db/schema";
 import { InsertFunnel } from "../db/schema";
+import { canAccessFunnel } from "../authorization/funnel";
 
 /**
  * Add new funnel
  */
 export async function addFunnel(funnelDetails: InsertFunnel) {
     try {
+        if (!await canAccessFunnel(funnelDetails.businessId)) {
+            return { error: 'You do not have access to add a funnel to this business' }
+        }
         const insertFunnel = async (funnelDetails: InsertFunnel) => {
             return await db.insert(funnel).values(funnelDetails).returning().then(res => res[0])
         }
@@ -109,6 +112,9 @@ export async function getFunnelById(funnel_id: string) {
         const dbFunnel = await db.select().from(funnel).where(
             eq(funnel.id, funnel_id)
         ).then(res => res[0]);
+        if (!await canAccessFunnel(dbFunnel.businessId)) {
+            return { error: 'You do not have access to view this funnel' }
+        }
         return { dbFunnel }
     } catch (error: any) {
         console.log(error)
@@ -118,6 +124,9 @@ export async function getFunnelById(funnel_id: string) {
 
 export async function getFunnelsByBusinessId(businessId: string) {
     try {
+        if (!await canAccessFunnel(businessId)) {
+            return { error: 'You do not have access to view these funnels' }
+        }
         const funnels = await db.select().from(funnel).where(
             eq(funnel.businessId, businessId)
         ).then(res => res);

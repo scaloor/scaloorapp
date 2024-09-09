@@ -1,9 +1,9 @@
-'use server'
-
+import 'server-only'
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
 import { SelectUser, users } from "@/server/db/schema";
 import { InsertUser } from "../db/schema";
+import { canAccessUser } from '../authorization/user';
 
 /**
  * Add new user
@@ -49,6 +49,7 @@ export async function updateUser(userDetails: InsertUser) {
 
 type UpdateUserOptions = {
     id: string;
+    businessId?: string;
     firstName?: string;
     lastName?: string;
     email?: string;
@@ -58,32 +59,29 @@ type UpdateUserOptions = {
 /**
  * Update user columns
  */
-export async function updateUserColumns({
-    id,
-    firstName,
-    lastName,
-    email,
-    mobile,
-}: UpdateUserOptions) {
+export async function updateUserColumns(userDetails: UpdateUserOptions) {
     try {
-        const userDetails = {
-            id,
-            ...(firstName ? { firstName } : {}),
-            ...(lastName ? { lastName } : {}),
-            ...(email ? { email } : {}),
-            ...(mobile ? { mobile } : {}),
-            updatedAt: new Date().toISOString(),
+        if (!await canAccessUser(userDetails.id)) {
+            return { error: "You are not authorized to update this user" }
         }
-        const dbUser = await db
+        const { user } = await getUserById(userDetails.id);
+        if (!user) {
+            return { error: 'User not found' };
+        }
+        const { id, ...updateData } = userDetails;
+        const updatedUser = await db
             .update(users)
-            .set({ ...userDetails })
-            .where(eq(users.id, userDetails.id!))
-            .returning().then(res => res[0]);
-
-        return { dbUser }
+            .set({
+                ...updateData,
+                updatedAt: new Date().toISOString(),
+            })
+            .where(eq(users.id, id))
+            .returning()
+            .then(res => res[0]);
+        return { dbUser: updatedUser };
     } catch (error: any) {
-        console.log(error)
-        return { error: error.message }
+        console.log(error);
+        return { error: error.message };
     }
 }
 

@@ -3,10 +3,17 @@
 import { db } from "@/server/db"
 import { desc, eq } from "drizzle-orm"
 import { funnel } from "@/server/db/schema"
+import { createPathname } from "@/lib/utils"
+import { addFunnel, getFunnelById, getFunnelsByBusinessId } from "@/server/data/funnels"
+import { getAuthUserDetails } from "../users"
+import { canAccessFunnel } from "@/server/authorization/funnel"
 
-
+// TODO: Add authorization check
 export async function getRecentFunnels({ businessId }: { businessId: string }) {
     try {
+        if (!canAccessFunnel(businessId)) {
+            return { error: "You are not authorized to access this funnel" }
+        }
         const funnels = await db.query.funnel.findMany({
             where: eq(funnel.businessId, businessId),
             orderBy: [desc(funnel.updatedAt)],
@@ -18,3 +25,49 @@ export async function getRecentFunnels({ businessId }: { businessId: string }) {
         return { error: error.message }
     }
 }
+
+export async function getAllFunnelsAction() {
+    const { dbUser } = await getAuthUserDetails()
+    if (!dbUser?.businessId) return { error: 'User not found' }
+    const { funnels, error } = await getFunnelsByBusinessId(dbUser.businessId)
+    if (error) return { error: error }
+    return { funnels, businessId: dbUser.businessId }
+}
+
+export async function createNewFunnelAction(
+    {
+        businessId,
+        name,
+    }: {
+        businessId: string;
+        name: string;
+    }
+) {
+    try {
+        const pathName = createPathname(name);
+        const { error } = await addFunnel({ name, businessId, pathName })
+        if (error) {
+            return { error: error.message }
+        }
+        return { success: true }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
+    }
+}
+
+
+export async function getFunnelByIdAction(funnelId: string) {
+    try {
+        const { dbFunnel, error } = await getFunnelById(funnelId);
+        if (error) {
+            return { error: error.message }
+        }
+        return { dbFunnel }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
+
+    }
+}
+

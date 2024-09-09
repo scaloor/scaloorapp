@@ -11,6 +11,7 @@ export const users = pgTable("user", {
     lastName: text("last_name").notNull(),
     email: text("email").notNull(),
     mobile: text("mobile"),
+    image: text("image"),
     businessId: text("business_id").references(() => business.id),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),

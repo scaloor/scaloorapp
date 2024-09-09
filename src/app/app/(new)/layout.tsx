@@ -12,11 +12,14 @@ export default async function BusinessLayout({ children }: SettingsLayoutProps) 
         <AuthenicatedRoute>
             <div className="flex h-screen overflow-hidden w-full">
                 <AccountLayout>
-                    <div className="w-full">
-                        {children}
+                    <div className="flex flex-col h-full overflow-hidden">
+                        {/* Assuming AccountLayout includes a top bar, it should be placed here */}
+                        <div className="flex-grow overflow-y-auto mb-16">
+                            {children}
+                        </div>
                     </div>
                 </AccountLayout>
-            </div >
+            </div>
         </AuthenicatedRoute>
     )
 }

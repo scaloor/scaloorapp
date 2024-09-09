@@ -1,3 +1,4 @@
+import 'server-only'
 import { eq } from "drizzle-orm";
 import { business, subscription } from "../db/schema";
 import { db } from "../db";
@@ -39,6 +40,7 @@ export async function addSubscription({
                 updatedAt: new Date().toDateString(),
             }).returning().then(res => res[0])
         }
+        // The add subscription request comes from Stripe, so authorization cannot be checked.
         const dbSubscription = await insertSubscription(stripeSubscription)
         const { success } = await updateBusinessSubscription(businessId, dbSubscription.id)
         return { success }

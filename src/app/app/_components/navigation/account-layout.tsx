@@ -27,9 +27,7 @@ export default async function AccountLayout({ children }: { children: React.Reac
                 businessName={business.name}
             />
             <AccountTopbar>
-                <div className="flex flex-col gap-4 p-4 lg:gap-6">
-                    {children}
-                </div>
+                {children}
             </AccountTopbar>
         </AccountNavigationProvider>
     );

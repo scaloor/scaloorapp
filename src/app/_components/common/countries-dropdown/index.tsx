@@ -45,7 +45,7 @@ const CountryDropdown = ({ disabled, form, defaultValue }: CountryDropdownProps)
                     variant="outline"
                     role="combobox"
                     aria-expanded={openCountryDropdown}
-                    className="w-full justify-between rounded-[6px] border !border-[#27272a] !bg-[#0f0f11] hover:!bg-[#0f0f11] focus:!bg-[#0f0f11] focus:!outline-none focus:!ring-2 focus:!ring-[#0f0f11] focus:!ring-offset-2 focus:!ring-offset-[#0f0f11]"
+                    className="w-full justify-between rounded-[6px] dark:!bg-[#0f0f11] dark:hover:!bg-[#0f0f11] dark:focus:!bg-[#0f0f11] dark:focus:!outline-none dark:focus:!ring-2 dark:focus:!ring-[#0f0f11] dark:focus:!ring-offset-2 dark:focus:!ring-offset-[#0f0f11]"
                     disabled={disabled}
                 >
                     <span>
@@ -65,7 +65,7 @@ const CountryDropdown = ({ disabled, form, defaultValue }: CountryDropdownProps)
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] rounded-[6px] border border-[#27272a] p-0">
+            <PopoverContent className="w-[300px] rounded-[6px] p-0">
                 <Command>
                     <CommandInput
                         placeholder="Search country..."
@@ -81,7 +81,7 @@ const CountryDropdown = ({ disabled, form, defaultValue }: CountryDropdownProps)
                                         setCountryValue(currentValue === lowerCase(country.name) ? currentValue : "");
                                         setOpenCountryDropdown(false);
                                     }}
-                                    className="flex cursor-pointer items-center justify-between text-xs hover:!bg-[#27272a] hover:!text-white"
+                                    className="flex cursor-pointer items-center justify-between text-xs dark:hover:!bg-[#27272a] hover:!text-white"
                                 >
                                     <div className="flex items-end gap-2">
                                         <span>{country.emoji}</span>

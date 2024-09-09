@@ -3,7 +3,6 @@ import React from 'react'
 import CreateBusinessForm from './create-business-form';
 import { getAuthUserDetails } from '@/server/actions/users';
 import { redirect } from 'next/navigation';
-import { getBusinessById } from '@/server/data/business';
 import OnboardingSteps from '../onboarding-steps';
 import { BriefcaseBusiness } from 'lucide-react';
 

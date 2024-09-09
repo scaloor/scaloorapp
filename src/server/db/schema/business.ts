@@ -1,4 +1,4 @@
-import { bigint, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { subscription } from "./subscription";
 import { scaloorId } from "./defaults";
 
@@ -13,8 +13,6 @@ export const business = pgTable("business", {
     country: text("country").notNull(),
     currentSubscriptionId: text("subscription_id").references(() => subscription.id),
     stripeAccountId: text("stripe_account_id"),
-    scaloorDomain: text("scaloor_domain").unique(),
-    customDomain: text("custom_domain").unique(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => {
