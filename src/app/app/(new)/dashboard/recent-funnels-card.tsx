@@ -2,10 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/card'
 import { SelectFunnel } from '@/server/db/schema'
 import React from 'react'
-import { DataTable } from '@/app/_components/ui/data-table'
-import { funnelColumns } from '@/app/app/(business)/funnel/[funnelId]/_components/columns';
 import FunnelList from '../funnels/_components/funnel-list'
-import { Separator } from '@/app/_components/ui/separator'
 
 type RecentFunnelsCardProps = {
   funnels: SelectFunnel[]
