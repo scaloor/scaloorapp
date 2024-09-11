@@ -1,5 +1,5 @@
 import 'server-only'
-import { eq } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { db } from "../db";
 import { page } from "../db/schema";
 import { InsertPage, SelectPage } from "../db/schema";
@@ -130,9 +130,12 @@ export async function deletePage(page_id: string) {
 export async function getPagesByFunnelId(funnel_id: string) {
     try {
         if (await canAccessPage(funnel_id)) {
-            const pages = await db.select().from(page).where(
-                eq(page.funnelId, funnel_id)
-            ).then(res => res);
+            const pages = await db
+                .select()
+                .from(page)
+                .where(eq(page.funnelId, funnel_id))
+                .orderBy(asc(page.order))
+                .then(res => res);
             return { pages };
         }
         return { error: 'You do not have access to this funnel' };

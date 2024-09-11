@@ -4,6 +4,7 @@ import {
     CodeBlockLowlight,
     Color,
     CustomKeymap,
+    GlobalDragHandle,
     HighlightExtension,
     HorizontalRule,
     MarkdownExtension,
@@ -18,7 +19,6 @@ import {
     Twitter,
     UpdatedImage,
     Youtube,
-    Mathematics,
 } from "novel/extensions";
 import { UploadImagesPlugin } from "novel/plugins";
 
@@ -26,7 +26,6 @@ import { cx } from "class-variance-authority";
 import { common, createLowlight } from "lowlight";
 import NodeButtons from "./node-buttons";
 import { slashCommand } from "./slash-command";
-import CardExtension from "./card";
 
 //TODO I am using cx here to get tailwind autocomplete working, idk if someone else can write a regex to just capture the class key in objects
 const aiHighlight = AIHighlight;
@@ -82,17 +81,17 @@ const horizontalRule = HorizontalRule.configure({
 const starterKit = StarterKit.configure({
     bulletList: {
         HTMLAttributes: {
-            class: cx("list-disc list-outside"),
+            class: cx("list-disc list-outside leading-3 -mt-2"),
         },
     },
     orderedList: {
         HTMLAttributes: {
-            class: cx("list-decimal list-outside"),
+            class: cx("list-decimal list-outside leading-3 -mt-2"),
         },
     },
     listItem: {
         HTMLAttributes: {
-            class: cx(""),
+            class: cx("leading-normal -mb-2"),
         },
     },
     blockquote: {
@@ -139,21 +138,7 @@ const twitter = Twitter.configure({
     inline: false,
 });
 
-const mathematics = Mathematics.configure({
-    HTMLAttributes: {
-        class: cx("text-foreground rounded p-1 hover:bg-accent cursor-pointer"),
-    },
-    katexOptions: {
-        throwOnError: false,
-    },
-});
-
 const characterCount = CharacterCount.configure();
-
-CardExtension.configure({
-    nested: true,
-});
-
 
 export const extensions = [
     starterKit,
@@ -168,8 +153,6 @@ export const extensions = [
     codeBlockLowlight,
     youtube,
     twitter,
-    mathematics,
-    characterCount,
     TiptapUnderline,
     MarkdownExtension,
     HighlightExtension,
@@ -178,5 +161,4 @@ export const extensions = [
     CustomKeymap,
     NodeButtons,
     slashCommand,
-    /* CardExtension, */
 ];

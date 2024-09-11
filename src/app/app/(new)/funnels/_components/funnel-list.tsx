@@ -59,7 +59,7 @@ export default function FunnelList({ funnels }: FunnelListProps) {
                                             <Button
                                                 variant="ghost"
                                                 size="sm"
-                                                className="text-sm text-slate-700 p-1"
+                                                className="text-sm text-slate-700 dark:text-slate-300 p-1"
                                                 onClick={(e) => {
                                                     e.preventDefault();
                                                     e.stopPropagation();
@@ -96,7 +96,7 @@ export default function FunnelList({ funnels }: FunnelListProps) {
                                                     <Button
                                                         variant="ghost"
                                                         size="sm"
-                                                        className="text-sm text-slate-700 p-1"
+                                                        className="text-sm text-slate-700 dark:text-slate-300 p-1"
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             e.stopPropagation();

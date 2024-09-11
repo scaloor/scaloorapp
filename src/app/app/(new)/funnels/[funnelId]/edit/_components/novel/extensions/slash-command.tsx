@@ -13,10 +13,11 @@ import {
   Twitter,
   Youtube,
   Blocks,
+  FilePlus2,
 } from "lucide-react";
 import { createSuggestionItems } from "novel/extensions";
 import { Command, renderItems } from "novel/extensions";
-import Card from "./card";
+import { uploadFn } from "./image-upload";
 // import { uploadFn } from "./image-upload";
 
 
@@ -39,6 +40,15 @@ export const suggestionItems = createSuggestionItems([
       editor.chain().focus().deleteRange(range).toggleNode("card", "card").run();
     },
   }, */
+  {
+    title: "Add New Page",
+    description: "Create a new page.",
+    searchTerms: ["new", "page", "add"],
+    icon: <FilePlus2 size={18} />,
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).toggleNode("card", "card").run();
+    },
+  },
   {
     title: "Text",
     description: "Just start typing with plain text.",
@@ -145,7 +155,7 @@ export const suggestionItems = createSuggestionItems([
       }
     },
   },
-  /* {
+  {
     title: "Image",
     description: "Upload an image from your computer.",
     searchTerms: ["photo", "picture", "media"],
@@ -165,7 +175,7 @@ export const suggestionItems = createSuggestionItems([
       };
       input.click();
     },
-  }, */
+  },
 ]);
 
 export const slashCommand = Command.configure({

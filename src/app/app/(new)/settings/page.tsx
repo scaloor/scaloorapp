@@ -11,7 +11,7 @@ export default async function Settings() {
   return (
     <MaxWidthWrapper className="flex flex-col w-full">
       <div>
-        <h1 className="text-2xl font-bold text-zinc-800">Settings</h1>
+        <h1 className="text-2xl font-bold text-zinc-800 dark:text-white">Settings</h1>
         <div className="w-full h-px bg-gray-200 mb-4"></div>
       </div>
       <AccountPage

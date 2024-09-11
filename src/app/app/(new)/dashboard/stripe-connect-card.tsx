@@ -22,9 +22,9 @@ export default function StripeConnectCard({ business }: StripeConnectCardProps) 
                     <p>Status:</p>
                     <div className='text-sm text-muted-foreground'>
                         {business.stripeAccountId ?
-                            <Badge className='dark:text-white'>Connected</Badge>
+                            <Badge variant={'affirmative'}>Connected</Badge>
                             :
-                            <Badge className='dark:text-white' variant={'destructive'}>Not connected</Badge>
+                            <Badge variant={'destructive'}>Not connected</Badge>
                         }
                     </div>
                 </div>

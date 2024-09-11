@@ -36,8 +36,8 @@ export default function AccountPage({ user, business, subscription }: AccountPag
 
                 </div>
                 <div className='flex items-center'>
-                    <Link href="/account/edit-user">
-                        <Button className='dark:text-white h-8'>
+                    <Link href="/settings/edit-user">
+                        <Button className='h-8'>
                             Edit User
                         </Button>
                     </Link>
@@ -71,7 +71,7 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                 <div className='flex justify-between my-4'>
                     <div className='flex flex-col ml-2'>
                         <h4>{business.name}</h4>
-                        {business.stripeAccountId ? <Badge className='dark:text-white w-fit mt-2'>Stripe Connected</Badge> : <Badge variant={'destructive'} className='dark:text-white w-fit mt-2'>Stripe Not Connected</Badge>}
+                        {business.stripeAccountId ? <Badge variant={'affirmative'} className='w-fit mt-2'>Stripe Connected</Badge> : <Badge variant={'destructive'} className='w-fit mt-2'>Stripe Not Connected</Badge>}
                     </div>
                     <div className='flex gap-2 items-center'>
                         {business.stripeAccountId && <StripeConnectButton
@@ -81,8 +81,8 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                             returnUrl={'account'}
                             connected={business.stripeAccountId ? true : false}
                         />}
-                        <Link href="/account/edit-business">
-                            <Button className='dark:text-white h-8'>
+                        <Link href="/settings/edit-business">
+                            <Button className='h-8'>
                                 Edit Business
                             </Button>
                         </Link>
@@ -117,7 +117,7 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                 <div className='flex justify-between my-4'>
                     <div className='flex flex-col ml-2'>
                         <h4>Subscription Details</h4>
-                        {subscription.stripeSubscriptionId ? <Badge className='dark:text-white w-fit mt-2'>Subscribed</Badge> : <Badge variant={'destructive'} className='dark:text-white w-fit mt-2'>Not Subscribed</Badge>}
+                        {subscription.stripeSubscriptionId ? <Badge variant={'affirmative'} className='w-fit mt-2'>Subscribed</Badge> : <Badge variant={'destructive'} className='w-fit mt-2'>Not Subscribed</Badge>}
                     </div>
                     <div className='flex gap-2 items-center'>
 

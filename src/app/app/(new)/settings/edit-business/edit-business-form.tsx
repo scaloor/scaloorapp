@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { EditBusinessSchema } from "./schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Input } from "@/app/_components/ui/input";
 import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
@@ -20,6 +20,9 @@ import { stripeSession } from "@/server/actions/stripe";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
 import { capitalizeFirstLetter } from "@/lib/utils";
 import ErrorPage from "@/app/_components/common/error-page";
+import { editBusinessAction } from "@/server/actions/api/dashboard/edit-business";
+import { toast } from "sonner";
+import { useDropdownStore } from "@/app/_components/common/countries-dropdown/dropdown";
 
 type EditBusinessFormProps = {
     business: InsertBusiness;
@@ -29,6 +32,8 @@ export default function EditBusinessForm({ business }: EditBusinessFormProps) {
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
+    const { setCountryValue } = useDropdownStore();
+
     const form = useForm<z.infer<typeof EditBusinessSchema>>({
         resolver: zodResolver(EditBusinessSchema),
         defaultValues: {
@@ -38,36 +43,40 @@ export default function EditBusinessForm({ business }: EditBusinessFormProps) {
         },
     });
 
+    useEffect(() => {
+        if (business.country) {
+            setCountryValue(business.country.toLowerCase());
+        }
+    }, [business.country, setCountryValue]);
+
     if (!business.id) return <ErrorPage errorMessage="Business not found" />
 
     const onSubmit = async (formData: z.infer<typeof EditBusinessSchema>) => {
         setFormError("");
-        console.log('Form data:', formData)
         const file = form.getValues('businessLogo');
-        const path = `business-logo/${formData.name}`;
+        const path = `business/${business.id}/logo`;
         let businessLogoPath: string | undefined;
         startTransition(async () => {
             if (!!file) {
                 // Upload the business logo to supabase storage
                 const { data, error } = await uploadFile(file, path);
-                console.log('Data:', error);
                 if (error) return setFormError(error?.message);
                 if (!data) return setFormError("Unable to upload business logo");
                 businessLogoPath = data.path;
             }
             // Create the business in the database
-            const country = capitalizeFirstLetter(formData.country);
-            const { error } = await updateBusinessColumn({
+            const { success, error } = await editBusinessAction({
                 id: business.id!,
-                ...formData,
-                country,
+                name: formData.name,
+                businessEmail: formData.businessEmail,
+                country: formData.country,
                 businessLogo: businessLogoPath,
-
             })
             if (error) {
                 setFormError(error?.message);
             } else {
-                router.push('/account')
+                toast(success)
+                router.push('/settings')
             }
         });
     }

@@ -7,20 +7,15 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { Input } from "@/app/_components/ui/input";
-import { PhoneInput } from "@/app/_components/ui/phone-input";
 import ImageUpload from "@/app/_components/common/image-upload";
 import { Button } from "@/app/_components/ui/button";
 import { uploadFile } from "@/lib/supabase/client";
 import { FormError } from "@/app/_components/common/form-error";
-import { addBusiness } from "@/server/data/business";
-import { updateUser } from "@/server/data/users";
-import { business, InsertUser } from "@/server/db/schema";
-import { stripeSession } from "@/server/actions/stripe";
+import { InsertUser } from "@/server/db/schema";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
-import { capitalizeFirstLetter } from "@/lib/utils";
-import { createBusiness } from "@/server/actions/onboarding";
+import { createBusiness } from "@/server/actions/api/onboarding";
 import { useRouter } from "next/navigation";
-import { getAuthUserDetails } from "@/server/actions/users";
+
 
 type createBusinessFormProps = {
     user: InsertUser

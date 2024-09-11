@@ -36,7 +36,7 @@ export default function StripeConnectButton(
 
     return (
         <Button
-            className={cn('dark:text-white h-8', className)}
+            className={cn('h-8', className)}
             onClick={connectStripe}
         >
             {connected ? 'Edit Stripe Account' : 'Connect Stripe'}

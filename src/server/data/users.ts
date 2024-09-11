@@ -54,6 +54,7 @@ type UpdateUserOptions = {
     lastName?: string;
     email?: string;
     mobile?: string;
+    image?: string;
 }
 
 /**

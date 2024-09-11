@@ -2,7 +2,7 @@
 
 import { getAuthUserDetails } from "@/server/actions/users"
 import { getBusinessById } from "@/server/data/business"
-import { getRecentFunnels } from "../funnel"
+import { getRecentFunnels } from "../../funnel"
 
 export async function getDashboardDetailsAction() {
     const { dbUser } = await getAuthUserDetails()

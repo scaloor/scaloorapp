@@ -11,10 +11,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/app/_components/ui/input';
 import { FormError } from '@/app/_components/common/form-error';
 import { Button } from '@/app/_components/ui/button';
-import { updateUserColumns } from '@/server/data/users';
 import ErrorPage from '@/app/_components/common/error-page';
 import { useRouter } from 'next/navigation';
 import { PhoneInput } from '@/app/_components/ui/phone-input';
+import { toast } from 'sonner';
+import { editUserAction } from '@/server/actions/api/dashboard/edit-user';
 
 type EditUserFormProps = {
     user: InsertUser;
@@ -39,18 +40,21 @@ export default function EditUserForm({ user }: EditUserFormProps) {
     const onSubmit = async (data: z.infer<typeof EditUserSchema>) => {
         setFormError("");
         startTransition(async () => {
-            const { error } = await updateUserColumns({
+
+            const { success, error } = await editUserAction({
                 id: user.id!,
                 ...data,
             });
             if (error) {
                 setFormError(error?.message);
             } else {
-                router.push('/account')
+                toast(success)
+                router.push('/settings')
             }
         });
     }
 
+    // TODO: Add image upload
     return (
         <MaxWidthWrapper>
             <Card className='mt-5'>

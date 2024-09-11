@@ -1,6 +1,5 @@
 import ErrorPage from '@/app/_components/common/error-page'
 import { getFunnelByIdAction } from '@/server/actions/funnel'
-import { redirect } from 'next/navigation'
 import React from 'react'
 
 type FunnelViewPageProps = {

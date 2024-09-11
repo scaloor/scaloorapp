@@ -17,7 +17,7 @@ export default function ManageSubscriptionButton({ plan_slug, className }: Manag
         router.push(url!)
     }
     return (
-        <Button className={cn('dark:text-white max-w-[200px] h-8', className)} onClick={manageSubscription}>
+        <Button className={cn('max-w-[200px] h-8', className)} onClick={manageSubscription}>
             Manage subscription
         </Button>
     )

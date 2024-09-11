@@ -1,68 +1,46 @@
 'use client'
-/**
- * I need to create a nested editor component that will have only the necessary extensions
- * I.E a card node should not be able to render new card nodes, but it should include
- * images and video nodes.
- * This will also be useful to create colummns, with two editors side by side. This should
- * have the same restrictions as a card node.
- */
-import React from 'react'
-import { Card, CardContent } from '@/app/_components/ui/card'
-import {
-    EditorBubble,
-    EditorCommand,
-    EditorCommandEmpty,
-    EditorCommandItem,
-    EditorCommandList,
-    EditorContent,
-    EditorInstance,
-    EditorRoot,
-    JSONContent,
-    useEditor,
-} from "novel"
-import { extensions } from '../../extensions'
-import { suggestionItems } from '../../extensions/slash-command'
+import React, { useCallback, useState } from 'react'
+import { EditorRoot, EditorContent, EditorCommand, EditorBubble, EditorCommandEmpty, EditorCommandItem, EditorCommandList, JSONContent, EditorInstance } from 'novel'
+import { extensions } from './extensions'
+import { suggestionItems } from './extensions/slash-command'
+import { Separator } from '@/app/_components/ui/separator';
 import {
     ColorSelector,
     LinkSelector,
     NodeSelector,
     TextButtons,
-} from "../../bubble/selectors"
-import { Separator } from '@/app/_components/ui/separator'
-import { useState, useCallback } from 'react'
-import { NodeViewContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { nestedContent } from './nested-content'
+} from "./selectors";
 
-interface NestedEditorProps {
+
+type NovelProps = {
     initialContent: JSONContent
-    onChange: (content: JSONContent) => void
+    //onChange: (content: JSONContent) => void
 }
 
-const NestedEditor: React.FC<NestedEditorProps> = ({ initialContent, onChange }) => {
-    const [openNode, setOpenNode] = useState(false)
-    const [openColor, setOpenColor] = useState(false)
-    const [openLink, setOpenLink] = useState(false)
+export default function Novel({ initialContent }: NovelProps) {
+    const [value, setValue] = useState<JSONContent>(initialContent);
+    const [openNode, setOpenNode] = useState(false);
+    const [openColor, setOpenColor] = useState(false);
+    const [openLink, setOpenLink] = useState(false);
 
     const handleUpdate = useCallback(({ editor }: { editor: EditorInstance }) => {
-        const json = editor.getJSON()
-        onChange(json)
-    }, [onChange])
+        const json = editor.getJSON();
+        setValue(json);
+    }, []);
 
-    // The card should be rendered outside of the editor, i.e. not in this component
     return (
         <EditorRoot>
             <EditorContent
-                extensions={[StarterKit]}
+                extensions={extensions}
                 initialContent={initialContent}
-                className=''
+                immediatelyRender={false}
                 editorProps={{
                     attributes: {
-                        class: 'prose prose-sm dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full'
+                        class: 'prose prose-lg dark:prose-invert prose-headings:font-title font-default focus:outline-none max-w-full'
                     }
                 }}
-                onUpdate={handleUpdate}
             >
+
                 <EditorCommand className="z-50 h-auto max-h-[330px] overflow-y-auto rounded-md border border-muted bg-background px-1 py-2 shadow-md transition-all">
                     <EditorCommandEmpty className="px-2 text-muted-foreground">No results</EditorCommandEmpty>
                     <EditorCommandList>
@@ -85,6 +63,7 @@ const NestedEditor: React.FC<NestedEditorProps> = ({ initialContent, onChange })
                     </EditorCommandList>
                 </EditorCommand>
 
+                {/* Editor Bubble */}
                 <EditorBubble
                     tippyOptions={{
                         placement: "top",
@@ -94,16 +73,15 @@ const NestedEditor: React.FC<NestedEditorProps> = ({ initialContent, onChange })
                     <Separator orientation="vertical" />
                     <NodeSelector open={openNode} onOpenChange={setOpenNode} />
                     <Separator orientation="vertical" />
+
                     <LinkSelector open={openLink} onOpenChange={setOpenLink} />
                     <Separator orientation="vertical" />
                     <TextButtons />
                     <Separator orientation="vertical" />
                     <ColorSelector open={openColor} onOpenChange={setOpenColor} />
                 </EditorBubble>
+
             </EditorContent>
         </EditorRoot>
     )
 }
-
-export default NestedEditor
-
