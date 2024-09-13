@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Suspense, useEffect, useState } from "react";
 import { getFunnelByIdAction } from "@/server/actions/funnel";
+import React from "react";
 
 export default function Breadcrumbs() {
     const pathname = usePathname()
@@ -39,16 +40,16 @@ export default function Breadcrumbs() {
     }, [pathname]);
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem className="font-semibold text-lg">
-                        <BreadcrumbLink href="/">
-                            <Image src="/assets/logo.png" alt="Scaloor" width={16} height={16} />
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
+        <Breadcrumb>
+            <BreadcrumbList>
+                <BreadcrumbItem className="font-semibold text-lg">
+                    <BreadcrumbLink href="/">
+                        <Image src="/assets/logo.png" alt="Scaloor" width={16} height={16} />
+                    </BreadcrumbLink>
+                </BreadcrumbItem>
+                <Suspense fallback={<div>Loading...</div>}>
                     {processedSegments.map((segment, index) => (
-                        <>
+                        <React.Fragment key={index}>
                             <BreadcrumbSeparator />
                             <BreadcrumbItem className="font-semibold text-sm">
                                 {index === pathSegments.length - 1 ? (
@@ -59,10 +60,10 @@ export default function Breadcrumbs() {
                                     </BreadcrumbLink>
                                 )}
                             </BreadcrumbItem>
-                        </>
+                        </React.Fragment>
                     ))}
-                </BreadcrumbList>
-            </Breadcrumb >
-        </Suspense>
+                </Suspense>
+            </BreadcrumbList>
+        </Breadcrumb >
     )
 }
