@@ -5,7 +5,7 @@ import { ReactNode, RefObject } from "react";
 import tippy, { type GetReferenceClientRect, type Instance, type Props } from "tippy.js";
 import { CommandOut } from "./command-components";
 
-export const CommandExtension = Extension.create({
+export const Command = Extension.create({
   name: 'command',
 
   addOptions() {
@@ -36,7 +36,7 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
   let popup: Instance<Props>[] | null = null;
 
   return {
-    onStart: (props: { editor: Editor; clientRect: DOMRect }) => {
+    onStart: (props: { editor: Editor; clientRect: DOMRect; query: string }) => {
       component = new ReactRenderer(CommandOut, {
         props,
         editor: props.editor,
@@ -53,7 +53,7 @@ export const renderItems = (elementRef?: RefObject<Element> | null) => {
         placement: "bottom-start",
       });
     },
-    onUpdate: (props: { editor: Editor; clientRect: GetReferenceClientRect }) => {
+    onUpdate: (props: { editor: Editor; clientRect: GetReferenceClientRect; query: string }) => {
       component?.updateProps(props);
 
       popup?.[0]?.setProps({

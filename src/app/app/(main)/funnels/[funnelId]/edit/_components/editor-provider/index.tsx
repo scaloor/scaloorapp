@@ -1,6 +1,7 @@
 'use client'
 import React, { ReactNode, createContext, useContext, useReducer } from 'react'
 import { SelectPage } from '@/server/db/schema'
+import { pageTypeEnum } from '@/server/db/schema'
 
 // Might want to add published
 // Might want to add funnelId
@@ -16,6 +17,8 @@ type Styles = {
 
 type DeviceTypes = 'Desktop' | 'Mobile' | 'Tablet'
 
+export type PageType = 'landing' | 'upsell' | 'downsell' | 'thank_you';
+
 interface FunnelEditorState {
     funnelId: string; // Add this line
     pages: SelectPage[];
@@ -27,9 +30,11 @@ interface FunnelEditorState {
 type FunnelEditorAction =
     | { type: 'ADD_PAGE'; page: SelectPage }
     | { type: 'REMOVE_PAGE'; pageId: string }
+    | { type: 'UPDATE_PAGE_TYPE'; pageId: string; pageType: PageType }
     | { type: 'UPDATE_STYLES'; styles: Partial<Styles> }
     | { type: 'SET_DEVICE_TYPE'; deviceType: DeviceTypes }
     | { type: 'TOGGLE_PREVIEW_MODE' }
+
 
 function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorAction): FunnelEditorState {
     switch (action.type) {
@@ -37,6 +42,15 @@ function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorActio
             return { ...state, pages: [...state.pages, action.page] };
         case 'REMOVE_PAGE':
             return { ...state, pages: state.pages.filter(page => page.id !== action.pageId) };
+        case 'UPDATE_PAGE_TYPE':
+            return {
+                ...state,
+                pages: state.pages.map(page =>
+                    page.id === action.pageId
+                        ? { ...page, type: action.pageType as PageType }
+                        : page
+                )
+            };
         case 'UPDATE_STYLES':
             return { ...state, styles: { ...state.styles, ...action.styles } };
         case 'SET_DEVICE_TYPE':

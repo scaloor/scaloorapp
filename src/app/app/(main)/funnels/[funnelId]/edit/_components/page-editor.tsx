@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useCallback, FocusEventHandler } from 'react'
-import { InsertPage, SelectPage } from '@/server/db/schema'
+import { SelectPage } from '@/server/db/schema'
 import Tiptap from './tiptap'
 import { Separator } from '@/app/_components/ui/separator'
 import { defaultContent } from './tiptap/default-content'
@@ -10,17 +10,17 @@ import { useFunnelEditor } from './editor-provider'
 import { Input } from '@/app/_components/ui/input'
 import { toast } from 'sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/app/_components/ui/tooltip'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/app/_components/ui/select'
-import { capitalizeFirstLetter } from '@/lib/utils'
 import { Button } from '@/app/_components/ui/button'
 import { defaultThankYouPage, PageTypes } from './editor-provider/defaults'
-import { Badge } from '@/app/_components/ui/badge'
+import { TrashIcon } from 'lucide-react'
+import PageTypeDialog from './page-type-dialog'
 
 
 
 
 export default function PageEditor() {
     const { state, dispatch } = useFunnelEditor()
+    const [isHovered, setIsHovered] = useState(false)
     const { pages } = state
     console.log('pages', state.pages)
 
@@ -63,56 +63,63 @@ export default function PageEditor() {
         }
     }
 
-    const handleAddNewPage = () => {
-        dispatch({ type: 'ADD_PAGE', page: defaultThankYouPage(state.funnelId, state.pages.length + 1) })
+
+    const deletePage = (pageId: string) => {
+        dispatch({ type: 'REMOVE_PAGE', pageId })
     }
 
 
     return (
         <>
-            <Button onClick={handleAddNewPage}>Add New Page</Button>
             {pages.map((page, index) => (
                 <div key={index}>
-                    <div className="flex flex-col justify-center items-center my-2 w-full text-center">
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <Input
-                                        defaultValue={page.name}
-                                        className="border-none h-8 m-0 p-0 text-md text-muted-foreground hover:bg-zinc-200 cursor-pointer text-center w-auto focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:bg-zinc-200"
-                                        data-page-id={page.id}
-                                        onBlur={handleOnBlurNameChange}
-                                    />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Page name</p>
-                                    <p className="text-muted-foreground text-xs">This won&apos;t be visible to your customers</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    {/*  <Select>
-                                        <SelectTrigger>
-                                            <SelectValue defaultValue={page.type} />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="checkout">Checkout</SelectItem>
-                                            <SelectItem value="upsell">Upsell</SelectItem>
-                                            <SelectItem value="thank_you">Thank you</SelectItem>
-                                        </SelectContent>
-                                    </Select> */}
-                                    <Badge variant={'outline'} className="cursor-default">
-                                        <p className="text-muted-foreground text-sm">{PageTypes.find(type => type.slug === page.type)?.name}</p>
-                                    </Badge>
-                                </TooltipTrigger>
-                                <TooltipContent side="bottom">
-                                    <p>Page type</p>
-                                    <p className="text-muted-foreground text-xs">This won&apos;t be visible to your customers</p>
-                                </TooltipContent>
-                            </Tooltip>
-
-                        </TooltipProvider>
+                    <div className="grid grid-cols-3 my-2 w-full text-center"
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        <div></div>
+                        <div className="flex flex-col items-center justify-center">
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <Input
+                                            defaultValue={page.name}
+                                            className="border-none h-8 m-0 p-0 text-md text-muted-foreground hover:bg-zinc-200 cursor-pointer text-center w-auto focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:bg-zinc-200 rounded-3xl my-2"
+                                            data-page-id={page.id}
+                                            onBlur={handleOnBlurNameChange}
+                                        />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>Page name</p>
+                                        <p className="text-muted-foreground text-xs">This is what will appear in the URL</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        {/**To change page type can use select or potentially dialog? */}
+                                        <PageTypeDialog pageId={page.id} pageType={PageTypes.find(p => p.slug === page.type)!.name} />
+                                    </TooltipTrigger>
+                                    <TooltipContent side="bottom">
+                                        <p>Page type</p>
+                                        <p className="text-muted-foreground text-xs">This won&apos;t be visible to your customers</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
+                        </div>
+                        <div>
+                            {index !== 0 && (
+                                <Button
+                                    variant='ghost'
+                                    className={`transition-opacity duration-300 ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+                                    size='sm'
+                                    onClick={() => deletePage(page.id)}
+                                >
+                                    <TrashIcon className="w-4 h-4 text-red-500" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
+                    <Separator />
                     <Tiptap
                         initialContent={page.content || defaultContent}
                     />
