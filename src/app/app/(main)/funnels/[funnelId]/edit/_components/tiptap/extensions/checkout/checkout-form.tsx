@@ -11,10 +11,6 @@ type CheckoutFormFields = {
     email: boolean
     phone: boolean
     address: boolean
-    city: boolean
-    state: boolean
-    zip: boolean
-    country: boolean
 }
 
 type CheckoutFormProps = {
@@ -47,11 +43,15 @@ export default function CheckoutForm({ productName, price, productImage, fields 
                 {fields.name && <Input type='text' placeholder='Name' />}
                 {fields.email && <Input type='email' placeholder='Email' />}
                 {fields.phone && <Input type='tel' placeholder='Phone' />}
-                {fields.address && <Input type='text' placeholder='Address' />}
-                {fields.city && <Input type='text' placeholder='City' />}
-                {fields.state && <Input type='text' placeholder='State' />}
-                {fields.zip && <Input type='text' placeholder='Zip' />}
-                {fields.country && <Input type='text' placeholder='Country' />}
+                {fields.address && (
+                    <>
+                        <Input type='text' placeholder='Address' />
+                        <Input type='text' placeholder='City' />
+                        <Input type='text' placeholder='State' />
+                        <Input type='text' placeholder='Zip' />
+                        <Input type='text' placeholder='Country' />
+                    </>
+                )}
             </div>
             <PaymentElement />
             <Button>Submit</Button>

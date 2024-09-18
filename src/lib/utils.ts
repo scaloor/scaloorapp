@@ -25,6 +25,14 @@ export function capitalizeFirstLetter(string: string) {
 }
 
 
+export function formatPrice(price: number) {
+  // Convert cents to dollars and format with 2 decimal places
+  const dollars = (price / 100).toFixed(2);
+  // Add dollar sign and commas for thousands
+  return `$${dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
+}
+
+
 export const createPathname = (name: string): string => {
   return name
     .toLowerCase()

@@ -104,8 +104,21 @@ function createPlusButton(view: EditorView) {
         e.stopPropagation();
         const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
         if (pos) {
-            const tr = view.state.tr.insert(pos.pos, view.state.schema.nodes.paragraph.create());
+            const $pos = view.state.doc.resolve(pos.pos);
+            let insertPos;
+
+            if ($pos.depth === 0) {
+                // We're at the top level, insert at the end of the current node
+                insertPos = $pos.end();
+            } else {
+                // Get the position after the parent node
+                insertPos = $pos.after($pos.depth);
+            }
+
+            const tr = view.state.tr.insert(insertPos, view.state.schema.nodes.paragraph.create());
+            tr.setSelection(TextSelection.create(tr.doc, insertPos + 1));
             view.dispatch(tr);
+            view.focus();
         }
     });
     return plusButton;

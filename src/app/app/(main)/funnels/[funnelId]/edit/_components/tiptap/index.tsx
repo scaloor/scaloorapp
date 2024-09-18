@@ -1,7 +1,6 @@
 'use client'
 import React, { useCallback, useState } from 'react'
 import { extensions } from './extensions'
-import TiptapFloatingMenu from './floating-menu'
 import { Editor, EditorProvider, JSONContent } from '@tiptap/react'
 import TiptapBubbleMenu from './bubble-menu'
 
@@ -19,7 +18,7 @@ export default function Tiptap({ initialContent }: NovelProps) {
 
     const handleUpdate = useCallback(({ editor }: { editor: Editor }) => {
         const json = editor.getJSON();
-        //console.log(json)
+        console.log('Editor JSON', json)
         setValue(json);
     }, []);
 

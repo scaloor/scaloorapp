@@ -3,7 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Product } from "./sample-products";
 import Image from "next/image";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatPrice } from "@/lib/utils";
 import { Button } from "@/app/_components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/app/_components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontalIcon } from "lucide-react";
@@ -54,6 +54,13 @@ export const columns: ColumnDef<Product>[] = [
             )
         },
         enableSorting: true,
+        cell: ({ row }) => {
+            return (
+                <div>
+                    {formatPrice(row.original.defaultPrice)}
+                </div>
+            )
+        }
     },
     {
         accessorKey: "lastModified",

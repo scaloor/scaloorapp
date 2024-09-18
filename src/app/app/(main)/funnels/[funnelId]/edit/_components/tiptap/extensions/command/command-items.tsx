@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { Editor, Range } from "@tiptap/react";
 import { Command, renderItems } from ".";
-import { Heading1Icon, Heading2Icon, Heading3Icon, ListIcon, ListOrderedIcon, type LucideIcon, TextIcon } from "lucide-react";
+import { Heading1Icon, Heading2Icon, Heading3Icon, ListIcon, ListOrderedIcon, type LucideIcon, ShoppingCartIcon, TextIcon } from "lucide-react";
 import YoutubeIcon from '@/lib/icons/youtube'
 import Youtube from '@tiptap/extension-youtube'
 

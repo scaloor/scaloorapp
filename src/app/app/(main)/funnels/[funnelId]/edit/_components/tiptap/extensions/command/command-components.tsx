@@ -6,8 +6,8 @@ import { useState, useEffect } from 'react';
 import { EditorCommandItem } from "./command-items";
 import { useFunnelEditor } from "../../../editor-provider";
 import { defaultThankYouPage } from "../../../editor-provider/defaults";
-import { FilePlus2 } from "lucide-react";
-import { useCommandState } from "cmdk";
+import { FilePlus2, ShoppingCartIcon } from "lucide-react";
+import { useCurrentEditor } from "@tiptap/react";
 
 /**
  * The command extension requires 5 components which are extended from shadcn
@@ -30,7 +30,8 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const { state, dispatch } = useFunnelEditor();
     const commandRef = useRef<HTMLDivElement>(null);
-    
+    const { editor } = useCurrentEditor()
+
     useEffect(() => {
         setSelectedIndex(0);
     }, [items]);
@@ -155,6 +156,24 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
                             <div className="flex flex-col items-start pl-2">
                                 <span className="text-sm text-foreground">Add New Page</span>
                                 <span className="text-xs text-zinc-500">Create a new page in the funnel</span>
+                            </div>
+                        </CommandItem>
+                        <CommandItem
+                            onSelect={() => {
+                                if (editor) {
+                                    const { from, to } = editor.state.selection
+                                    editor.chain().focus().deleteRange({ from, to }).setNode('checkout').run()
+                                    console.log('checkout')
+                                }
+                            }}
+                            className="flex items-start w-full rounded-md py-2 text-sm aria-selected:bg-zinc-200 aria-selected:text-inherit aria-selected:font-normal dark:aria-selected:bg-zinc-800 dark:aria-selected:text-black"
+                        >
+                            <div className="flex h-10 w-10 items-center justify-center rounded-md border border-muted bg-background text-foreground">
+                                <ShoppingCartIcon />
+                            </div>
+                            <div className="flex flex-col items-start pl-2">
+                                <span className="text-sm text-foreground">Add Checkout</span>
+                                <span className="text-xs text-zinc-500">Add a checkout page to the funnel</span>
                             </div>
                         </CommandItem>
                     </CommandGroup>

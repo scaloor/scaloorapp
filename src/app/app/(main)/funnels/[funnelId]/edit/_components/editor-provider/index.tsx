@@ -15,16 +15,23 @@ type Styles = {
     accentColor: string;
 }
 
+type Checkout = {
+    productId: string;
+    currency: string;
+}
+
 type DeviceTypes = 'Desktop' | 'Mobile' | 'Tablet'
 
 export type PageType = 'landing' | 'upsell' | 'downsell' | 'thank_you';
 
 interface FunnelEditorState {
-    funnelId: string; // Add this line
+    funnelId: string;
     pages: SelectPage[];
     styles: Styles;
     deviceType: DeviceTypes;
     previewMode: boolean;
+    published: boolean; // Need to add actions
+    checkout: Checkout | null; // Need to add actions
 }
 
 type FunnelEditorAction =
@@ -81,6 +88,8 @@ export function FunnelEditorProvider({ children, initialPages, funnelId }: { chi
         },
         deviceType: 'Desktop',
         previewMode: false,
+        published: false,
+        checkout: null,
     });
 
     return (

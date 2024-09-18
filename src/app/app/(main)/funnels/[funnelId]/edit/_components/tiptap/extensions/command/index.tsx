@@ -85,6 +85,3 @@ export interface SuggestionItem {
   searchTerms?: string[];
   command?: (props: { editor: Editor; range: Range }) => void;
 }
-
-  /* export const createSuggestionItems = (items: SuggestionItem[]) => items; */
-

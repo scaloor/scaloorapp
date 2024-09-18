@@ -23,6 +23,10 @@ export default function TiptapBubbleMenu() {
                     duration: 100,
                     placement: 'top'
                 }}
+                shouldShow={({ editor, from, to }) => {
+                    // Only show the menu when there's a valid text selection
+                    return editor.isEditable && from !== to;
+                }}
             >
                 <div className="flex w-fit max-w-[90vw] overflow-hidden rounded-md border border-muted bg-background shadow-xl">
                     <NodeSelector open={openNode} onOpenChange={setOpenNode} />
