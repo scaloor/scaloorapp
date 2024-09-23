@@ -1,6 +1,7 @@
 import { boolean, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { business } from "./business";
 import { scaloorId } from "./defaults";
+import { domain } from "./domain";
 
 export const funnel = pgTable("funnel", {
     id: text("id")
@@ -8,6 +9,7 @@ export const funnel = pgTable("funnel", {
         .notNull()
         .$defaultFn(() => scaloorId('fun')),
     businessId: text("business_id").notNull().references(() => business.id),
+    domainId: text("domain_id"),
     name: text("name").notNull(),
     pathName: text("path_name").notNull(),
     published: boolean("published").default(false).notNull(),

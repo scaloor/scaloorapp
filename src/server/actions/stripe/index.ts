@@ -52,7 +52,7 @@ export async function stripeSession(plan_slug: string) {
     // Redirect to the billing portal if the user has an active subscription
     const stripeSession = await stripe.billingPortal.sessions.create({
         customer: subscription.stripeCustomerId,
-        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/account`,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
     })
 
     return stripeSession.url;

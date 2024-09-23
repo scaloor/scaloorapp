@@ -9,8 +9,6 @@ import { ArrowUpDown, MoreHorizontalIcon, PackageIcon } from "lucide-react";
 import { SelectProduct } from "@/server/db/schema";
 import { deleteProductByIdAction } from "@/server/actions/api/product";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { parseISO, format } from 'date-fns'
 import { deleteFile } from "@/lib/supabase/client";
 
@@ -20,7 +18,7 @@ function formatDate(dateString: string) {
 }
 
 
-const deleteProduct = async (productId: string, router: AppRouterInstance, image: string | null) => {
+const deleteProduct = async (productId: string, image: string | null) => {
     // Delete the image from the bucket
     if (image) {
         const { error: fileError } = await deleteFile(image)
@@ -35,7 +33,7 @@ const deleteProduct = async (productId: string, router: AppRouterInstance, image
     }
 
     toast.success("Product deleted successfully")
-    router.refresh()
+    window.location.reload()
 
 }
 
@@ -125,7 +123,6 @@ export const columns: ColumnDef<SelectProduct>[] = [
         accessorKey: "actions",
         header: "Actions",
         cell: ({ row }) => {
-            const router = useRouter();
             return (
                 <div>
                     <DropdownMenu>
@@ -136,13 +133,15 @@ export const columns: ColumnDef<SelectProduct>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => { router.push(`/products/${row.original.id}/edit`) }}>
-                                Edit
-                            </DropdownMenuItem>
+                            <a href={`/products/${row.original.id}/edit`}>
+                                <DropdownMenuItem>
+                                    Edit
+                                </DropdownMenuItem>
+                            </a>
                             {/* <DropdownMenuItem>
                                 Duplicate
                             </DropdownMenuItem> */}
-                            <DropdownMenuItem onClick={() => { deleteProduct(row.original.id, router, row.original.image) }}>
+                            <DropdownMenuItem onClick={() => { deleteProduct(row.original.id, row.original.image) }}>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>

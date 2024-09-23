@@ -94,7 +94,7 @@ const FunnelEditorContext = createContext<{
     dispatch: React.Dispatch<FunnelEditorAction>;
 } | undefined>(undefined)
 
-export function FunnelEditorProvider({ children, initialPages, funnelId, checkoutProduct }: { children: ReactNode, initialPages: SelectPage[], funnelId: string, checkoutProduct: string }) {
+export function FunnelEditorProvider({ children, initialPages, funnelId, published, checkoutProduct }: { children: ReactNode, initialPages: SelectPage[], funnelId: string, published: boolean, checkoutProduct: string }) {
     const [state, dispatch] = useReducer(funnelEditorReducer, {
         pages: initialPages,
         funnelId,
@@ -108,7 +108,7 @@ export function FunnelEditorProvider({ children, initialPages, funnelId, checkou
         },
         deviceType: 'Desktop',
         previewMode: false,
-        published: false,
+        published: published,
         checkoutProduct: checkoutProduct,
     });
 

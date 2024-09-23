@@ -25,9 +25,10 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL(`/app${path === "/" ? "" : path}`, request.url));
   }
 
+  // TODO: What does this do?
   await updateSession(request)
 
-  // If the path is a custom page, rewrite to the custom page
+  // If the path is a dynamic page, rewrite to the dynamic page
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, request.url));
 
 }

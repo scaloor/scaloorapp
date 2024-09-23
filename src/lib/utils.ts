@@ -1,30 +1,21 @@
 import { type ClassValue, clsx } from "clsx"
+import { format, parseISO } from "date-fns"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatDate = (value: any): string => {
-  if (value instanceof Date) {
-    return value.toLocaleString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false
-    });
-  }
-  return String(value);
+export function formatDate(dateString: string) {
+  const date = parseISO(dateString)
+  return format(date, 'PPp') // e.g., "September 19th, 2024"
 }
 
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-
+// Format the price to a string
 export function formatPriceToString(price: number) {
   // Convert cents to dollars and format with 2 decimal places
   const dollars = (price / 100).toFixed(2);

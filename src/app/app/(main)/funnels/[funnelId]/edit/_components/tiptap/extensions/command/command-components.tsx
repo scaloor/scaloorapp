@@ -31,7 +31,7 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
     const { state, dispatch } = useFunnelEditor();
     const commandRef = useRef<HTMLDivElement>(null);
     const { editor } = useCurrentEditor()
-    if (!editor) return null
+    
 
     useEffect(() => {
         setSelectedIndex(0);
@@ -114,6 +114,8 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
         editor.chain().focus().deleteRange({ from: start, to: end }).setNode('paragraph').run()
         dispatch({ type: 'ADD_PAGE', page: defaultThankYouPage(state.funnelId, state.pages.length + 1) })
     }
+
+    if (!editor) return null
 
     return (
         <>

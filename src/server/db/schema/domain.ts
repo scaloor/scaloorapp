@@ -8,8 +8,10 @@ export const domain = pgTable("domain", {
         .notNull()
         .$defaultFn(() => scaloorId('domain')),
     businessId: text("business_id").notNull().references(() => business.id),
-    domain: text("domain").notNull(),
-    customDomain: boolean("custom_domain").default(false).notNull(),
+    domain: text("domain").unique().notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });
+
+export type InsertDomain = typeof domain.$inferInsert;
+export type SelectDomain = typeof domain.$inferSelect;

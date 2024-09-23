@@ -11,10 +11,10 @@ export async function getDashboardDetailsAction() {
     const { dbBusiness } = await getBusinessById(dbUser.businessId)
     if (!dbBusiness) return { error: "Business not found" }
     // TODO: Get custom domain
-    const { domains } = await getDomainsByBusinessId(dbBusiness.id)
+    const { dbDomains } = await getDomainsByBusinessId(dbBusiness.id)
     const { funnels } = await getRecentFunnels({ businessId: dbBusiness.id! })
     if (!funnels) return { error: "Funnels not found" }
-    return { dbUser, dbBusiness, funnels, domains }
+    return { dbUser, dbBusiness, funnels, dbDomains }
 }
 
 /* export async function getDashboardDetailsAction() {

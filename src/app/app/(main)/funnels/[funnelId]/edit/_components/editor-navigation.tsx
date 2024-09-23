@@ -5,8 +5,7 @@ import React from 'react'
 import { useFunnelEditor } from './editor-provider'
 import { saveFunnelAction } from '@/server/actions/api/editor'
 import { toast } from 'sonner'
-
-
+import PublishDialog from './publish-dialog'
 
 export default function EditorNavigation() {
     const { state } = useFunnelEditor()
@@ -36,9 +35,7 @@ export default function EditorNavigation() {
                 <Button variant="outline" className="h-8">
                     Preview
                 </Button>
-                <Button variant="default" className="h-8">
-                    Publish
-                </Button>
+                <PublishDialog />
             </div>
         </header>
     )

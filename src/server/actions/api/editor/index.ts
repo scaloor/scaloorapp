@@ -5,6 +5,7 @@ import { getFunnelById, updateFunnelColumns } from "@/server/data/funnels";
 import { addPage, deletePageById, getPageById, getPagesByFunnelId, updatePage } from "@/server/data/page";
 import { SelectPage } from "@/server/db/schema";
 import { JSONContent } from "@tiptap/react";
+import { getDomainsAction } from "../domain";
 
 export async function loadEditorAction({ funnelId }: { funnelId: string }) {
     const { dbFunnel, error: funnelError } = await getFunnelById(funnelId);
@@ -19,7 +20,7 @@ export async function loadEditorAction({ funnelId }: { funnelId: string }) {
         }
     }
 
-    return { pages, checkoutProduct: dbFunnel.checkoutProduct }
+    return { pages, checkoutProduct: dbFunnel.checkoutProduct, published: dbFunnel.published }
 }
 
 export async function saveFunnelAction({
@@ -75,6 +76,36 @@ export async function saveFunnelAction({
             error: error.message
         }
     }
+}
+
+export async function loadPublishDialogAction(funnelId: string) {
+    try {
+        const { dbDomains, error: domainError } = await getDomainsAction();
+        if (domainError || !dbDomains) {
+            return { error: 'Error fetching domains' }
+        }
+
+        const { dbFunnel, error: funnelError } = await getFunnelById(funnelId);
+        if (funnelError || !dbFunnel) {
+            return { error: 'Funnel not found' }
+        }
+
+        return { funnelPath: dbFunnel.pathName, dbDomains }
+    } catch (error: any) {
+        return { error: error.message }
+    }
+}
+
+export async function publishFunnelAction({ funnelId, published, domainId }: { funnelId: string, published: boolean, domainId: string }) {
+    const { error: funnelError } = await updateFunnelColumns({
+        id: funnelId,
+        published: published,
+        domainId: domainId
+    })
+    if (funnelError) {
+        return { error: 'Error updating funnel' }
+    }
+    return { success: true }
 }
 
 export async function deletePageAction(pageId: string) {

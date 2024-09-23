@@ -15,35 +15,33 @@ export default function CheckoutComponent() {
     const [productPrice, setProductPrice] = useState<number | null>(null)
     const { state, dispatch } = useFunnelEditor();
 
-    if (!state.previewMode) {
-        useEffect(() => {
-            const loadStripePromise = async () => {
-                const { stripePK } = await getStripePK() // Can probably change stripePK to next_public
-                const promise = await loadStripe(stripePK!, { stripeAccount: 'acct_1Pq0p5PPUP2vo0Tr' });
-                setStripePromise(promise);
-            };
-            loadStripePromise();
-        }, []);
+    useEffect(() => {
+        const loadStripePromise = async () => {
+            const { stripePK } = await getStripePK() // Can probably change stripePK to next_public
+            const promise = await loadStripe(stripePK!, { stripeAccount: 'acct_1Pq0p5PPUP2vo0Tr' });
+            setStripePromise(promise);
+        };
+        loadStripePromise();
+    }, []);
 
-        useEffect(() => {
-            checkoutAction({
-                productId: state.checkoutProduct!, //This is fine because in the parent component we check if state.checkoutProduct is not null
-                funnelId: state.funnelId
+    useEffect(() => {
+        checkoutAction({
+            productId: state.checkoutProduct!, //This is fine because in the parent component we check if state.checkoutProduct is not null
+            funnelId: state.funnelId
+        })
+            .then(async ({
+                clientSecret,
+                productName,
+                productPrice
+            }) => {
+                if (clientSecret) setClientSecret(clientSecret)
+                if (productName) setProductName(productName)
+                if (productPrice) setProductPrice(productPrice)
+
+                console.log('clientSecret', clientSecret)
             })
-                .then(async ({ 
-                    clientSecret,
-                    productName,
-                    productPrice
-                 }) => {
-                    if (clientSecret) setClientSecret(clientSecret)
-                    if (productName) setProductName(productName)
-                    if (productPrice) setProductPrice(productPrice)
-
-                    console.log('clientSecret', clientSecret)                    
-                })
-                .catch((error) => console.error(error))
-        }, [])
-    }
+            .catch((error) => console.error(error))
+    }, [])
 
     if (!clientSecret || !stripePromise || !productName || !productPrice) return null
 

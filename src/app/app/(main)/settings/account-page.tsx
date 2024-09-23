@@ -22,7 +22,6 @@ export default function AccountPage({ user, business, subscription }: AccountPag
     // User details
     const capitalizedFirstName = capitalizeFirstLetter(user.firstName)
     const capitalizedLastName = capitalizeFirstLetter(user.lastName)
-    const userSince = new Date(user.createdAt!).toUTCString();
 
 
     return (
@@ -59,7 +58,7 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                         <div className='flex items-center mb-4 gap-2 text-sm'>
                             <Clock className='mr-2 h-5 w-5' />
                             <p className='font-semibold'>Scaloor since</p>
-                            <p className='text-muted-foreground'>{userSince}</p>
+                            <p className='text-muted-foreground'>{formatDate(user.createdAt!)}</p>
                         </div>
                         <div className='flex items-center mb-4 gap-2 text-sm'>
                             <Phone className='mr-2 h-5 w-5' />
@@ -139,7 +138,7 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                         <div className='flex items-center mb-4 gap-2 text-sm'>
                             <CreditCard className='mr-2 h-5 w-5' />
                             <p className='font-semibold'>Next Billing Date</p>
-                            <p className='text-muted-foreground'>{formatDate(new Date(subscription.currentPeriodEndDate))}</p>
+                            <p className='text-muted-foreground'>{formatDate(subscription.currentPeriodEndDate)}</p>
                         </div>
                     </CardContent>
                 </Card>

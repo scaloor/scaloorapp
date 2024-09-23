@@ -54,6 +54,7 @@ type UpdateFunnelColumns = {
     published?: boolean;
     favicon?: string;
     checkoutProduct?: string;
+    domainId?: string;
 }
 
 /**
