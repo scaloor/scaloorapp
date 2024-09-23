@@ -1,20 +1,12 @@
-export type Product = {
-    id: number;
-    name: string;
-    image: string;
-    defaultPrice: number;
-    lastModified: Date;
-};
-
-export type Products = Product[];
 
 
-export const sampleProducts: Products = [
+
+export const sampleProducts = [
 
     {
         id: 1,
         name: "Ergonomic Chair",
-        image: "/placeholder.svg?height=50&width=50",
+        image: "",
         defaultPrice: 19999,
         lastModified: new Date("2023-06-15T10:30:00Z")
     },

@@ -10,9 +10,9 @@ interface SettingsLayoutProps {
 export default async function BusinessLayout({ children }: SettingsLayoutProps) {
     return (
         <AuthenicatedRoute>
-            <div className="flex h-screen overflow-hidden w-full">
+            <div className="flex w-full">
                 <AccountLayout>
-                    <div className="flex flex-col h-full overflow-hidden">
+                    <div className="flex flex-col h-full">
                         {/* Assuming AccountLayout includes a top bar, it should be placed here */}
                         <div className="flex-grow overflow-y-auto mb-16">
                             {children}

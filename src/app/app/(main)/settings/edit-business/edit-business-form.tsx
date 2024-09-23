@@ -145,7 +145,7 @@ export default function EditBusinessForm({ business }: EditBusinessFormProps) {
                                         <FormItem className="w-full">
                                             <FormLabel className="text-left">Logo</FormLabel>
                                             <FormControl className="w-full">
-                                                <ImageUpload form={form} />
+                                                <ImageUpload form={form} value="businessLogo" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

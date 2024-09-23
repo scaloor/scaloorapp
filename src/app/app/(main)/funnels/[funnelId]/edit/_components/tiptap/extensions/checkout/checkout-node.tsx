@@ -1,21 +1,15 @@
 'use client'
 
-import { Product, sampleProducts } from '@/app/app/(main)/products/_components/sample-products'
-import React, { useState } from 'react'
 import SelectProductComponent from './select-product'
 import CheckoutComponent from './checkout-component'
+import { useFunnelEditor } from '../../../editor-provider'
 
 
 export default function CheckoutNode() {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
+  const { state, dispatch } = useFunnelEditor();
 
-  if (!selectedProduct) return (
-    <SelectProductComponent
-      selectedProductId={selectedProductId}
-      setSelectedProduct={setSelectedProduct}
-      setSelectedProductId={setSelectedProductId}
-    />
+  if (!state.checkoutProduct) return (
+    <SelectProductComponent />
   )
 
   return (

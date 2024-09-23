@@ -7,7 +7,7 @@ import { EditorCommandItem } from "./command-items";
 import { useFunnelEditor } from "../../../editor-provider";
 import { defaultThankYouPage } from "../../../editor-provider/defaults";
 import { FilePlus2, ShoppingCartIcon } from "lucide-react";
-import { useCurrentEditor } from "@tiptap/react";
+import { Editor, useCurrentEditor } from "@tiptap/react";
 
 /**
  * The command extension requires 5 components which are extended from shadcn
@@ -31,6 +31,7 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
     const { state, dispatch } = useFunnelEditor();
     const commandRef = useRef<HTMLDivElement>(null);
     const { editor } = useCurrentEditor()
+    if (!editor) return null
 
     useEffect(() => {
         setSelectedIndex(0);
@@ -106,7 +107,11 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
         }
     };
 
-    const addNewPage = () => {
+    const addNewPage = (editor: Editor) => {
+        const { $from } = editor.state.selection
+        const start = $from.start()
+        const end = $from.pos
+        editor.chain().focus().deleteRange({ from: start, to: end }).setNode('paragraph').run()
         dispatch({ type: 'ADD_PAGE', page: defaultThankYouPage(state.funnelId, state.pages.length + 1) })
     }
 
@@ -147,7 +152,7 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
                     <CommandSeparator />
                     <CommandGroup heading="Funnel Options">
                         <CommandItem
-                            onSelect={addNewPage}
+                            onSelect={() => addNewPage(editor)}
                             className="flex items-start w-full rounded-md py-2 text-sm aria-selected:bg-zinc-200 aria-selected:text-inherit aria-selected:font-normal dark:aria-selected:bg-zinc-800 dark:aria-selected:text-black"
                         >
                             <div className="flex h-10 w-10 items-center justify-center rounded-md border border-muted bg-background text-foreground">
@@ -160,11 +165,11 @@ const CommandOut: FC<CommandListProps> = ({ items, command, query }) => {
                         </CommandItem>
                         <CommandItem
                             onSelect={() => {
-                                if (editor) {
-                                    const { from, to } = editor.state.selection
-                                    editor.chain().focus().deleteRange({ from, to }).setNode('checkout').run()
-                                    console.log('checkout')
-                                }
+                                const { $from } = editor.state.selection
+                                const start = $from.start()
+                                const end = $from.pos
+                                editor.chain().focus().deleteRange({ from: start, to: end }).setNode('checkout').run()
+
                             }}
                             className="flex items-start w-full rounded-md py-2 text-sm aria-selected:bg-zinc-200 aria-selected:text-inherit aria-selected:font-normal dark:aria-selected:bg-zinc-800 dark:aria-selected:text-black"
                         >

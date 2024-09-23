@@ -4,3 +4,5 @@ export * from "./subscription";
 export * from "./funnel";
 export * from "./page";
 export * from "./domain";
+export * from "./product";
+

@@ -3,7 +3,6 @@ import { updateSession } from '@/lib/supabase/middleware'
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
-  // This code makes /site the root path for the site
   const url = request.nextUrl
 
   let hostname = request.headers
@@ -15,18 +14,22 @@ export async function middleware(request: NextRequest) {
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
 
+  console.log('hostname', hostname, 'path', path)
+  // If the path is the root path, rewrite to the site page
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
 
-  
+  // If the path is the app path, rewrite to the app page
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     return NextResponse.rewrite(new URL(`/app${path === "/" ? "" : path}`, request.url));
   }
 
+  await updateSession(request)
 
+  // If the path is a custom page, rewrite to the custom page
+  return NextResponse.rewrite(new URL(`/${hostname}${path}`, request.url));
 
-  return await updateSession(request)
 }
 
 export const config = {
@@ -39,5 +42,6 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    //"/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
   ],
 }

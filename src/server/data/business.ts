@@ -4,6 +4,7 @@ import { business } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { InsertBusiness } from "@/server/db/schema";
 import { canAccessBusiness, canCreateBusiness } from "../authorization/business";
+import { getFunnelById } from './funnels';
 
 
 /**
@@ -116,3 +117,13 @@ export async function updateBusinessColumn(businessDetails: UpdateBusinessOption
         return { error: error.message };
     }
 }
+
+export async function getStripeAccountIdByFunnelId(funnelId: string) {
+    // This has an authorization check, will probably have to remove it
+    const { dbFunnel } = await getFunnelById(funnelId)
+    if (!dbFunnel?.businessId) return { error: 'Funnel not found' }
+    const { dbBusiness } = await getBusinessById(dbFunnel.businessId)
+    if (!dbBusiness?.stripeAccountId) return { error: 'Business does not have a Stripe account' }
+    return { stripeAccountId: dbBusiness.stripeAccountId }
+}
+

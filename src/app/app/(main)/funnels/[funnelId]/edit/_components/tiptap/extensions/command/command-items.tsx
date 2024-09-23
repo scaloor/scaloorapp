@@ -30,6 +30,7 @@ const EditorCommandItems = (query: string) => {
             description: 'Big heading.',
             icon: Heading1Icon,
             command: ({ editor, range }: { editor: Editor; range: Range }) => {
+                console.log(range)
                 editor.chain().focus().deleteRange(range).setNode('heading', { level: 1 }).run()
             },
         },

@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/app/_components/ui/button'
 import { Input } from '@/app/_components/ui/input'
-import { formatPrice } from '@/lib/utils'
+import { formatPriceToString } from '@/lib/utils'
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import React from 'react'
 import Image from 'next/image'
@@ -36,7 +36,7 @@ export default function CheckoutForm({ productName, price, productImage, fields 
         >
             <div>
                 <h2>{productName}</h2>
-                <p>{formatPrice(price)}</p>
+                <p>{formatPriceToString(price)}</p>
                 {productImage && <Image src={productImage} alt={productName} width={100} height={100} />}
             </div>
             <div className='flex flex-col gap-2'>

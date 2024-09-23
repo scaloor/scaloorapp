@@ -53,7 +53,11 @@ export default function AccountSidebar({ firstName, lastName, businessName }: Ac
     return (
         <>
             <div
-                className={cn("lg:block hidden border-r h-full", !isOpen && 'border-none bg-transparent', isOpen && 'w-64')}
+                className={cn(
+                    "lg:block hidden border-r h-screen fixed top-0 left-0",
+                    !isOpen && 'border-none bg-transparent',
+                    isOpen && 'w-64'
+                )}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >

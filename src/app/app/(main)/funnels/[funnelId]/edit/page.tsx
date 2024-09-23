@@ -5,6 +5,7 @@ import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper'
 import ErrorPage from '@/app/_components/common/error-page'
 import { FunnelEditorProvider } from './_components/editor-provider'
 import { defaultLandingPage } from './_components/editor-provider/defaults'
+import EditorNavigation from './_components/editor-navigation'
 
 type FunnelEditPageProps = {
   params: {
@@ -14,7 +15,7 @@ type FunnelEditPageProps = {
 
 export default async function FunnelEditPage({ params }: FunnelEditPageProps) {
   const { funnelId } = params
-  const { pages, error } = await loadEditorAction({ funnelId })
+  const { pages, checkoutProduct, error } = await loadEditorAction({ funnelId })
   if (error || !pages) {
     return <ErrorPage errorMessage={error || 'Error loading funnel'} />
   }
@@ -24,7 +25,9 @@ export default async function FunnelEditPage({ params }: FunnelEditPageProps) {
       <FunnelEditorProvider
         initialPages={initialPages}
         funnelId={funnelId}
+        checkoutProduct={checkoutProduct || ''}
       >
+        <EditorNavigation />
         <PageEditor />
       </FunnelEditorProvider>
     </MaxWidthWrapper>

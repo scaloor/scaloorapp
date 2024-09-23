@@ -1,38 +1,47 @@
-'use client';
+'use client'
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/app/_components/ui/form";
 import { useForm } from "react-hook-form";
-import { CreateProductSchema, PricingTypeEnum } from "./schema";
+import { z } from "zod";
+import { EditProductSchema, PricingTypeEnum } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
-import { Input } from "@/app/_components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
+import { useRouter } from "next/navigation";
+import { useTransition, useState } from "react";
+import { uploadFile } from "@/lib/supabase/client";
+import { SelectProduct } from "@/server/db/schema";
+import { formatPriceToNumber, formatPriceToString } from "@/lib/utils";
+import { toast } from "sonner";
+import { FormError } from "@/app/_components/common/form-error";
 import ImageUpload from "@/app/_components/common/image-upload";
 import { Button } from "@/app/_components/ui/button";
-import { uploadFile } from "@/lib/supabase/client";
-import { FormError } from "@/app/_components/common/form-error";
-import { useRouter } from "next/navigation";
-import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
-import { z } from "zod";
-import { toast } from "sonner";
-import { createProductAction } from "@/server/actions/api/product/create-product";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/app/_components/ui/card";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/app/_components/ui/form";
+import { RadioGroup } from "@/app/_components/ui/radio-group";
+import { RadioGroupItem } from "@radix-ui/react-radio-group";
+import { Input } from "@/app/_components/ui/input";
+import { editProductAction } from "@/server/actions/api/product/edit-product";
 
-type CreateProductFormProps = {
-    businessId: string
+type EditProductFormProps = {
+    product: SelectProduct
 }
 
-export default function CreateProductForm({ businessId }: CreateProductFormProps) {
+export default function EditProductForm({ product }: EditProductFormProps) {
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
-    const form = useForm<z.infer<typeof CreateProductSchema>>({
-        resolver: zodResolver(CreateProductSchema),
+
+    const form = useForm<z.infer<typeof EditProductSchema>>({
+        resolver: zodResolver(EditProductSchema),
+        defaultValues: {
+            name: product.name,
+            pricingType: "one_time", // TODO: Add recurring
+            defaultPrice: formatPriceToString(product.defaultPrice),
+        }
     });
 
-    const onSubmit = async (formData: z.infer<typeof CreateProductSchema>) => {
+    const onSubmit = async (formData: z.infer<typeof EditProductSchema>) => {
         setFormError("");
         const file = form.getValues('productImage');
-        const path = `business/${businessId}/product-images`;
+        const path = `business/${product.businessId}/product-images`;
         let productImagePath: string | undefined;
 
         startTransition(async () => {
@@ -43,18 +52,21 @@ export default function CreateProductForm({ businessId }: CreateProductFormProps
                 productImagePath = data.path;
             }
 
-            const { success, error } = await createProductAction({
+            const { success, error } = await editProductAction({
+                id: product.id,
                 name: formData.name,
-                pricingType: formData.pricingType,
-                defaultPrice: formData.defaultPrice,
-                productImage: productImagePath || "",
-                businessId,
+                billingType: formData.pricingType,
+                defaultPrice: formatPriceToNumber(formData.defaultPrice),
+                ...(productImagePath ? { image: productImagePath } : {}),
+                businessId: product.businessId,
             })
 
             if (error) return setFormError(error);
-            toast.success("Product created successfully");
+            toast.success("Product updated successfully");
             router.push('/products');
-        });
+
+
+        })
     }
 
     return (
@@ -174,7 +186,7 @@ export default function CreateProductForm({ businessId }: CreateProductFormProps
                                     disabled={isPending}
                                     className="dark:text-white min-w-64 max-w-sm"
                                 >
-                                    Create Product
+                                    Save Changes
                                 </Button>
                             </div>
                         </form>
@@ -183,4 +195,5 @@ export default function CreateProductForm({ businessId }: CreateProductFormProps
             </div>
         </Card>
     )
+
 }

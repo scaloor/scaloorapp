@@ -36,7 +36,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
         /* return console.log(await getAuthUserDetails()) */
         setFormError("");
         const file = form.getValues('businessLogo');
-        const path = `business-logo/${formData.name}`;
+        const path = `business-logo/${formData.name}`; //TODO: Change to businessId
         let businessLogoPath: string | undefined;
         startTransition(async () => {
             if (!!file) {
@@ -120,7 +120,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                             <FormItem className="w-full">
                                 <FormLabel className="text-left">Logo</FormLabel>
                                 <FormControl className="w-full">
-                                    <ImageUpload form={form} />
+                                    <ImageUpload form={form} value="businessLogo" />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>

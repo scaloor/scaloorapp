@@ -1,26 +1,31 @@
 'use client'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { extensions } from './extensions'
 import { Editor, EditorProvider, JSONContent } from '@tiptap/react'
 import TiptapBubbleMenu from './bubble-menu'
+import { onPageChangeAction } from '@/server/actions/api/editor'
+import { useFunnelEditor } from '../editor-provider'
 
 
-type NovelProps = {
+type TiptapProps = {
     initialContent: JSONContent
+    pageId: string
     //onChange: (content: JSONContent) => void
 }
 
-export default function Tiptap({ initialContent }: NovelProps) {
-    const [value, setValue] = useState<JSONContent>(initialContent);
-    /* const [openNode, setOpenNode] = useState(false);
-    const [openColor, setOpenColor] = useState(false);
-    const [openLink, setOpenLink] = useState(false); */
+export default function Tiptap({ initialContent, pageId }: TiptapProps) {
+    const [editorContent, setEditorContent] = useState<JSONContent>(initialContent);
+    const { state, dispatch } = useFunnelEditor()
 
     const handleUpdate = useCallback(({ editor }: { editor: Editor }) => {
         const json = editor.getJSON();
-        console.log('Editor JSON', json)
-        setValue(json);
+        setEditorContent(json);
     }, []);
+
+    useEffect(() => {
+        dispatch({ type: 'ON_PAGE_CHANGE', pageId, content: editorContent })
+        console.log('Updated state:', state)
+    }, [editorContent, dispatch, pageId]);
 
 
     return (

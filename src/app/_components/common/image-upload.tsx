@@ -10,16 +10,17 @@ import { Button } from "../ui/button";
 
 type ImageUploadProps = {
     form?: UseFormReturn<any>
+    value?: string
     className?: string
 }
 
-export default function ImageUpload({ form, className }: ImageUploadProps) {
+export default function ImageUpload({ form, value, className }: ImageUploadProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [previewURL, setPreviewURL] = useState<string | undefined>(undefined); // This is the URL of the uploaded image
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         setIsLoading(true);
-        form?.setValue('businessLogo', acceptedFiles[0]); // If there is a form, set the value of the form field to the uploaded file
+        form?.setValue(`${value}`, acceptedFiles[0]); // If there is a form, set the value of the form field to the uploaded file
         setPreviewURL(URL.createObjectURL(acceptedFiles[0])); // Set the image URL to the URL of the uploaded file
         setIsLoading(false);
     }, []);

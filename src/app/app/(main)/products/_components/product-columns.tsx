@@ -1,26 +1,63 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { Product } from "./sample-products";
 import Image from "next/image";
-import { formatDate, formatPrice } from "@/lib/utils";
+import { formatPriceToString } from "@/lib/utils";
 import { Button } from "@/app/_components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/app/_components/ui/dropdown-menu";
-import { ArrowUpDown, MoreHorizontalIcon } from "lucide-react";
+import { ArrowUpDown, MoreHorizontalIcon, PackageIcon } from "lucide-react";
+import { SelectProduct } from "@/server/db/schema";
+import { deleteProductByIdAction } from "@/server/actions/api/product";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { parseISO, format } from 'date-fns'
+import { deleteFile } from "@/lib/supabase/client";
 
-export const columns: ColumnDef<Product>[] = [
+function formatDate(dateString: string) {
+    const date = parseISO(dateString)
+    return format(date, 'PPp') // e.g., "September 19th, 2024"
+}
+
+
+const deleteProduct = async (productId: string, router: AppRouterInstance, image: string | null) => {
+    // Delete the image from the bucket
+    if (image) {
+        const { error: fileError } = await deleteFile(image)
+        if (fileError) {
+            return toast.error(fileError.message)
+        }
+    }
+    // Delete the product
+    const { error: productError } = await deleteProductByIdAction(productId)
+    if (productError) {
+        return toast.error(productError.message)
+    }
+
+    toast.success("Product deleted successfully")
+    router.refresh()
+
+}
+
+export const columns: ColumnDef<SelectProduct>[] = [
     {
         accessorKey: "image",
         header: "Image",
         cell: ({ row }) => {
             return (
                 <div>
-                    <Image
-                        src={row.original.image}
-                        alt={row.original.name}
-                        width={50}
-                        height={50}
-                    />
+                    {row.original.image ? (
+                        <Image
+                            src={`${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL}/scaloor-bucket/${row.original.image}`}
+                            alt={row.original.name}
+                            width={50}
+                            height={50}
+                        />
+                    ) : (
+                        <div className="w-10 h-10 text-muted-foreground" title={`No image available for ${row.original.name}`}>
+                            <PackageIcon />
+                        </div>
+                    )}
                 </div>
             )
         }
@@ -57,7 +94,7 @@ export const columns: ColumnDef<Product>[] = [
         cell: ({ row }) => {
             return (
                 <div>
-                    {formatPrice(row.original.defaultPrice)}
+                    {formatPriceToString(row.original.defaultPrice)}
                 </div>
             )
         }
@@ -79,7 +116,7 @@ export const columns: ColumnDef<Product>[] = [
         cell: ({ row }) => {
             return (
                 <div>
-                    {formatDate(row.original.lastModified)}
+                    {formatDate(row.original.updatedAt)}
                 </div>
             )
         }
@@ -88,6 +125,7 @@ export const columns: ColumnDef<Product>[] = [
         accessorKey: "actions",
         header: "Actions",
         cell: ({ row }) => {
+            const router = useRouter();
             return (
                 <div>
                     <DropdownMenu>
@@ -98,9 +136,15 @@ export const columns: ColumnDef<Product>[] = [
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit</DropdownMenuItem>
-                            <DropdownMenuItem>Duplicate</DropdownMenuItem>
-                            <DropdownMenuItem>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => { router.push(`/products/${row.original.id}/edit`) }}>
+                                Edit
+                            </DropdownMenuItem>
+                            {/* <DropdownMenuItem>
+                                Duplicate
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem onClick={() => { deleteProduct(row.original.id, router, row.original.image) }}>
+                                Delete
+                            </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

@@ -12,3 +12,10 @@ export async function uploadFile(file: File, path: string) {
   const { data, error } = await supabase.storage.from('scaloor-bucket').upload(`${path}/${file.name}`, file)
   return { data, error }
 }
+
+export async function deleteFile(path: string) {
+  const supabase = createClient();
+  const { data, error } = await supabase.storage.from('scaloor-bucket').remove([path])
+  return { data, error }
+}
+

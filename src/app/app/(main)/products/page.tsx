@@ -4,10 +4,16 @@ import { sampleProducts } from './_components/sample-products'
 import { columns } from './_components/product-columns'
 import { Button } from '@/app/_components/ui/button'
 import Link from 'next/link'
+import { getAuthUserDetails } from '@/server/actions/users'
+import ErrorPage from '@/app/_components/common/error-page'
+import { productPageAction } from '@/server/actions/api/product'
 
 type Props = {}
 
-export default function ProductPage({ }: Props) {
+export default async function ProductPage({ }: Props) {
+    const { products, error } = await productPageAction()
+    if (error || !products) return <ErrorPage errorMessage={error || 'Cannot find products'} />
+
     return (
         <div>
             <div className="mb-4 flex justify-between items-center">
@@ -17,7 +23,7 @@ export default function ProductPage({ }: Props) {
                 </Button>
             </div>
             <div className="w-full h-px bg-gray-200 mb-4"></div>
-            <DataTable columns={columns} data={sampleProducts} />
+            <DataTable columns={columns} data={products} />
         </div>
     )
 }

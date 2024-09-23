@@ -12,6 +12,7 @@ export const funnel = pgTable("funnel", {
     pathName: text("path_name").notNull(),
     published: boolean("published").default(false).notNull(),
     favicon: text("favicon"),
+    checkoutProduct: text("checkout_product"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 },

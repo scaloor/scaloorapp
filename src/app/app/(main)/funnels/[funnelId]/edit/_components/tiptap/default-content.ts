@@ -66,12 +66,12 @@ export const defaultLandingPageContent = {
   content: [
     {
       type: "heading",
-      attrs: { level: 2 },
+      attrs: { textAlign: "center", level: 2 },
       content: [{ type: "text", text: "START BUILDING YOUR FUNNEL NOW" }],
     },
     {
       type: "heading",
-      attrs: { level: 1 },
+      attrs: { textAlign: "center", level: 1 },
       content: [{ type: "text", text: "USE ONE OF THESE TEMPLATES OR START FROM SCRATCH" }],
     },
     {

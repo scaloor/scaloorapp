@@ -2,6 +2,7 @@
 import React, { ReactNode, createContext, useContext, useReducer } from 'react'
 import { SelectPage } from '@/server/db/schema'
 import { pageTypeEnum } from '@/server/db/schema'
+import { JSONContent } from '@tiptap/react'
 
 // Might want to add published
 // Might want to add funnelId
@@ -15,11 +16,6 @@ type Styles = {
     accentColor: string;
 }
 
-type Checkout = {
-    productId: string;
-    currency: string;
-}
-
 type DeviceTypes = 'Desktop' | 'Mobile' | 'Tablet'
 
 export type PageType = 'landing' | 'upsell' | 'downsell' | 'thank_you';
@@ -31,16 +27,19 @@ interface FunnelEditorState {
     deviceType: DeviceTypes;
     previewMode: boolean;
     published: boolean; // Need to add actions
-    checkout: Checkout | null; // Need to add actions
+    checkoutProduct: string | null; // Need to add actions
 }
 
 type FunnelEditorAction =
     | { type: 'ADD_PAGE'; page: SelectPage }
     | { type: 'REMOVE_PAGE'; pageId: string }
+    | { type: 'ON_PAGE_CHANGE'; pageId: string; content: JSONContent }
     | { type: 'UPDATE_PAGE_TYPE'; pageId: string; pageType: PageType }
     | { type: 'UPDATE_STYLES'; styles: Partial<Styles> }
     | { type: 'SET_DEVICE_TYPE'; deviceType: DeviceTypes }
     | { type: 'TOGGLE_PREVIEW_MODE' }
+    | { type: 'SET_PUBLISHED'; published: boolean }
+    | { type: 'SET_CHECKOUT_PRODUCT'; productId: string }
 
 
 function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorAction): FunnelEditorState {
@@ -48,7 +47,23 @@ function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorActio
         case 'ADD_PAGE':
             return { ...state, pages: [...state.pages, action.page] };
         case 'REMOVE_PAGE':
-            return { ...state, pages: state.pages.filter(page => page.id !== action.pageId) };
+            const updatedPages = state.pages.filter(page => page.id !== action.pageId);
+            return {
+                ...state,
+                pages: updatedPages.map((page, index) => ({
+                    ...page,
+                    order: index + 1
+                }))
+            };
+        case 'ON_PAGE_CHANGE':
+            return {
+                ...state,
+                pages: state.pages.map(page =>
+                    page.id === action.pageId
+                        ? { ...page, content: action.content }
+                        : page
+                )
+            };
         case 'UPDATE_PAGE_TYPE':
             return {
                 ...state,
@@ -64,6 +79,11 @@ function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorActio
             return { ...state, deviceType: action.deviceType };
         case 'TOGGLE_PREVIEW_MODE':
             return { ...state, previewMode: !state.previewMode };
+        case 'SET_PUBLISHED':
+            return { ...state, published: action.published };
+        case 'SET_CHECKOUT_PRODUCT':
+            console.log('SET_CHECKOUT_PRODUCT', action.productId)
+            return { ...state, checkoutProduct: action.productId };
         default:
             return state;
     }
@@ -74,7 +94,7 @@ const FunnelEditorContext = createContext<{
     dispatch: React.Dispatch<FunnelEditorAction>;
 } | undefined>(undefined)
 
-export function FunnelEditorProvider({ children, initialPages, funnelId }: { children: ReactNode, initialPages: SelectPage[], funnelId: string }) {
+export function FunnelEditorProvider({ children, initialPages, funnelId, checkoutProduct }: { children: ReactNode, initialPages: SelectPage[], funnelId: string, checkoutProduct: string }) {
     const [state, dispatch] = useReducer(funnelEditorReducer, {
         pages: initialPages,
         funnelId,
@@ -89,7 +109,7 @@ export function FunnelEditorProvider({ children, initialPages, funnelId }: { chi
         deviceType: 'Desktop',
         previewMode: false,
         published: false,
-        checkout: null,
+        checkoutProduct: checkoutProduct,
     });
 
     return (

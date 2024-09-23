@@ -107,17 +107,15 @@ export async function getPageById(page_id: string) {
 /**
  * Delete page
  */
-export async function deletePage(page_id: string) {
+export async function deletePageById(page_id: string) {
     try {
         const { dbPage } = await getPageById(page_id)
         if (!dbPage) {
             return { error: 'Page not found' };
         }
-        if (await canAccessPage(dbPage.funnelId)) {
-            await db.delete(page).where(eq(page.id, page_id));
-            return { success: true };
-        }
-        return { error: 'You do not have access to delete this page' };
+        // Authorizatiom check not required as it is done in getPageById
+        await db.delete(page).where(eq(page.id, page_id));
+        return { success: true };
     } catch (error: any) {
         console.log(error);
         return { error: error.message };

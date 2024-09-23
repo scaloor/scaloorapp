@@ -13,6 +13,7 @@ export const business = pgTable("business", {
     country: text("country").notNull(),
     currentSubscriptionId: text("subscription_id").references(() => subscription.id),
     stripeAccountId: text("stripe_account_id"),
+    defaultCurrency: text("default_currency"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => {
