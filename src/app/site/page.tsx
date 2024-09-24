@@ -1,12 +1,19 @@
 import Hero from "./_components/hero";
-import { redirect } from "next/navigation";
-import { getSessionUser } from "@/app/app/(auth)/provider/authenticated-route";
+import Benefits from "./_components/benefits";
+import MaxWidthWrapper from "../_components/common/max-width-wrapper";
+import Features from "./_components/features";
+import FAQ from "./_components/faq";
 
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Hero />
+    <main className="flex-1">
+      <MaxWidthWrapper>
+        <Hero />
+        <Benefits />
+        <Features />
+        <FAQ />
+      </MaxWidthWrapper>
     </main>
   );
 }

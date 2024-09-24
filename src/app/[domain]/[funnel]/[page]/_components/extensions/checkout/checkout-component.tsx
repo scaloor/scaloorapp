@@ -45,11 +45,6 @@ export default function CheckoutComponent() {
             .catch((error) => console.error(error))
     }, [])
 
-    console.log('clientSecret', clientSecret)
-    console.log('stripePromise', stripePromise)
-    console.log('productName', productName)
-    console.log('productPrice', productPrice)
-
     if (!clientSecret || !stripePromise || !productName || !productPrice) return null
 
     const defaultCheckoutFormFields = {
