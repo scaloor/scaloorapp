@@ -6,7 +6,7 @@ import { useFunnelEditor } from '../../../editor-provider'
 
 
 export default function CheckoutNode() {
-  const { state, dispatch } = useFunnelEditor();
+  const { state } = useFunnelEditor();
 
   if (!state.checkoutProduct) return (
     <SelectProductComponent />
