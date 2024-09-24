@@ -1,6 +1,6 @@
 import { mergeAttributes, Node } from "@tiptap/core"
 import { ReactNodeViewRenderer } from "@tiptap/react"
-import CheckoutNode from "./checkout-node"
+import CheckoutComponent from "./checkout-component"
 
 export const Checkout = Node.create({
     name: 'checkout',
@@ -24,6 +24,6 @@ export const Checkout = Node.create({
     },
 
     addNodeView() {
-        return ReactNodeViewRenderer(CheckoutNode)
+        return ReactNodeViewRenderer(CheckoutComponent)
     },
 })

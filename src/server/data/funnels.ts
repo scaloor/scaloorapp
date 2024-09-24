@@ -106,9 +106,6 @@ export async function getFunnelById(funnel_id: string) {
         const dbFunnel = await db.select().from(funnel).where(
             eq(funnel.id, funnel_id)
         ).then(res => res[0]);
-        if (!await canAccessFunnel(dbFunnel.businessId)) {
-            return { error: 'You do not have access to view this funnel' }
-        }
         return { dbFunnel }
     } catch (error: any) {
         console.log(error)

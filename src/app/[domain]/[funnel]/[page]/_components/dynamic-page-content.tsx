@@ -3,7 +3,6 @@
 import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper"
 import { EditorProvider, JSONContent } from "@tiptap/react"
 import { dynamicPageContentExtensions } from "./extensions"
-import { defaultLandingPageContent } from "@/app/app/(main)/funnels/[funnelId]/edit/_components/tiptap/default-content"
 
 
 type DynamicPageContentProps = {

@@ -14,9 +14,6 @@ import { getFunnelById } from './funnels';
  */
 export async function getBusinessById(business_id: string) {
     try {
-        if (!await canAccessBusiness(business_id)) {
-            return { error: "You are not authorized to access this business" }
-        }
         const dbBusiness = await db.select().from(business).where(
             eq(business.id, business_id)
         ).then(res => res[0]);
@@ -121,6 +118,7 @@ export async function updateBusinessColumn(businessDetails: UpdateBusinessOption
 export async function getStripeAccountIdByFunnelId(funnelId: string) {
     // This has an authorization check, will probably have to remove it
     const { dbFunnel } = await getFunnelById(funnelId)
+    console.log('dbFunnel', dbFunnel?.businessId)
     if (!dbFunnel?.businessId) return { error: 'Funnel not found' }
     const { dbBusiness } = await getBusinessById(dbFunnel.businessId)
     if (!dbBusiness?.stripeAccountId) return { error: 'Business does not have a Stripe account' }

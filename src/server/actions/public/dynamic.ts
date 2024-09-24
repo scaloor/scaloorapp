@@ -41,7 +41,7 @@ export async function getDynamicPageAction({ domainName, funnelPath, pagePath }:
 
         if (!dbPage) return { error: 'Page not found' }
 
-        return { dbPage }
+        return { dbPage, checkoutProduct: dbFunnel.checkoutProduct, funnelId: dbFunnel.id }
     } catch (error) {
         console.error(error)
         return { error: error }

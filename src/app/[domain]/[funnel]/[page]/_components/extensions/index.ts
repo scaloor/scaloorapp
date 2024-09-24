@@ -7,7 +7,7 @@ import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Link from '@tiptap/extension-link'
-import { Checkout } from '@/app/app/(main)/funnels/[funnelId]/edit/_components/tiptap/extensions/checkout'
+import { Checkout } from './checkout'
 
 const starterKit = StarterKit.configure({
   bulletList: {
@@ -52,5 +52,5 @@ export const dynamicPageContentExtensions = [
   highlight,
   textAlign,
   link,
-  /* checkout, */
+  checkout,
 ]
