@@ -34,10 +34,12 @@ export function DomainCard({ domainId, domain, lastUpdated }: DomainCardProps) {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <EditScaloorDialog
-                            domainId={domainId}
-                            domainName={subdomain}
-                        />
+                        {domain.includes('scaloor') && (
+                            <EditScaloorDialog
+                                domainId={domainId}
+                                domainName={subdomain}
+                            />
+                        )}
                         <DeleteDialog domainId={domainId} />
                     </div>
                 </div>

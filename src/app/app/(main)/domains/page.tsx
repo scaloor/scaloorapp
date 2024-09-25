@@ -5,6 +5,7 @@ import React from 'react'
 import { DomainCard } from './_components/domain-card'
 import ErrorPage from '@/app/_components/common/error-page'
 import AddScaloorDialog from './_components/add-scaloor-dialog'
+import AddCustomDialog from './_components/add-custom-dialog'
 
 
 export default async function DomainsPage() {
@@ -26,9 +27,7 @@ export default async function DomainsPage() {
         </div>
         <div className="flex gap-2">
           <AddScaloorDialog />
-          <Button size="sm" className="h-8">
-            Add custom domain
-          </Button>
+          <AddCustomDialog />
 
         </div>
       </div>

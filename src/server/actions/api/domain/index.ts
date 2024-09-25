@@ -3,6 +3,8 @@
 import { addDomain, deleteDomain, getDomainsByBusinessId, updateDomain } from "@/server/data/domains"
 import { getAuthUserDetails } from "../../users"
 import { createPathname } from "@/lib/utils"
+import { BLACKLISTED_DOMAINS, validDomainRegex } from "@/lib/constants"
+import { addDomainToVercel } from "@/server/data/vercel"
 
 
 export async function getDomainsAction() {
@@ -18,10 +20,10 @@ export async function getDomainsAction() {
     }
 }
 
-export async function addDomainAction(domainName: string) {
+export async function addScaloorDomainAction(domainName: string) {
     try {
         const processedDomainName = `${createPathname(domainName)}.scaloor.com`
-
+        if (BLACKLISTED_DOMAINS.includes(processedDomainName)) return { error: 'Domain taken.' }
         // Check to see how many scaloor domains the business has.
         const { dbUser } = await getAuthUserDetails()
         if (!dbUser?.businessId) return { error: 'User not found' }
@@ -55,6 +57,26 @@ export async function deleteDomainAction(domainId: string) {
     try {
         const { error: deleteDomainError } = await deleteDomain(domainId)
         if (deleteDomainError) throw new Error(deleteDomainError)
+        return { success: true }
+    } catch (error: any) {
+        return { error: error.message }
+    }
+}
+
+export async function addCustomDomainAction(domainName: string) {
+    try {
+        if (domainName.includes('scaloor')) return { error: 'You cannot use the scaloor domain.' }
+        if (!validDomainRegex.test(domainName)) return { error: 'Please enter a valid domain.' }
+
+        const { dbDomain, error: addDomainError } = await addDomain(domainName)
+        if (addDomainError) throw new Error(addDomainError)
+
+        if (dbDomain) {
+            await Promise.all([
+                addDomainToVercel(domainName)
+            ])
+        }
+
         return { success: true }
     } catch (error: any) {
         return { error: error.message }

@@ -4,6 +4,7 @@ import { domain } from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { canAccessDomains } from '../authorization/domains'
 import { getAuthUserDetails } from '../actions/users'
+import { removeDomainFromVercelProject } from './vercel'
 
 
 export async function addDomain(domainName: string) {
@@ -103,6 +104,10 @@ export async function deleteDomain(domainId: string) {
         if (!dbDomain) return { error: 'Domain not found' }
         if (!await canAccessDomains(dbDomain.businessId)) {
             return { error: 'You are not authorized to delete this domain' }
+        }
+
+        if (!dbDomain.domain.includes('scaloor')) {
+            await removeDomainFromVercelProject(dbDomain.domain)
         }
 
         await db

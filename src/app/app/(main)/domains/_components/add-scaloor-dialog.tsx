@@ -6,7 +6,7 @@ import { Input } from '@/app/_components/ui/input'
 import { Button } from '@/app/_components/ui/button'
 import { toast } from 'sonner'
 import { domainNamePattern } from '@/lib/constants'
-import { addDomainAction } from '@/server/actions/api/domain'
+import { addScaloorDomainAction } from '@/server/actions/api/domain'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
@@ -14,7 +14,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FormError } from '@/app/_components/common/form-error'
 
 const AddScaloorDialogSchema = z.object({
-    domainName: z.string().min(2, { message: 'Domain name must be at least 2 characters.' }).max(30, { message: 'Domain name must be at most 30 characters.' }),
+    domainName: z.string().min(2, { message: 'Domain name must be at least 2 characters.' }).max(32, { message: 'Domain name must be at most 32 characters.' }),
 });
 
 export default function AddScaloorDialog() {
@@ -31,7 +31,7 @@ export default function AddScaloorDialog() {
         const { domainName } = data;
 
         startTransition(async () => {
-            const { success, error } = await addDomainAction(domainName)
+            const { success, error } = await addScaloorDomainAction(domainName)
             if (error) {
                 setFormError(error);
             }

@@ -35,7 +35,7 @@ export default function DeleteDialog({ domainId }: DeleteDialogProps) {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you sure you want to delete this domain?</DialogTitle>
+                    <DialogTitle>Delete domain?</DialogTitle>
                     <DialogDescription>This action cannot be undone.</DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
