@@ -1,38 +1,44 @@
-import Link from "next/link"
+"use client";
+import React, { useState } from "react";
+import { HoveredLink, Menu, MenuItem, ProductItem } from "@/app/_components/ui/navbar-menu";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
-import MaxWidthWrapper from "../../../_components/common/max-width-wrapper"
-import { NavigationOptions } from "./navigation-options"
-import { createClient } from "@/lib/supabase/server";
 
 
-export default async function NavigationBar() {
+export default function Navbar({ className }: { className?: string }) {
+    const [active, setActive] = useState<string | null>(null);
     return (
-        <nav className="sticky h-14 inset-x-0 z-30 w-full border-b border-gray-200 bg-background backdrop-blur-lg transition-all px-3 md:px-0">
-            <MaxWidthWrapper>
-                <div className="flex h-14 items-center justify-between border-b border-zinc-200">
-                    <Link href='/' className='flex z-40 font-bold pl-5'>
-                        <span className="text-2xl pr-5">scaloor</span>
-                        <Image
-                            src={"/assets/scaloor_graph-removebg-preview.png"}
-                            height={30}
-                            width={30}
-                            alt={"Scaloor logo"}
-                        />
-                    </Link>
-                    <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/login`} className='flex z-40 font-bold pl-5'>
-                        Login
-                    </Link>
-                    {/* <MobileNavigation /> */}
 
-                    {/* <div className="hidden items-center space-x-4 sm:flex">
-                        <>
-                            <NavigationOptions isAuthenticated={false} />
-
-                            {/* <ModeToggle />
-                        </>
-                    </div> */}
+        <div
+            className={cn(
+                "fixed top-10 inset-x-0 md:max-w-2xl lg:max-w-4xl mx-auto z-50",
+                className,
+                "hidden md:block"
+            )}
+        >
+            <div className="flex justify-between">
+                <Menu
+                    className=""
+                    setActive={setActive}
+                >
+                    <HoveredLink href="/" className="flex items-center space-x-2">
+                        <Image src="/assets/favicon-16x16.png" alt="Scaloor" width={16} height={16} />
+                        <span className="">Scaloor</span>
+                    </HoveredLink>
+                </Menu>
+                <div className="inset-x-0 max-w-2xl mx-10 z-50">
+                    <Menu setActive={setActive}>
+                        <HoveredLink href="#benefits">Benefits</HoveredLink>
+                        <HoveredLink href="/site/pricing">Pricing</HoveredLink>
+                        <HoveredLink href="#faq">FAQ</HoveredLink>
+                    </Menu>
                 </div>
-            </MaxWidthWrapper>
-        </nav >
-    )
+                <Menu
+                    setActive={setActive}
+                >
+                    <HoveredLink href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>Login</HoveredLink>
+                </Menu>
+            </div>
+        </div>
+    );
 }
