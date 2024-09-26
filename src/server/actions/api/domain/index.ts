@@ -1,10 +1,10 @@
 'use server'
 
-import { addDomain, deleteDomain, getDomainsByBusinessId, updateDomain } from "@/server/data/domains"
+import { addDomain, deleteDomain, getDomainById, getDomainsByBusinessId, updateDomain } from "@/server/data/domains"
 import { getAuthUserDetails } from "../../users"
 import { createPathname } from "@/lib/utils"
 import { BLACKLISTED_DOMAINS, validDomainRegex } from "@/lib/constants"
-import { addDomainToVercel } from "@/server/data/vercel"
+import { addDomainToVercel, getDomainConfig, getDomainFromVercel, getDomainVerification } from "@/server/data/vercel"
 
 
 export async function getDomainsAction() {
@@ -78,6 +78,53 @@ export async function addCustomDomainAction(domainName: string) {
         }
 
         return { success: true }
+    } catch (error: any) {
+        return { error: error.message }
+    }
+}
+
+export async function getDomainConfigAction(domainId: string) {
+    try {
+        //TODO: add authorization?
+
+        // Check dbDomain to see if it is live
+        const { dbDomain, error: getDomainError } = await getDomainById(domainId)
+        if (getDomainError || !dbDomain) throw new Error(getDomainError)
+        const domain = dbDomain.domain
+        // Check if the domain is verified and configured
+        const [configResponse, domainResponse] = await Promise.all([
+            getDomainConfig(domain),
+            getDomainFromVercel(domain)
+        ])
+
+        if (domainResponse.status !== 200) return { error: 'Domain not found' }
+
+        const configJson = await configResponse.json()
+        const domainJson = await domainResponse.json()
+
+        // If the domain is not verified, verify it
+        let verificationResponse = null
+        if (!domainJson.verified) {
+            verificationResponse = await getDomainVerification(domain)
+        }
+
+        const verificationJson = await verificationResponse?.json()
+
+
+        // If misconfigured, return the domain details
+        if (configJson.misconfigured) {
+            return {
+                name: domainJson.name,
+                apex: domainJson.apexName,
+                verified: domainJson.verified,
+                configured: !configJson.misconfigured,
+            }
+        }
+
+        await updateDomain(domainId, domain, true)
+
+        return null
+
     } catch (error: any) {
         return { error: error.message }
     }

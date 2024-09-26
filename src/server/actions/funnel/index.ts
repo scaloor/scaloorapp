@@ -4,7 +4,7 @@ import { db } from "@/server/db"
 import { desc, eq } from "drizzle-orm"
 import { funnel } from "@/server/db/schema"
 import { createPathname } from "@/lib/utils"
-import { addFunnel, getFunnelById, getFunnelsByBusinessId } from "@/server/data/funnels"
+import { addFunnel, deleteFunnel, getFunnelById, getFunnelsByBusinessId } from "@/server/data/funnels"
 import { getAuthUserDetails } from "../users"
 import { canAccessFunnel } from "@/server/authorization/funnel"
 
@@ -71,3 +71,23 @@ export async function getFunnelByIdAction(funnelId: string) {
     }
 }
 
+export async function deleteFunnelAction(funnelId: string) {
+    try {
+        // Authorization check
+        const { dbFunnel, error: getFunnelError } = await getFunnelById(funnelId);
+        if (getFunnelError || !dbFunnel) return { error: getFunnelError?.message }
+        if (!canAccessFunnel(dbFunnel.businessId)) {
+            return { error: "You are not authorized to access this funnel" }
+        }
+
+        // Delete funnel
+        const { error: deleteFunnelError } = await deleteFunnel(funnelId)
+        if (deleteFunnelError) {
+            return { error: deleteFunnelError.message }
+        }
+        return { success: true }
+    } catch (error: any) {
+        console.log(error)
+        return { error: error.message }
+    }
+}

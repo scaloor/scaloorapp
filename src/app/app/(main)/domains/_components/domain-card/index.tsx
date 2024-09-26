@@ -6,20 +6,43 @@ import { formatDate } from '@/lib/utils';
 import { z } from 'zod';
 import DeleteDialog from './delete-dialog';
 import EditScaloorDialog from './edit-dialog';
+import { getDomainConfigAction } from '@/server/actions/api/domain';
+import DomainConfig from './domain-config';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface DomainCardProps {
     domainId: string;
     domain: string;
-    //status: 'Active' | 'Inactive';
+    configured: boolean;
     lastUpdated: string;
 }
 
-const EditScaloorDialogSchema = z.object({
-    domainName: z.string().min(2, { message: 'Domain name must be at least 2 characters.' }).max(30, { message: 'Domain name must be at most 30 characters.' }),
-});
+export type DomainConfig = {
+    name: string;
+    apex: string;
+    verified: boolean;
+    configured: boolean;
+}
 
-export function DomainCard({ domainId, domain, lastUpdated }: DomainCardProps) {
+export function DomainCard({ domainId, domain, configured, lastUpdated }: DomainCardProps) {
     const subdomain = domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, '');
+    const [domainConfig, setDomainConfig] = useState<DomainConfig | null>(null)
+    const router = useRouter()
+
+
+    //Temp
+    const testDomainConfig = async (domainId: string) => {
+        const domainConfigResponse = await getDomainConfigAction(domainId)
+        setDomainConfig(domainConfigResponse as DomainConfig)
+        if (domainConfigResponse == null) {
+            router.refresh()
+            toast.success('Domain is live')
+        } else {
+            toast('Configure the domain with your DNS provider')
+        }
+    }
 
     return (
         <Card className="w-full">
@@ -30,7 +53,11 @@ export function DomainCard({ domainId, domain, lastUpdated }: DomainCardProps) {
                             {domain}
                         </CardTitle>
                         <div>
-                            <Badge variant="affirmative">Live</Badge>
+                            {configured ? (
+                                <Badge variant="affirmative">Live</Badge>
+                            ) : (
+                                <Badge variant="destructive">Not Configured</Badge>
+                            )}
                         </div>
                     </div>
                     <div className="flex gap-2">
@@ -40,12 +67,20 @@ export function DomainCard({ domainId, domain, lastUpdated }: DomainCardProps) {
                                 domainName={subdomain}
                             />
                         )}
+                        {!domain.includes('scaloor') && !configured && ( //If !Live
+                            <Button variant="outline" size="sm" onClick={() => testDomainConfig(domainId)}>
+                                Check Configuration
+                            </Button>
+                        )}
                         <DeleteDialog domainId={domainId} />
                     </div>
                 </div>
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-muted-foreground">Last updated: {formatDate(lastUpdated)}</p>
+                {domainConfig && !domainConfig.configured && (
+                    <DomainConfig domainConfig={domainConfig} />
+                )}
 
             </CardContent>
         </Card>

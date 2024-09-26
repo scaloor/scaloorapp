@@ -39,6 +39,7 @@ export default async function DomainsPage() {
             key={domain.id}
             domainId={domain.id}
             domain={domain.domain}
+            configured={domain.configured}
             lastUpdated={domain.updatedAt}
           />
         ))}

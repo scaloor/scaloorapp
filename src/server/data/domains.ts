@@ -1,7 +1,7 @@
 import 'server-only'
 import { db } from '../db'
 import { domain } from '../db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, desc } from 'drizzle-orm'
 import { canAccessDomains } from '../authorization/domains'
 import { getAuthUserDetails } from '../actions/users'
 import { removeDomainFromVercelProject } from './vercel'
@@ -28,7 +28,8 @@ export async function addDomain(domainName: string) {
             .insert(domain)
             .values({
                 domain: domainName,
-                businessId: dbUser.businessId
+                businessId: dbUser.businessId,
+                configured: domainName.includes('scaloor.com')
             })
             .returning()
             .then(res => res[0])
@@ -40,7 +41,7 @@ export async function addDomain(domainName: string) {
     }
 }
 
-export async function updateDomain(domainId: string, domainName: string) {
+export async function updateDomain(domainId: string, domainName: string, configured?: boolean) {
     try {
         const { dbDomain } = await getDomainById(domainId)
         if (!dbDomain) return { error: 'Domain not found' }
@@ -50,7 +51,7 @@ export async function updateDomain(domainId: string, domainName: string) {
 
         await db
             .update(domain)
-            .set({ domain: domainName })
+            .set({ domain: domainName, configured: configured })
             .where(eq(domain.id, domainId))
 
         return { success: true }
@@ -90,7 +91,7 @@ export async function getDomainsByBusinessId(businessId: string) {
             .select()
             .from(domain)
             .where(eq(domain.businessId, businessId))
-
+            .orderBy(desc(domain.updatedAt))
         return { dbDomains }
     } catch (error: any) {
         console.log(error)

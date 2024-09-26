@@ -29,7 +29,7 @@ export default function DeleteDialog({ domainId }: DeleteDialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="destructive" size="sm" className="h-8">
+                <Button variant="destructive" size="sm">
                     Delete
                 </Button>
             </DialogTrigger>

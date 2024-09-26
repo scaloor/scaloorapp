@@ -9,6 +9,7 @@ export const domain = pgTable("domain", {
         .$defaultFn(() => scaloorId('domain')),
     businessId: text("business_id").notNull().references(() => business.id),
     domain: text("domain").unique().notNull(),
+    configured: boolean("configured").default(false).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 });

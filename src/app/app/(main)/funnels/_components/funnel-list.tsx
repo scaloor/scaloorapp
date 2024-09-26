@@ -1,7 +1,6 @@
 'use client'
 import React from 'react'
-import { sampleFunnels } from './sampleFunnels'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/app/_components/ui/card'
+import { Card, CardTitle, CardDescription, } from '@/app/_components/ui/card'
 import { Badge } from '@/app/_components/ui/badge'
 import { EllipsisVertical, Pencil, Trash } from 'lucide-react'
 import { Button } from '@/app/_components/ui/button'
@@ -16,6 +15,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/app/_components/ui/dropdown-menu'
+import { deleteFunnelAction } from '@/server/actions/funnel'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/app/_components/ui/dialog'
+import { DeleteDialog } from './delete-dialog'
 
 type FunnelListProps = {
     funnels: SelectFunnel[]
@@ -30,10 +32,16 @@ export default function FunnelList({ funnels }: FunnelListProps) {
     }
 
     // TODO: Implement delete funnel
-    const deleteFunnel = async (funnelId: string) => {
+    const deleteFunnel = async (funnelId: string, funnelName: string) => {
+        const { error } = await deleteFunnelAction(funnelId)
+        if (error) {
+            toast.error(error)
+            return
+        }
         toast('Funnel deleted', {
-            description: funnelId
+            description: funnelName
         })
+        router.refresh()
     }
 
 
@@ -74,16 +82,14 @@ export default function FunnelList({ funnels }: FunnelListProps) {
                                             <p>Edit</p>
                                         </TooltipContent>
                                     </Tooltip>
-
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <Button variant="ghost" size="sm" onClick={(e) => {
+                                            <span onClick={(e) => {
                                                 e.preventDefault();
                                                 e.stopPropagation();
-                                                deleteFunnel(funnel.name)
-                                            }} className="text-sm text-red-500 dark:text-red-400 p-1">
-                                                <Trash className="w-4 h-4" />
-                                            </Button>
+                                            }}>
+                                                <DeleteDialog funnelId={funnel.id} funnelName={funnel.name} />
+                                            </span>
                                         </TooltipTrigger>
                                         <TooltipContent>
                                             <p>Delete</p>
@@ -133,12 +139,13 @@ export default function FunnelList({ funnels }: FunnelListProps) {
                                             <p>More</p>
                                         </TooltipContent>
                                     </Tooltip>
+
                                 </div>
                             </div>
                         </Card>
                     </Link>
                 ))}
             </div>
-        </TooltipProvider>
+        </TooltipProvider >
     )
 }
