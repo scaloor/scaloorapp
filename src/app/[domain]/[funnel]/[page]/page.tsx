@@ -16,7 +16,6 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
 
   // Get the funnel page using the params
   const { dbPage, checkoutProduct, funnelId, error } = await getDynamicPageAction({ domainName: params.domain, funnelPath: params.funnel, pagePath: params.page })
-
   if (error || !dbPage?.content || !checkoutProduct) {
     return <div>404</div>
   }

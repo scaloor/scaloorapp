@@ -17,18 +17,18 @@ export default function NavigationButtons({ funnelId }: NavigationButtonsProps) 
         <div className="flex gap-4">
             <Link href={`/funnels/${funnelId}`}>
                 <Button
-                    className={cn(currentTab !== 'settings' ? 'bg-zinc-200' : '')}
-                    variant="ghost"
-                >
-                    General
-                </Button>
-            </Link>
-            <Link href={`/funnels/${funnelId}/settings`}>
-                <Button
-                    className={cn(currentTab === 'settings' ? 'bg-zinc-200' : '')}
+                    className={cn(currentTab !== 'domains' ? 'bg-zinc-200' : '')}
                     variant="ghost"
                 >
                     Settings
+                </Button>
+            </Link>
+            <Link href={`/funnels/${funnelId}/domains`}>
+                <Button
+                    className={cn(currentTab === 'domains' ? 'bg-zinc-200' : '')}
+                    variant="ghost"
+                >
+                    Domains
                 </Button>
             </Link>
         </div>

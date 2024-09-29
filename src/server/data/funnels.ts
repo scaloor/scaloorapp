@@ -62,9 +62,6 @@ type UpdateFunnelColumns = {
  */
 export async function updateFunnelColumns(funnelDetails: UpdateFunnelColumns) {
     try {
-        /* if (!await canAccessFunnel(funnelDetails.id)) {
-            return { error: 'You do not have access to update this funnel' }
-        } */
         const { id, ...updateData } = funnelDetails;
         const dbFunnel = await db
             .update(funnel)

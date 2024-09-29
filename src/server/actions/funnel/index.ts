@@ -7,6 +7,7 @@ import { createPathname } from "@/lib/utils"
 import { addFunnel, deleteFunnel, getFunnelById, getFunnelsByBusinessId } from "@/server/data/funnels"
 import { getAuthUserDetails } from "../users"
 import { canAccessFunnel } from "@/server/authorization/funnel"
+import { getDomainById } from "@/server/data/domains"
 
 // TODO: Add authorization check
 export async function getRecentFunnels({ businessId }: { businessId: string }) {
@@ -59,11 +60,16 @@ export async function createNewFunnelAction(
 
 export async function getFunnelByIdAction(funnelId: string) {
     try {
-        const { dbFunnel, error } = await getFunnelById(funnelId);
-        if (error) {
-            return { error: error.message }
+        const { dbFunnel, error: funnelError } = await getFunnelById(funnelId);
+        if (funnelError) throw new Error(funnelError.message)
+        if (!dbFunnel) return { error: "Funnel not found" }
+        if (!canAccessFunnel(dbFunnel?.businessId)) {
+            throw new Error("You are not authorized to access this funnel")
         }
-        return { dbFunnel }
+        if (!dbFunnel.domainId) return { dbFunnel }
+        const { dbDomain, error: domainError } = await getDomainById(dbFunnel.domainId)
+        if (domainError) throw new Error(domainError.message)
+        return { dbFunnel, dbDomain }
     } catch (error: any) {
         console.log(error)
         return { error: error.message }
