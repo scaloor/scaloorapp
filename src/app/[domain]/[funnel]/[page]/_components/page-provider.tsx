@@ -15,6 +15,7 @@ interface PageState {
     checkoutProduct: string | null;
     styles: Styles;
     paymentIntent: string | null;
+    previewMode: boolean; 
 }
 
 type PageAction =
@@ -46,13 +47,15 @@ export function PageProvider({
     initialFunnelId,
     initialCheckoutProduct, 
     /* initialStyles, */ 
-    initialPaymentIntent 
+    initialPaymentIntent,
+    previewMode
 }: {
     children: ReactNode,
     initialFunnelId: string,
     initialCheckoutProduct: string,
     /* initialStyles: Styles, */
-    initialPaymentIntent: string | null
+    initialPaymentIntent: string | null,
+    previewMode: boolean
 }) {
     const [state, dispatch] = useReducer(pageReducer, {
         funnelId: initialFunnelId,
@@ -66,6 +69,7 @@ export function PageProvider({
             accentColor: '#ff4500',
         },
         paymentIntent: initialPaymentIntent,
+        previewMode: previewMode,
     });
 
     return (

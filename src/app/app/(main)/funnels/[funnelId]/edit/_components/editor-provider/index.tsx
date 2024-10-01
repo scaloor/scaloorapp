@@ -1,7 +1,6 @@
 'use client'
 import React, { ReactNode, createContext, useContext, useReducer } from 'react'
 import { SelectPage } from '@/server/db/schema'
-import { pageTypeEnum } from '@/server/db/schema'
 import { JSONContent } from '@tiptap/react'
 
 // Might want to add published
@@ -25,7 +24,6 @@ interface FunnelEditorState {
     pages: SelectPage[];
     styles: Styles;
     deviceType: DeviceTypes;
-    previewMode: boolean;
     published: boolean; // Need to add actions
     checkoutProduct: string | null; // Need to add actions
 }
@@ -37,7 +35,6 @@ type FunnelEditorAction =
     | { type: 'UPDATE_PAGE_TYPE'; pageId: string; pageType: PageType }
     | { type: 'UPDATE_STYLES'; styles: Partial<Styles> }
     | { type: 'SET_DEVICE_TYPE'; deviceType: DeviceTypes }
-    | { type: 'TOGGLE_PREVIEW_MODE' }
     | { type: 'SET_PUBLISHED'; published: boolean }
     | { type: 'SET_CHECKOUT_PRODUCT'; productId: string }
 
@@ -77,8 +74,6 @@ function funnelEditorReducer(state: FunnelEditorState, action: FunnelEditorActio
             return { ...state, styles: { ...state.styles, ...action.styles } };
         case 'SET_DEVICE_TYPE':
             return { ...state, deviceType: action.deviceType };
-        case 'TOGGLE_PREVIEW_MODE':
-            return { ...state, previewMode: !state.previewMode };
         case 'SET_PUBLISHED':
             return { ...state, published: action.published };
         case 'SET_CHECKOUT_PRODUCT':
@@ -107,7 +102,6 @@ export function FunnelEditorProvider({ children, initialPages, funnelId, publish
             accentColor: '#ff4500',
         },
         deviceType: 'Desktop',
-        previewMode: false,
         published: published,
         checkoutProduct: checkoutProduct,
     });

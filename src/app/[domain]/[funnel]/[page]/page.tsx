@@ -32,6 +32,7 @@ export default async function DynamicPage({ params }: DynamicPageProps) {
         initialFunnelId={funnelId}
         initialCheckoutProduct={checkoutProduct}
         initialPaymentIntent={null}
+        previewMode={false}
       >
         <DynamicPageContent pageContent={dbPage.content} />
       </PageProvider>

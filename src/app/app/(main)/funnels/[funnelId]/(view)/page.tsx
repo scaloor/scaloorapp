@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/app/_components/ui/c
 import { Button } from '@/app/_components/ui/button'
 import Link from 'next/link'
 import { Input } from '@/app/_components/ui/input'
+import FunnelNameCard from './_components/funnel-name-card'
 
 type FunnelViewPageProps = {
   params: {
@@ -19,30 +20,7 @@ export default async function FunnelSettingsPage({ params }: FunnelViewPageProps
   if (!dbFunnel) return <ErrorPage errorMessage="Funnel not found" />
   return (
     <div className='flex flex-col gap-4'>
-      <Card>
-        <CardHeader>
-          <h3 className='text-lg font-medium'>Funnel Name</h3>
-          <p className='text-sm text-muted-foreground'>Change the name of your funnel to update the URL path.</p>
-        </CardHeader>
-        <CardContent>
-          <div className="max-w-md">
-            <Input value={dbFunnel.name} />
-          </div>
-          <div className='flex justify-end'>
-            <Button>Save</Button>
-          </div>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <h3 className='text-lg font-medium'>Edit Funnel</h3>
-        </CardHeader>
-        <CardContent>
-          <Link href={`/funnels/${funnelId}/edit`}>
-            <Button>Edit Funnel</Button>
-          </Link>
-        </CardContent>
-      </Card>
+      <FunnelNameCard funnelId={funnelId} name={dbFunnel.name} />
     </div>
   )
 }

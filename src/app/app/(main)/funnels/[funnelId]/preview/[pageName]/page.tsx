@@ -28,6 +28,7 @@ export default async function PreviewPage({ params }: PreviewPageProps) {
                 initialFunnelId={funnelId}
                 initialCheckoutProduct={checkoutProduct}
                 initialPaymentIntent={null}
+                previewMode={true}
             >
                 <PagePreview pageContent={dbPage.content} />
             </PageProvider>

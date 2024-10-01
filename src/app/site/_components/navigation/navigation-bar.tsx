@@ -1,44 +1,63 @@
 "use client";
-import React, { useState } from "react";
-import { HoveredLink, Menu, MenuItem, ProductItem } from "@/app/_components/ui/navbar-menu";
-import { cn } from "@/lib/utils";
+import React from "react";
 import Image from "next/image";
-
+import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
+import { Button } from "@/app/_components/ui/button";
 
 export default function Navbar({ className }: { className?: string }) {
-    const [active, setActive] = useState<string | null>(null);
-    return (
+    const smoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+        e.preventDefault();
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
-        <div
+    return (
+        <motion.div
             className={cn(
-                "fixed top-10 inset-x-0 md:max-w-2xl lg:max-w-4xl mx-auto z-50",
-                className,
-                "hidden md:block"
+                "fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm",
+                className
             )}
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-            <div className="flex justify-between">
-                <Menu
-                    className=""
-                    setActive={setActive}
-                >
-                    <HoveredLink href="/" className="flex items-center space-x-2">
-                        <Image src="/assets/favicon-16x16.png" alt="Scaloor" width={16} height={16} />
-                        <span className="">Scaloor</span>
-                    </HoveredLink>
-                </Menu>
-                <div className="inset-x-0 max-w-2xl mx-10 z-50">
-                    <Menu setActive={setActive}>
-                        <HoveredLink href="#benefits">Benefits</HoveredLink>
-                        <HoveredLink href="/site/pricing">Pricing</HoveredLink>
-                        <HoveredLink href="#faq">FAQ</HoveredLink>
-                    </Menu>
+            <MaxWidthWrapper className="flex justify-between items-center h-14 px-4 ">
+                <div>
+                    <Link href="/" className={'flex items-center'}>
+                        <Image src="/assets/favicon-16x16.png" alt="Scaloor" width={16} height={16} className="mr-2" />
+                        <span className="font-bold">Scaloor</span>
+                    </Link>
                 </div>
-                <Menu
-                    setActive={setActive}
-                >
-                    <HoveredLink href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>Login</HoveredLink>
-                </Menu>
-            </div>
-        </div>
+                <div>
+                    <Link href="#benefits" onClick={(e) => smoothScroll(e, 'benefits')}>
+                        <Button variant="ghost">
+                            Features
+                        </Button>
+                    </Link>
+                    <Link href="/site/pricing">
+                        <Button variant="ghost">
+                            Pricing
+                        </Button>
+                    </Link>
+                    <Link href="#faq" onClick={(e) => smoothScroll(e, 'faq')}>
+                        <Button variant="ghost">
+                            FAQ
+                        </Button>
+                    </Link>
+                </div>
+                <div>
+                    <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>
+                        <Button>
+                            Login
+                        </Button>
+                    </Link>
+                </div>
+            </MaxWidthWrapper>
+        </motion.div>
     );
 }
