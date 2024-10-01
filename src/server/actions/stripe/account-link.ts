@@ -2,7 +2,7 @@
 
 import { stripe } from "@/lib/stripe";
 
-export type StripeConnectReturnUrl = 'account' | 'dashboard'
+export type StripeConnectReturnUrl = 'settings' | 'dashboard'
 
 type CreateStripeAccountLinkOptions = {
     accountId: string;

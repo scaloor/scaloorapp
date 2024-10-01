@@ -63,7 +63,7 @@ export async function getFunnelByIdAction(funnelId: string) {
         const { dbFunnel, error: funnelError } = await getFunnelById(funnelId);
         if (funnelError) throw new Error(funnelError.message)
         if (!dbFunnel) return { error: "Funnel not found" }
-        if (!canAccessFunnel(dbFunnel?.businessId)) {
+        if (!await canAccessFunnel(dbFunnel?.businessId)) {
             throw new Error("You are not authorized to access this funnel")
         }
         if (!dbFunnel.domainId) return { dbFunnel }
@@ -82,7 +82,7 @@ export async function deleteFunnelAction(funnelId: string) {
         // Authorization check
         const { dbFunnel, error: getFunnelError } = await getFunnelById(funnelId);
         if (getFunnelError || !dbFunnel) return { error: getFunnelError?.message }
-        if (!canAccessFunnel(dbFunnel.businessId)) {
+        if (!await canAccessFunnel(dbFunnel.businessId)) {
             return { error: "You are not authorized to access this funnel" }
         }
 

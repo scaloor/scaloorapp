@@ -1,5 +1,5 @@
 import 'server-only'
-import { eq, asc } from "drizzle-orm";
+import { eq, asc, and } from "drizzle-orm";
 import { db } from "../db";
 import { page } from "../db/schema";
 import { InsertPage, SelectPage } from "../db/schema";
@@ -100,6 +100,21 @@ export async function getPageById(page_id: string) {
         return { error: 'You do not have access to this page' }
     } catch (error: any) {
         console.log(error);
+        return { error: error.message }
+    }
+}
+
+export async function getPageByFunnelIdAndPath(funnelId: string, pathName: string) {
+    try {
+        const dbPage = await db.select().from(page).where(
+            and(
+                eq(page.funnelId, funnelId),
+                eq(page.pathName, pathName)
+            )
+        ).then(res => res[0]);
+        return { dbPage }
+    } catch (error: any) {
+        console.log(error)
         return { error: error.message }
     }
 }

@@ -33,7 +33,7 @@ export async function updateFunnelDomainAction(domainId: string, funnelId: strin
         const { dbFunnel, error: funnelError } = await getFunnelById(funnelId)
         if (funnelError) throw new Error(funnelError)
         if (!dbFunnel) throw new Error("Funnel not found")
-        if (!canAccessFunnel(dbFunnel.businessId)) throw new Error("You are not authorized to access this funnel")
+        if (!await canAccessFunnel(dbFunnel.businessId)) throw new Error("You are not authorized to access this funnel")
 
         const { error: updateError } = await updateFunnelColumns({ id: funnelId, domainId })
         if (updateError) throw new Error(updateError)

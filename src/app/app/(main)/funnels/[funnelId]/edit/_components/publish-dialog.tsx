@@ -15,7 +15,7 @@ export default function PublishDialog() {
     const { state, dispatch } = useFunnelEditor()
     const [domains, setDomains] = useState<SelectDomain[]>([])
     const [selectedDomainId, setSelectedDomainId] = useState<string>('')
-    const [previewUrl, setPreviewUrl] = useState<string>('')
+    const [publishUrl, setPublishUrl] = useState<string>('')
     const [funnelPath, setFunnelPath] = useState<string>('')
 
     useEffect(() => {
@@ -38,7 +38,7 @@ export default function PublishDialog() {
         if (selectedDomainId) {
             const domain = domains.find(domain => domain.id === selectedDomainId)
             if (domain) {
-                setPreviewUrl(`https://${domain.domain}/${funnelPath}`)
+                setPublishUrl(`https://${domain.domain}/${funnelPath}`)
             }
         }
     }, [selectedDomainId])
@@ -55,7 +55,7 @@ export default function PublishDialog() {
     }
 
     const handleUnpublish = async () => {
-        const { success, error } = await publishFunnelAction({ funnelId: state.funnelId, published: false, domainId: selectedDomainId })
+        const { success, error } = await publishFunnelAction({ funnelId: state.funnelId, published: false, domainId: '' })
         if (error) {
             toast.error(error)
         }
@@ -67,9 +67,32 @@ export default function PublishDialog() {
 
     if (state.published) {
         return (
-            <Button variant="default" className="h-8" onClick={handleUnpublish}>
-                Unpublish
-            </Button>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="default" className="h-8">
+                        Unpublish
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        Unpublish Funnel
+                    </DialogHeader>
+                    <DialogDescription>
+                        <p>Are you sure you want to unpublish your funnel?</p>
+                    </DialogDescription>
+                    <div className='flex justify-end gap-2'>
+                        <DialogClose asChild>
+                            <Button
+                                variant="destructive"
+                            onClick={() => handleUnpublish()}
+                            disabled={!state.published}
+                        >
+                            Unpublish
+                            </Button>
+                        </DialogClose>
+                    </div>
+                </DialogContent>
+            </Dialog>
         )
     }
 
@@ -85,7 +108,8 @@ export default function PublishDialog() {
                     Publish Funnel
                 </DialogHeader>
                 <DialogDescription>
-                    Choose a domain to publish your funnel on.
+                    <p>Choose a domain to publish your funnel on.</p>
+                    <p>Note: you must have a checkout component setup to publish your funnel.</p>
                 </DialogDescription>
                 <Select
                     onValueChange={(value) => setSelectedDomainId(value)}>
@@ -100,24 +124,26 @@ export default function PublishDialog() {
                         ))}
                     </SelectContent>
                 </Select>
-                {previewUrl && (
+                {publishUrl && (
                     <div>
                         <p className='text-sm text-gray-500'>Once published, you can view your funnel at:</p>
                         <a
                             className='text-sm text-blue-500 hover:text-blue-600'
-                            href={previewUrl}
+                            href={publishUrl}
                             target='_blank'>
-                            {previewUrl}
+                            {publishUrl}
                         </a>
                     </div>
                 )}
                 <div className='flex justify-end gap-2'>
-                    <Button
-                        onClick={() => handlePublish()}
-                        disabled={state.published}
-                    >
-                        Publish
-                    </Button>
+                    <DialogClose asChild>
+                        <Button
+                            onClick={() => handlePublish()}
+                            disabled={state.published}
+                        >
+                            Publish
+                        </Button>
+                    </DialogClose>
                 </div>
             </DialogContent>
         </Dialog>

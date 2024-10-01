@@ -29,7 +29,7 @@ export default async function FunnelViewLayout({ children, params }: FunnelViewL
                             target="_blank"
                             className="text-sm text-muted-foreground hover:underline hover:text-foreground"
                         >
-                            {dbDomain.domain}
+                            {dbDomain.domain}/{dbFunnel.pathName}
                         </a>
                         <ExternalLinkIcon className="w-4 h-4" />
                     </div>

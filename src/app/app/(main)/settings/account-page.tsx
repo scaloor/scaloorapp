@@ -77,7 +77,7 @@ export default function AccountPage({ user, business, subscription }: AccountPag
                             country_name={business.country!}
                             email={business.businessEmail}
                             businessId={business.id!}
-                            returnUrl={'account'}
+                            returnUrl={'settings'}
                             connected={business.stripeAccountId ? true : false}
                         />}
                         <Link href="/settings/edit-business">
