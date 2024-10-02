@@ -39,11 +39,11 @@ export default function Navbar({ className }: { className?: string }) {
                             Features
                         </Button>
                     </Link>
-                    <Link href="/site/pricing">
+                    {/* <Link href="/site/pricing">
                         <Button variant="ghost">
                             Pricing
                         </Button>
-                    </Link>
+                    </Link> */}
                     <Link href="#faq" onClick={(e) => smoothScroll(e, 'faq')}>
                         <Button variant="ghost">
                             FAQ
@@ -51,11 +51,11 @@ export default function Navbar({ className }: { className?: string }) {
                     </Link>
                 </div>
                 <div>
-                    <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}>
-                        <Button>
+                    {/* <Link href={`${process.env.NEXT_PUBLIC_APP_URL}/login`}> */}
+                        <Button disabled>
                             Login
                         </Button>
-                    </Link>
+                    {/* </Link> */}
                 </div>
             </MaxWidthWrapper>
         </motion.div>
