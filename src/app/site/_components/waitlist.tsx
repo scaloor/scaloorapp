@@ -35,7 +35,7 @@ export default function EmailCapture() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg"
+                className="w-full max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg mb-10"
             >
                 <h2 className="text-2xl font-bold mb-4 text-center">Join Our Waitlist</h2>
                 <p className="text-muted-foreground mb-6 text-center">
