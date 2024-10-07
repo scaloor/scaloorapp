@@ -54,6 +54,7 @@
     "@tiptap/pm": "^2.6.6",
     "@tiptap/react": "^2.6.6",
     "@tiptap/starter-kit": "^2.6.6",
+    "@tiptap/suggestion": "^2.8.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/nodemailer": "^6.4.15",
     "bcryptjs": "^2.4.3",
@@ -89,7 +90,8 @@
     "tls": "^0.0.1",
     "use-debounce": "^10.0.3",
     "validator": "^13.12.0",
-    "zod": "^3.23.6"
+    "zod": "^3.23.6",
+    "zustand": "^5.0.0-rc.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
