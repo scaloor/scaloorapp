@@ -15,25 +15,21 @@ type StripeConnectButtonProps = {
     className?: string;
 }
 
-export default function StripeConnectButton(
-    {
-        country_name,
-        email,
-        businessId,
-        returnUrl,
-        connected,
-        className
-
-    }:
-        StripeConnectButtonProps) {
+export default function StripeConnectButton({
+    country_name,
+    email,
+    businessId,
+    returnUrl,
+    connected,
+    className
+}: StripeConnectButtonProps) {
     const router = useRouter()
+    
     const connectStripe = async () => {
         const { url, error } = await createStripeAccount({ country_name, email, businessId, returnUrl });
         // Client side error handling here
-
         router.push(url!);
     }
-
     return (
         <Button
             className={cn('h-8', className)}

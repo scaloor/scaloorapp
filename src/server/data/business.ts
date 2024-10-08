@@ -86,6 +86,7 @@ type UpdateBusinessOptions = {
     businessLogo?: string;
     country?: string;
     currentSubscriptionId?: string;
+    paymentsEnabled?: boolean;
     stripeAccountId?: string;
 };
 

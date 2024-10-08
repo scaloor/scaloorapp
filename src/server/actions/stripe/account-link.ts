@@ -19,6 +19,7 @@ export async function createStripeAccountLink({ accountId, returnUrl }: CreateSt
             type: 'account_onboarding',
         });
 
+        console.log((await stripe.accounts.retrieve(accountId)).charges_enabled)
         return { url: accountLink.url };
     } catch (error: any) {
         console.error('An error occurred when calling the Stripe API to create an account:', error);

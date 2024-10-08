@@ -13,15 +13,12 @@ type CreateStripeAccountOptions = {
     returnUrl: StripeConnectReturnUrl;
 }
 
-export default async function createStripeAccount(
-    {
-        country_name,
-        email,
-        businessId,
-        returnUrl
-    }:
-        CreateStripeAccountOptions
-) {
+export default async function createStripeAccount({
+    country_name,
+    email,
+    businessId,
+    returnUrl
+}: CreateStripeAccountOptions) {
     try {
         // Find ISO2 code
         const C = countries as CountryProps[];

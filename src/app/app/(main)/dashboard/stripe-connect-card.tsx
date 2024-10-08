@@ -21,7 +21,7 @@ export default function StripeConnectCard({ business }: StripeConnectCardProps) 
                 <div className='flex gap-2 items-center'>
                     <p>Status:</p>
                     <div className='text-sm text-muted-foreground'>
-                        {business.stripeAccountId ?
+                        {business.paymentsEnabled ?
                             <Badge variant={'affirmative'}>Connected</Badge>
                             :
                             <Badge variant={'destructive'}>Not connected</Badge>
