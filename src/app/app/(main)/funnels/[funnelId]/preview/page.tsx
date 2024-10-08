@@ -1,4 +1,4 @@
-import { getFirstPageAction } from "@/server/actions/funnel/preview"
+import { getFirstPageAction } from "@/server/actions/protected/funnel/preview"
 import { redirect } from "next/navigation"
 
 

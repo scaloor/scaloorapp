@@ -2,7 +2,7 @@
 import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper'
 import React from 'react'
 import NavigationButtons from '../_components/navigation-buttons'
-import { getFunnelByIdAction } from '@/server/actions/funnel'
+import { getFunnelByIdAction } from '@/server/actions/protected/funnel'
 import ErrorPage from '@/app/_components/common/error-page'
 import { ExternalLinkIcon } from 'lucide-react'
 import Link from 'next/link'

@@ -1,7 +1,7 @@
 
 
 import ErrorPage from '@/app/_components/common/error-page'
-import { getFunnelPreview } from '@/server/actions/funnel/preview'
+import { getFunnelPreview } from '@/server/actions/protected/funnel/preview'
 import React from 'react'
 import PagePreview from './page-preview'
 import { PageProvider } from '@/app/[domain]/[funnel]/[page]/_components/page-provider'

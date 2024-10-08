@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/app/_components/ui/card';
 import { Input } from '@/app/_components/ui/input';
 import { Button } from '@/app/_components/ui/button';
-import { updateFunnelNameAction } from '@/server/actions/funnel';
+import { updateFunnelNameAction } from '@/server/actions/protected/funnel';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 

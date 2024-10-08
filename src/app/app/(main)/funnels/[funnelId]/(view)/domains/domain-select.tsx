@@ -2,7 +2,7 @@
 
 import { Button } from '@/app/_components/ui/button'
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/app/_components/ui/select'
-import { updateFunnelDomainAction } from '@/server/actions/funnel/domains'
+import { updateFunnelDomainAction } from '@/server/actions/protected/funnel/domains'
 import { SelectDomain } from '@/server/db/schema'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'

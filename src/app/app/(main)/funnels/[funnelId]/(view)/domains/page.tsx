@@ -1,8 +1,7 @@
 
 import React from 'react'
 import { Card, CardContent } from '@/app/_components/ui/card'
-import { Button } from '@/app/_components/ui/button'
-import { getFunnelDomainsAction } from '@/server/actions/funnel/domains'
+import { getFunnelDomainsAction } from '@/server/actions/protected/funnel/domains'
 import ErrorPage from '@/app/_components/common/error-page'
 import DomainSelect from './domain-select'
 
