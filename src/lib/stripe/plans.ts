@@ -5,10 +5,10 @@ export const PLANS = [
         interval: 'month',
         // Can add plan business rules here
         price: {
-            amount: 19.99,
+            amount: 47.00,
             currency: 'usd',
             priceIds: {
-                test: 'price_1PZo7RAdR9Knb0hz5eMN2lV7',
+                test: 'price_1Q7StnLTaqxTcADsdYufGvjf',
                 production: '',
             },
             link: {

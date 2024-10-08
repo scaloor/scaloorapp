@@ -1,4 +1,4 @@
-import { loadEditorAction } from '@/server/actions/api/editor'
+import { loadEditorAction } from '@/server/actions/protected/editor'
 import React from 'react'
 import PageEditor from './_components/page-editor'
 import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper'

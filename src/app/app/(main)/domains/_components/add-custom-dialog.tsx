@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 import { z } from 'zod';
 import { domainNamePattern, validDomainRegex } from '@/lib/constants';
 import { FormError } from '@/app/_components/common/form-error';
-import { addCustomDomainAction } from '@/server/actions/api/domain';
+import { addCustomDomainAction } from '@/server/actions/protected/domain';
 
 
 const AddCustomDialogSchema = z.object({

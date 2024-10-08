@@ -13,7 +13,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/app/_components/ui/navigation-menu"
-import { signOut } from "@/server/actions/auth/sign-out"
+import { signOut } from "@/server/actions/public/auth/sign-out"
 
 
 export function NavigationOptions({ isAuthenticated }: { isAuthenticated: boolean }) {

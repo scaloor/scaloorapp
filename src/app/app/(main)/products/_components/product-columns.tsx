@@ -7,7 +7,7 @@ import { Button } from "@/app/_components/ui/button";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/app/_components/ui/dropdown-menu";
 import { ArrowUpDown, MoreHorizontalIcon, PackageIcon } from "lucide-react";
 import { SelectProduct } from "@/server/db/schema";
-import { deleteProductByIdAction } from "@/server/actions/api/product";
+import { deleteProductByIdAction } from "@/server/actions/protected/product";
 import { toast } from "sonner";
 import { parseISO, format } from 'date-fns'
 import { deleteFile } from "@/lib/supabase/client";

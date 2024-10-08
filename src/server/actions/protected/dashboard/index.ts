@@ -1,8 +1,8 @@
 'use server'
 
-import { getAuthUserDetails } from "@/server/actions/users"
+import { getAuthUserDetails } from "@/server/actions/protected/users"
 import { getBusinessById } from "@/server/data/business"
-import { getRecentFunnels } from "../../funnel"
+import { getRecentFunnels } from "@/server/actions/protected/funnel"
 import { getDomainsByBusinessId } from "@/server/data/domains"
 
 export async function getDashboardDetailsAction() {

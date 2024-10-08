@@ -1,6 +1,6 @@
 'use server';
 import { getBusinessById } from "@/server/data/business";
-import { getAuthUserDetails } from "../users";
+import { getAuthUserDetails } from "../protected/users";
 import { getSubscriptionById } from "@/server/data/subscription";
 import { stripe } from "@/lib/stripe";
 import { PLANS } from "@/lib/stripe/plans";

@@ -4,7 +4,7 @@ import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper';
 import DomainStatusCard from './domain-status-card';
 import StripeConnectCard from './stripe-connect-card';
 import RecentFunnelsCard from './recent-funnels-card';
-import { getDashboardDetailsAction } from '@/server/actions/api/dashboard';
+import { getDashboardDetailsAction } from '@/server/actions/protected/dashboard';
 
 export default async function DashboardPage() {
   const { dbUser, dbBusiness, funnels, dbDomains, error } = await getDashboardDetailsAction()

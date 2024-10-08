@@ -2,7 +2,7 @@ import React from 'react'
 import FunnelList from './_components/funnel-list'
 import CreateFunnelDialog from './_components/create-funnel-dialog'
 import ErrorPage from '@/app/_components/common/error-page';
-import { getAllFunnelsAction } from '@/server/actions/funnel';
+import { getAllFunnelsAction } from '@/server/actions/protected/funnel';
 
 export default async function FunnelsPage() {
   const { funnels, businessId, error } = await getAllFunnelsAction()
@@ -10,7 +10,7 @@ export default async function FunnelsPage() {
   if (!funnels || !businessId) return <ErrorPage errorMessage="Funnels not found" />
 
   if (funnels.length === 0) return (
-    <div className="flex flex-col justify-center items-center mt-10">
+    <div className="flex flex-col h-full justify-center items-center">
       <h1 className="text-2xl font-bold mb-2">Create a funnel to get started</h1>
       <p className="text-gray-500 mb-4">Funnels are a series of steps that guide your customers through a journey to become a customer.</p>
       <CreateFunnelDialog businessId={businessId} />

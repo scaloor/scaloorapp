@@ -1,6 +1,6 @@
 'use server'
 
-import { getAuthUserDetails } from "@/server/actions/users"
+import { getAuthUserDetails } from "@/server/actions/protected/users"
 import { deleteProductById, getProductsByBusinessId } from "@/server/data/product"
 
 export async function productPageAction() {

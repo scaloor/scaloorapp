@@ -15,7 +15,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/app/_components/ui/dropdown-menu'
-import { deleteFunnelAction } from '@/server/actions/funnel'
+import { deleteFunnelAction } from '@/server/actions/protected/funnel'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/app/_components/ui/dialog'
 import { DeleteDialog } from './delete-dialog'
 

@@ -1,5 +1,5 @@
 import ErrorPage from '@/app/_components/common/error-page';
-import { getAuthUserDetails } from '@/server/actions/users';
+import { getAuthUserDetails } from '@/server/actions/protected/users';
 import React from 'react'
 import EditUserForm from './edit-user-form';
 

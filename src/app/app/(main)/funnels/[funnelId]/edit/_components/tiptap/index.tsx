@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { extensions } from './extensions'
 import { Editor, EditorProvider, JSONContent } from '@tiptap/react'
 import TiptapBubbleMenu from './bubble-menu'
-import { onPageChangeAction } from '@/server/actions/api/editor'
+import { onPageChangeAction } from '@/server/actions/protected/editor'
 import { useFunnelEditor } from '../editor-provider'
 
 

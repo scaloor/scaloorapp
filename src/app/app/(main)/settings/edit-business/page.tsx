@@ -1,7 +1,7 @@
 import ErrorPage from '@/app/_components/common/error-page';
 import React from 'react'
 import EditBusinessForm from './edit-business-form';
-import { editBusinessSettingsAction } from '@/server/actions/settings';
+import { editBusinessSettingsAction } from '@/server/actions/protected/settings';
 
 
 export default async function EditBusinessPage() {

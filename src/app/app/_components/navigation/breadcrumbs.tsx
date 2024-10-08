@@ -9,7 +9,7 @@ import {
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { Suspense, useEffect, useState } from "react";
-import { getFunnelByIdAction } from "@/server/actions/funnel";
+import { getFunnelByIdAction } from "@/server/actions/protected/funnel";
 import React from "react";
 
 export default function Breadcrumbs() {

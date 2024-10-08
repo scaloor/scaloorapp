@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { FormError } from '@/app/_components/common/form-error'
 import { addFunnel } from '@/server/data/funnels'
 import { funnelNamePattern } from '@/lib/constants'
-import { createNewFunnelAction } from '@/server/actions/funnel'
+import { createNewFunnelAction } from '@/server/actions/protected/funnel'
 import { toast } from 'sonner'
 
 type CreateFunnelDialogProps = {

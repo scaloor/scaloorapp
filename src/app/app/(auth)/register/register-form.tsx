@@ -19,9 +19,9 @@ import { FormSuccess } from "@/app/_components/common/form-success";
 import { RegisterSchema } from "../_components/schemas";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import Link from "next/link";
-import { signup } from "@/server/actions/auth/sign-up";
+import { signup } from "@/server/actions/public/auth/sign-up";
 import { FcGoogle } from "react-icons/fc";
-import { loginWithGoogle } from "@/server/actions/auth/login-google";
+import { loginWithGoogle } from "@/server/actions/public/auth/login-google";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");

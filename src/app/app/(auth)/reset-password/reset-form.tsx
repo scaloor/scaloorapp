@@ -18,7 +18,7 @@ import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
-import { resetPassword } from "@/server/actions/auth/reset-password";
+import { resetPassword } from "@/server/actions/public/auth/reset-password";
 
 export const ResetForm = () => {
     const [error, setError] = useState<string | undefined>("");

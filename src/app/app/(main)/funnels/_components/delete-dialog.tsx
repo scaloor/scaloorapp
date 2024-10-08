@@ -4,7 +4,7 @@ import { Button } from '@/app/_components/ui/button'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/app/_components/ui/dialog'
 import { Trash } from 'lucide-react'
 import { toast } from 'sonner'
-import { deleteFunnelAction } from '@/server/actions/funnel'
+import { deleteFunnelAction } from '@/server/actions/protected/funnel'
 import { useRouter } from 'next/navigation'
 
 interface DeleteDialogProps {

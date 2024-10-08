@@ -6,7 +6,7 @@ import { formatDate } from '@/lib/utils';
 import { z } from 'zod';
 import DeleteDialog from './delete-dialog';
 import EditScaloorDialog from './edit-dialog';
-import { getDomainConfigAction } from '@/server/actions/api/domain';
+import { getDomainConfigAction } from '@/server/actions/protected/domain';
 import DomainConfig from './domain-config';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';

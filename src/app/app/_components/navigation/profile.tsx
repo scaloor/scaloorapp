@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback } from '@/app/_components/ui/avatar'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/app/_components/ui/dropdown-menu'
 import { cn } from '@/lib/utils'
-import { signOut } from '@/server/actions/auth/sign-out'
+import { signOut } from '@/server/actions/public/auth/sign-out'
 import { LogOut, Settings, CircleUser } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'

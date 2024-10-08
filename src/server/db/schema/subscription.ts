@@ -1,4 +1,4 @@
-import { boolean, pgEnum, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { boolean, integer, pgEnum, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { scaloorId } from "./defaults";
 
 export const planEnum = pgEnum("plan_enum", ['funnels'])
@@ -10,12 +10,12 @@ export const subscription = pgTable("subscription", {
         .$defaultFn(() => scaloorId('sub')),
     businessId: text("business_id").notNull(),
     plan: planEnum("plan").notNull(),
-    price: text("price").notNull(),
+    price: integer("price").notNull(),
     active: boolean("active").default(false).notNull(),
     stripePriceId: text("stripe_price_id").notNull(),
     stripeCustomerId: text("stripe_customer_id").notNull(),
     currentPeriodEndDate: timestamp("current_period_end_date", { withTimezone: true, mode: 'string' }).notNull(),
-    stripeSubscriptionId: text("stripe_subscription_id").notNull(),
+    stripeSubscriptionId: text("stripe_subscription_id").notNull().unique(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 },

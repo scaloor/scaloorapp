@@ -1,4 +1,4 @@
-import { getEditProductAction } from "@/server/actions/api/product/edit-product";
+import { getEditProductAction } from "@/server/actions/protected/product/edit-product";
 import EditProductForm from "./edit-product-form";
 import ErrorPage from "@/app/_components/common/error-page";
 import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";

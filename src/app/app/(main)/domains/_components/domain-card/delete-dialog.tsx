@@ -3,7 +3,7 @@
 import { Button } from '@/app/_components/ui/button'
 import { DialogHeader, DialogFooter } from '@/app/_components/ui/dialog'
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/app/_components/ui/dialog'
-import { deleteDomainAction } from '@/server/actions/api/domain'
+import { deleteDomainAction } from '@/server/actions/protected/domain'
 import { useRouter } from 'next/navigation'
 import { useTransition } from 'react'
 import { toast } from 'sonner'

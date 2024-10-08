@@ -1,5 +1,5 @@
 import 'server-only'
-import { getAuthUserDetails } from '../actions/users'
+import { getAuthUserDetails } from '../actions/protected/users'
 import { getBusinessById } from '../data/business'
 
 // The User can access the funnel if the associated funnel belongs to the user's business

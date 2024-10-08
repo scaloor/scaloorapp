@@ -1,4 +1,4 @@
-import { getAuthUserDetails } from '@/server/actions/users';
+import { getAuthUserDetails } from '@/server/actions/protected/users';
 import CreateProductForm from './create-product-form';
 import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper';
 import ErrorPage from '@/app/_components/common/error-page';

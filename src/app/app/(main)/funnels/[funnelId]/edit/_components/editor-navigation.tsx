@@ -3,7 +3,7 @@
 import { Button } from '@/app/_components/ui/button'
 import React from 'react'
 import { useFunnelEditor } from './editor-provider'
-import { saveFunnelAction } from '@/server/actions/api/editor'
+import { saveFunnelAction } from '@/server/actions/protected/editor'
 import { toast } from 'sonner'
 import PublishDialog from './publish-dialog'
 

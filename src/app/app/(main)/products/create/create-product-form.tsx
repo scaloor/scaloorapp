@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group";
 import { z } from "zod";
 import { toast } from "sonner";
-import { createProductAction } from "@/server/actions/api/product/create-product";
+import { createProductAction } from "@/server/actions/protected/product/create-product";
 
 type CreateProductFormProps = {
     businessId: string

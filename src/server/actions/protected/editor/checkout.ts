@@ -1,7 +1,7 @@
 'use server'
 import { stripe } from "@/lib/stripe"
 import { getProductById, getProductsByBusinessId } from "@/server/data/product"
-import { getAuthUserDetails } from "../../users"
+import { getAuthUserDetails } from "../users"
 import { getStripeAccountIdByFunnelId } from "@/server/data/business";
 
 export async function checkoutAction({

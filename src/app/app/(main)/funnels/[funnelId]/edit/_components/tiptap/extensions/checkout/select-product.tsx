@@ -7,7 +7,7 @@ import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@
 import { Button } from '@/app/_components/ui/button'
 import { SelectProduct } from '@/server/db/schema'
 import { useEffect, useState } from 'react'
-import { getProductsForFunnel } from '@/server/actions/api/editor/checkout'
+import { getProductsForFunnel } from '@/server/actions/protected/editor/checkout'
 import { useFunnelEditor } from '../../../editor-provider'
 
 

@@ -6,7 +6,7 @@ import { Stripe, loadStripe } from '@stripe/stripe-js'
 import { useFunnelEditor } from '../../../editor-provider'
 import { Elements } from '@stripe/react-stripe-js'
 import CheckoutForm from './checkout-form'
-import { checkoutAction, getStripePK } from '@/server/actions/api/editor/checkout'
+import { checkoutAction, getStripePK } from '@/server/actions/protected/editor/checkout'
 
 export default function CheckoutComponent() {
     const [stripePromise, setStripePromise] = useState<Stripe | null | Promise<Stripe | null>>(null)

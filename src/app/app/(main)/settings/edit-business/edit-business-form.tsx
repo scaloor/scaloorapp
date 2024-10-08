@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { InsertBusiness } from "@/server/db/schema";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
 import ErrorPage from "@/app/_components/common/error-page";
-import { editBusinessAction } from "@/server/actions/api/dashboard/edit-business";
+import { editBusinessAction } from "@/server/actions/protected/dashboard/edit-business";
 import { toast } from "sonner";
 import { useDropdownStore } from "@/app/_components/common/countries-dropdown/dropdown";
 

@@ -1,4 +1,4 @@
-import { getAuthUserDetails } from "@/server/actions/users";
+import { getAuthUserDetails } from "@/server/actions/protected/users";
 import AccountSidebar from "./account-sidebar";
 import AccountTopbar from "./account-topbar";
 import { AccountNavigationProvider } from "./navigation-provider";

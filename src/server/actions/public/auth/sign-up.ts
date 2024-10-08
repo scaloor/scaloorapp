@@ -43,7 +43,7 @@ export async function signup(data: z.infer<typeof RegisterSchema>) {
   })
 
   if (error) {
-    console.log(error)
+    console.log('here', error)
     return { error: "Invalid details!" }
   }
 

@@ -6,7 +6,7 @@ import { useFunnelEditor } from './editor-provider'
 import { toast } from 'sonner'
 import { Button } from '@/app/_components/ui/button'
 import { useEffect, useState } from 'react'
-import { loadPublishDialogAction, publishFunnelAction } from '@/server/actions/api/editor'
+import { loadPublishDialogAction, publishFunnelAction } from '@/server/actions/protected/editor'
 import { SelectDomain } from '@/server/db/schema'
 
 

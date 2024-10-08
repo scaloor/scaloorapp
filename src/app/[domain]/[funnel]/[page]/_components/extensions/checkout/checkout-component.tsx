@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { Stripe, loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
 import CheckoutForm from './checkout-form'
-import { checkoutAction, getStripePK } from '@/server/actions/api/editor/checkout'
+import { checkoutAction, getStripePK } from '@/server/actions/protected/editor/checkout'
 import { usePage } from '../../page-provider'
 
 export default function CheckoutComponent() {

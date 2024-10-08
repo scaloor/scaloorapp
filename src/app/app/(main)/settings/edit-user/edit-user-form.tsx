@@ -15,7 +15,7 @@ import ErrorPage from '@/app/_components/common/error-page';
 import { useRouter } from 'next/navigation';
 import { PhoneInput } from '@/app/_components/ui/phone-input';
 import { toast } from 'sonner';
-import { editUserAction } from '@/server/actions/api/dashboard/edit-user';
+import { editUserAction } from '@/server/actions/protected/dashboard/edit-user';
 
 type EditUserFormProps = {
     user: InsertUser;

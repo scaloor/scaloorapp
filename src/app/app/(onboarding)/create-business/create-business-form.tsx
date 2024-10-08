@@ -13,7 +13,7 @@ import { uploadFile } from "@/lib/supabase/client";
 import { FormError } from "@/app/_components/common/form-error";
 import { InsertUser } from "@/server/db/schema";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
-import { createBusiness } from "@/server/actions/api/onboarding";
+import { createBusiness } from "@/server/actions/protected/onboarding";
 import { useRouter } from "next/navigation";
 
 
@@ -74,7 +74,8 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Business Name</FormLabel>
+                                <FormLabel>Business Name*</FormLabel>
+                                <FormDescription>This is the name of your business</FormDescription>
                                 <FormControl>
                                     <Input
                                         {...field}
@@ -90,7 +91,8 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                         name="businessEmail"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Business Email</FormLabel>
+                                <FormLabel>Business Email*</FormLabel>
+                                <FormDescription>You can leave this as your personal email if you like!</FormDescription>
                                 <FormControl>
                                     <Input
                                         {...field}
@@ -106,7 +108,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                         name="country"
                         render={({ field }) => (
                             <FormItem className="w-full flex flex-col">
-                                <FormLabel>Country</FormLabel>
+                                <FormLabel>Country*</FormLabel>
                                 <div>
                                     <CountryDropdown form={form} />
                                 </div>

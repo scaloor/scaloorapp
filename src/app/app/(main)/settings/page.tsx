@@ -1,7 +1,7 @@
 import AccountPage from "./account-page";
 import ErrorPage from "@/app/_components/common/error-page";
 import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
-import { getSettingsDetailsAction } from "@/server/actions/settings";
+import { getSettingsDetailsAction } from "@/server/actions/protected/settings";
 
 
 export default async function Settings() {

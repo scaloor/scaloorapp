@@ -18,7 +18,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDes
 import { RadioGroup } from "@/app/_components/ui/radio-group";
 import { RadioGroupItem } from "@radix-ui/react-radio-group";
 import { Input } from "@/app/_components/ui/input";
-import { editProductAction } from "@/server/actions/api/product/edit-product";
+import { editProductAction } from "@/server/actions/protected/product/edit-product";
 
 type EditProductFormProps = {
     product: SelectProduct

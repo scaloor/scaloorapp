@@ -4,9 +4,9 @@ import { sampleProducts } from './_components/sample-products'
 import { columns } from './_components/product-columns'
 import { Button } from '@/app/_components/ui/button'
 import Link from 'next/link'
-import { getAuthUserDetails } from '@/server/actions/users'
+import { getAuthUserDetails } from '@/server/actions/protected/users'
 import ErrorPage from '@/app/_components/common/error-page'
-import { productPageAction } from '@/server/actions/api/product'
+import { productPageAction } from '@/server/actions/protected/product'
 
 type Props = {}
 

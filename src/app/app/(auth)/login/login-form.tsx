@@ -17,10 +17,10 @@ import {
 } from "@/app/_components/ui/form";
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
-import { login } from "@/server/actions/auth/login";
+import { login } from "@/server/actions/public/auth/login";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
 import { FcGoogle } from "react-icons/fc";
-import { loginWithGoogle } from "@/server/actions/auth/login-google";
+import { loginWithGoogle } from "@/server/actions/public/auth/login-google";
 
 
 export const LoginForm = () => {

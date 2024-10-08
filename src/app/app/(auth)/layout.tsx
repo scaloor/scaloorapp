@@ -1,4 +1,4 @@
-import { getAuthUserDetails } from "@/server/actions/users";
+import { getAuthUserDetails } from "@/server/actions/protected/users";
 import { redirect } from "next/navigation";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {

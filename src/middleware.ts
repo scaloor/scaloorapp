@@ -5,16 +5,18 @@ import { NextResponse } from "next/server";
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl
 
+  // If the request is for an API route, don't apply any rewrites
+  if (url.pathname.startsWith('/api')) {
+    return NextResponse.next()
+  }
+
   let hostname = request.headers
     .get("host")!
     .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   const searchParams = request.nextUrl.searchParams.toString();
-  // Get the pathname of the request (e.g. /, /about, /blog/first-post)
-  const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
-    }`;
+  const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
-  console.log('hostname', hostname, 'path', path)
   // If the path is the root path, rewrite to the site page
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
@@ -43,6 +45,6 @@ export const config = {
      * Feel free to modify this pattern to include more paths.
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    //"/((?!api/|_next/|_static/|_vercel|[\\w-]+\\.\\w+).*)",
+    '/api/:path*'  // Add this line to include API routes in the matcher
   ],
 }

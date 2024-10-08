@@ -1,6 +1,6 @@
 import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper'
 import { Button } from '@/app/_components/ui/button'
-import { getDomainsAction } from '@/server/actions/api/domain'
+import { getDomainsAction } from '@/server/actions/protected/domain'
 import React from 'react'
 import { DomainCard } from './_components/domain-card'
 import ErrorPage from '@/app/_components/common/error-page'

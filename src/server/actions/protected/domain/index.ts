@@ -1,7 +1,7 @@
 'use server'
 
 import { addDomain, deleteDomain, getDomainById, getDomainsByBusinessId, updateDomain } from "@/server/data/domains"
-import { getAuthUserDetails } from "../../users"
+import { getAuthUserDetails } from "../users"
 import { createPathname } from "@/lib/utils"
 import { BLACKLISTED_DOMAINS, validDomainRegex } from "@/lib/constants"
 import { addDomainToVercel, getDomainConfig, getDomainFromVercel, getDomainVerification } from "@/server/data/vercel"

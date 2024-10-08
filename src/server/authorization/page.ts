@@ -1,5 +1,5 @@
 import 'server-only'
-import { getAuthUserDetails } from '../actions/users'
+import { getAuthUserDetails } from '../actions/protected/users'
 import { getFunnelById } from '../data/funnels'
 
 

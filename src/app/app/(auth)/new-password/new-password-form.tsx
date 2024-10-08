@@ -20,7 +20,7 @@ import {
 import { Button } from "@/app/_components/ui/button";
 import { FormError } from "@/app/_components/common/form-error";
 import { FormSuccess } from "@/app/_components/common/form-success";
-import { newPassword } from "@/server/actions/auth/new-password";
+import { newPassword } from "@/server/actions/public/auth/new-password";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card";
 
 export const NewPasswordForm = () => {

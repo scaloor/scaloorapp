@@ -3,7 +3,7 @@ import { db } from '../db'
 import { domain } from '../db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { canAccessDomains } from '../authorization/domains'
-import { getAuthUserDetails } from '../actions/users'
+import { getAuthUserDetails } from '../actions/protected/users'
 import { removeDomainFromVercelProject } from './vercel'
 
 
