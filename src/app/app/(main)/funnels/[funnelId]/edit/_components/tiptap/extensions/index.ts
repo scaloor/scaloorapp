@@ -10,6 +10,7 @@ import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Link from '@tiptap/extension-link'
 import { Checkout } from './checkout'
+import { Button } from './button'
 
 const starterKit = StarterKit.configure({
   bulletList: {
@@ -45,6 +46,8 @@ const link = Link.configure({})
 
 const checkout = Checkout.configure({})
 
+const button = Button.configure({})
+
 export const extensions = [
   NodeButtons,
   starterKit,
@@ -56,5 +59,6 @@ export const extensions = [
   highlight,
   textAlign,
   link,
-  checkout
+  checkout,
+  button, // Add the new Button extension
 ]

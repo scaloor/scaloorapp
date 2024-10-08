@@ -17,6 +17,7 @@ export async function checkoutAction({
         * authorization.
         * This action will only work for funnel development, as in production,
         * the customer will not have access to the stripe account ID.
+        * ??? Authorization probably isn't required to render a checkout?
         */
         const { stripeAccountId, error } = await getStripeAccountIdByFunnelId(funnelId)
         if (error || !stripeAccountId) return { error: error || "Cannot find stripe account ID" }
@@ -32,19 +33,21 @@ export async function checkoutAction({
         }, {
             stripeAccount: stripeAccountId,
         })
-        return { 
+        return {
             clientSecret: paymentIntent.client_secret,
             productName: dbProduct.name,
             productPrice: dbProduct.defaultPrice,
-         }
+        }
     } catch (error: any) {
         console.error(error)
         return { error: error.message }
     }
 }
 
-export async function getStripePK() {
-    return { stripePK: process.env.STRIPE_PUBLIC_KEY }
+export async function getStripeCheckoutDetails(funnelId: string) {
+    const { stripeAccountId, error } = await getStripeAccountIdByFunnelId(funnelId)
+    if (error || !stripeAccountId) return { error: error || "Cannot find stripe account ID" }
+    return { stripePK: process.env.STRIPE_PUBLIC_KEY!, stripeAccountId: stripeAccountId }
 }
 
 

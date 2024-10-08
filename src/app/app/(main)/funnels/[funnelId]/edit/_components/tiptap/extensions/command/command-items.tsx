@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import { Editor, Range } from "@tiptap/react";
 import { Command, renderItems } from ".";
-import { Heading1Icon, Heading2Icon, Heading3Icon, ListIcon, ListOrderedIcon, type LucideIcon, ShoppingCartIcon, TextIcon } from "lucide-react";
+import { Heading1Icon, Heading2Icon, Heading3Icon, ListIcon, ListOrderedIcon, type LucideIcon, ShoppingCartIcon, Square, TextIcon } from "lucide-react";
 import YoutubeIcon from '@/lib/icons/youtube'
 import Youtube from '@tiptap/extension-youtube'
 
@@ -91,6 +91,14 @@ const EditorCommandItems = (query: string) => {
                         alert("Please enter a correct Youtube Video Link");
                     }
                 }
+            },
+        },
+        {
+            title: 'Button',
+            description: 'Add an editable button.',
+            icon: Square,
+            command: ({ editor, range }: { editor: Editor; range: Range }) => {
+                editor.chain().focus().deleteRange(range).setButton({ text: 'Click me' }).run()
             },
         },
     ]

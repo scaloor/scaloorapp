@@ -6,7 +6,7 @@ import { Stripe, loadStripe } from '@stripe/stripe-js'
 import { useFunnelEditor } from '../../../editor-provider'
 import { Elements } from '@stripe/react-stripe-js'
 import CheckoutForm from './checkout-form'
-import { checkoutAction, getStripePK } from '@/server/actions/protected/editor/checkout'
+import { checkoutAction, getStripeCheckoutDetails } from '@/server/actions/protected/editor/checkout'
 
 export default function CheckoutComponent() {
     const [stripePromise, setStripePromise] = useState<Stripe | null | Promise<Stripe | null>>(null)
@@ -17,8 +17,11 @@ export default function CheckoutComponent() {
 
     useEffect(() => {
         const loadStripePromise = async () => {
-            const { stripePK } = await getStripePK() // Can probably change stripePK to next_public
-            const promise = await loadStripe(stripePK!, { stripeAccount: 'acct_1Pq0p5PPUP2vo0Tr' });
+            const { stripePK, stripeAccountId, error } = await getStripeCheckoutDetails(state.funnelId) // Can probably change stripePK to next_public
+            if (error || !stripePK || !stripeAccountId) return (
+                console.error(error)
+            )
+            const promise = await loadStripe(stripePK, { stripeAccount: stripeAccountId });
             setStripePromise(promise);
         };
         loadStripePromise();

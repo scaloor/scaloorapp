@@ -9,6 +9,7 @@ import { SelectProduct } from '@/server/db/schema'
 import { useEffect, useState } from 'react'
 import { getProductsForFunnel } from '@/server/actions/protected/editor/checkout'
 import { useFunnelEditor } from '../../../editor-provider'
+import Link from 'next/link'
 
 
 export default function SelectProductComponent() {
@@ -45,21 +46,32 @@ export default function SelectProductComponent() {
                         <CardTitle>Choose one of your products</CardTitle>
                     </CardHeader>
                     <CardContent className=''>
-                        <Select onValueChange={(value) => setSelectedProductId(value)}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a product" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {products.map((product) => (
-                                    <SelectItem key={product.id} value={product.id.toString()}>{product.name}</SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        <div className='flex justify-end pt-2'>
-                            <Button onClick={initializeCheckout} disabled={!selectedProductId}>
-                                Add to checkout
-                            </Button>
-                        </div>
+                        {products.length === 0 ? (
+                            <div className='flex flex-col items-center justify-center gap-4'>
+                                <p className='text-sm text-muted-foreground'>It seems like you haven&apos;t created any products yet.</p>
+                                <Link href='/products'>
+                                    <Button>Create a product</Button>
+                                </Link>
+                            </div>
+                        ) : (
+                            <>
+                                <Select onValueChange={(value) => setSelectedProductId(value)}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select a product" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {products.map((product) => (
+                                            <SelectItem key={product.id} value={product.id.toString()}>{product.name}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <div className='flex justify-end pt-2'>
+                                    <Button onClick={initializeCheckout} disabled={!selectedProductId}>
+                                        Add to checkout
+                                    </Button>
+                                </div>
+                            </>
+                        )}
                     </CardContent>
                 </Card>
             </div>
