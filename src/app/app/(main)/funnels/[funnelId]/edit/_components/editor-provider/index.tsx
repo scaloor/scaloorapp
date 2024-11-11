@@ -3,9 +3,6 @@ import React, { ReactNode, createContext, useContext, useReducer } from 'react'
 import { SelectPage } from '@/server/db/schema'
 import { JSONContent } from '@tiptap/react'
 
-// Might want to add published
-// Might want to add funnelId
-
 type Styles = {
     backgroundColor: string;
     textColor: string;
@@ -21,6 +18,7 @@ export type PageType = 'landing' | 'upsell' | 'downsell' | 'thank_you';
 
 interface FunnelEditorState {
     funnelId: string;
+    businessId: string;
     pages: SelectPage[];
     styles: Styles;
     deviceType: DeviceTypes;
@@ -89,10 +87,11 @@ const FunnelEditorContext = createContext<{
     dispatch: React.Dispatch<FunnelEditorAction>;
 } | undefined>(undefined)
 
-export function FunnelEditorProvider({ children, initialPages, funnelId, published, checkoutProduct }: { children: ReactNode, initialPages: SelectPage[], funnelId: string, published: boolean, checkoutProduct: string }) {
+export function FunnelEditorProvider({ children, initialPages, funnelId, businessId, published, checkoutProduct }: { children: ReactNode, initialPages: SelectPage[], funnelId: string, businessId: string, published: boolean, checkoutProduct: string }) {
     const [state, dispatch] = useReducer(funnelEditorReducer, {
         pages: initialPages,
         funnelId,
+        businessId,
         styles: {
             backgroundColor: '#ffffff',
             textColor: '#000000',

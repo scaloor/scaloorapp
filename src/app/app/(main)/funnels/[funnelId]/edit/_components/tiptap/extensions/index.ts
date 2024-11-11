@@ -10,7 +10,10 @@ import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Link from '@tiptap/extension-link'
 import { Checkout } from './checkout'
-import { Button } from './button'
+import { ButtonExtension } from './button'
+import ImageExtension from './image'
+import Image from '@tiptap/extension-image'
+import { UploadImagesPlugin } from './image/upload-image'
 
 const starterKit = StarterKit.configure({
   bulletList: {
@@ -30,6 +33,27 @@ const youtube = Youtube.configure({
   nocookie: true,
 })
 
+const tiptapImage = Image.extend({
+  addProseMirrorPlugins() {
+    return [
+      UploadImagesPlugin({
+        imageClass: cn("opacity-40 rounded-lg border border-stone-200"),
+      }),
+    ];
+  },
+}).configure({
+  allowBase64: true,
+  HTMLAttributes: {
+    class: cn("rounded-lg border border-muted"),
+  },
+});
+
+const imageExtension = ImageExtension.configure({
+  HTMLAttributes: {
+    class: cn("rounded-lg border border-muted"),
+  },
+});
+
 const underline = Underline.configure({})
 
 const color = Color.configure({
@@ -46,7 +70,7 @@ const link = Link.configure({})
 
 const checkout = Checkout.configure({})
 
-const button = Button.configure({})
+const buttonExtension = ButtonExtension.configure({})
 
 export const extensions = [
   NodeButtons,
@@ -60,5 +84,7 @@ export const extensions = [
   textAlign,
   link,
   checkout,
-  button, // Add the new Button extension
+  buttonExtension, // Add the new Button extension
+  tiptapImage,
+  imageExtension,
 ]

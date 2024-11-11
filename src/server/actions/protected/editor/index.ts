@@ -20,7 +20,7 @@ export async function loadEditorAction({ funnelId }: { funnelId: string }) {
         }
     }
 
-    return { pages, checkoutProduct: dbFunnel.checkoutProduct, published: dbFunnel.published }
+    return { pages, businessId: dbFunnel.businessId, checkoutProduct: dbFunnel.checkoutProduct, published: dbFunnel.published }
 }
 
 export async function saveFunnelAction({

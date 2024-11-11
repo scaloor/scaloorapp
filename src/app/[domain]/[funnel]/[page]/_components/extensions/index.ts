@@ -8,7 +8,7 @@ import Highlight from '@tiptap/extension-highlight'
 import TextAlign from '@tiptap/extension-text-align'
 import Link from '@tiptap/extension-link'
 import { Checkout } from './checkout'
-import { Button as ButtonExtension } from '@/app/app/(main)/funnels/[funnelId]/edit/_components/tiptap/extensions/button'
+import { ButtonExtension } from '@/app/app/(main)/funnels/[funnelId]/edit/_components/tiptap/extensions/button'
 
 const starterKit = StarterKit.configure({
   bulletList: {

@@ -17,7 +17,7 @@ declare module '@tiptap/core' {
   }
 }
 
-export const Button = Node.create<ButtonOptions>({
+export const ButtonExtension = Node.create<ButtonOptions>({
   name: 'button',
 
   group: 'inline',

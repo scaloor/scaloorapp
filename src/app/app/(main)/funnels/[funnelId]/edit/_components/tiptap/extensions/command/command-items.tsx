@@ -3,9 +3,10 @@
 import { ReactNode } from "react";
 import { Editor, Range } from "@tiptap/react";
 import { Command, renderItems } from ".";
-import { Heading1Icon, Heading2Icon, Heading3Icon, ListIcon, ListOrderedIcon, type LucideIcon, ShoppingCartIcon, Square, TextIcon } from "lucide-react";
+import { Heading1Icon, Heading2Icon, Heading3Icon, ImageIcon, ListIcon, ListOrderedIcon, type LucideIcon, ShoppingCartIcon, Square, TextIcon } from "lucide-react";
 import YoutubeIcon from '@/lib/icons/youtube'
 import Youtube from '@tiptap/extension-youtube'
+import { uploadFn } from "../image/image-upload";
 
 export type EditorCommandItem = {
     title: string;
@@ -64,6 +65,26 @@ const EditorCommandItems = (query: string) => {
             icon: ListOrderedIcon,
             command: ({ editor, range }: { editor: Editor; range: Range }) => {
                 editor.chain().focus().deleteRange(range).toggleOrderedList().run();
+            },
+        },
+        {
+            title: "Image",
+            description: "Upload an image from your computer.",
+            icon: ImageIcon,
+            command: ({ editor, range }: { editor: Editor; range: Range }) => {
+                editor.chain().focus().deleteRange(range).run();
+                // upload image
+                const input = document.createElement("input");
+                input.type = "file";
+                input.accept = "image/*";
+                input.onchange = async () => {
+                    if (input.files?.length) {
+                        const file = input.files[0];
+                        const pos = editor.view.state.selection.from;
+                        uploadFn(file, editor.view, pos);
+                    }
+                };
+                input.click();
             },
         },
         {

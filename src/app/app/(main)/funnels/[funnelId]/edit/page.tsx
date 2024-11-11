@@ -15,7 +15,7 @@ type FunnelEditPageProps = {
 
 export default async function FunnelEditPage({ params }: FunnelEditPageProps) {
   const { funnelId } = params
-  const { pages, checkoutProduct, published, error } = await loadEditorAction({ funnelId })
+  const { pages, businessId, checkoutProduct, published, error } = await loadEditorAction({ funnelId })
   if (error || !pages) {
     return <ErrorPage errorMessage={error || 'Error loading funnel'} />
   }
@@ -25,6 +25,7 @@ export default async function FunnelEditPage({ params }: FunnelEditPageProps) {
       <FunnelEditorProvider
         initialPages={initialPages}
         funnelId={funnelId}
+        businessId={businessId}
         checkoutProduct={checkoutProduct || ''}
         published={published}
       >
