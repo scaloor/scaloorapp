@@ -9,16 +9,22 @@ Scaloor is a unique funnel builder based on the ideaology that building funnels 
 - [Drizzle ORM](https://orm.drizzle.team/) - Typesafe database ORM. Configured in this project for postgres.
 - [Amazon SES](https://aws.amazon.com/ses/) - Email server for developers .
 - [Shadcn/ui](https://ui.shadcn.com/) - Customizable react components.
-- [PlateJS](https://platejs.org/) - Open source rich text editor
+- [Tiptap](https://tiptap.dev/) - Open source rich text editor
 
 ## Roadmap
-- Funnel Creator
-    - [ ] Text based funnel page editor
-    - [ ] Pre-built custom made funnel page components (e.g. checkout)
-    - [ ] GUI for creating funnel pages
-    - [ ] Funnel page templates
+- Funnel Editor
+    [ ] Text based funnel page editor
+    [ ] Pre-built custom made funnel page components (e.g. checkout)
+    [ ] GUI for creating funnel pages
+    [ ] Funnel page templates
 
 - Funnel Analytics
+
+- Digital Product Management
+    [ ] Store digital products
+    [ ] Deliver digital products
+
+- Membership
 
 
 ## Documentation
