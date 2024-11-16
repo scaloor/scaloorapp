@@ -19,6 +19,7 @@ export async function middleware(request: NextRequest) {
   for (const devDomain of developmentDomains) {
     if (hostname.endsWith(devDomain)) {
       hostname = hostname.replace(devDomain, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+      console.log("hostname updated:", hostname)
       break;
     }
   }
