@@ -13,7 +13,8 @@ export async function middleware(request: NextRequest) {
   let hostname = request.headers.get("host")!;
   const developmentDomains = [
     ".localhost:3000",
-    ".scaloorapp-git-mvp02-scaloors-projects.vercel.app" // Replace with your testing environment domain
+    ".scaloorapp-git-mvp02-scaloors-projects.vercel.app", // Replace with your testing environment domain
+    ".scaloorapp-qywwdbprr-scaloors-projects.vercel.app",
   ];
 
   for (const devDomain of developmentDomains) {
@@ -25,6 +26,8 @@ export async function middleware(request: NextRequest) {
   }
 
   console.log("hostname:", hostname)
+
+  console.log("root domain:", process.env.NEXT_PUBLIC_ROOT_DOMAIN)
 
   const searchParams = request.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
