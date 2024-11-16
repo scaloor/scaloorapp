@@ -24,6 +24,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  console.log("hostname:", hostname)
 
   const searchParams = request.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
@@ -31,7 +32,7 @@ export async function middleware(request: NextRequest) {
   // If the path is the app path, rewrite to the app page
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     if (path === "/") {
-      return NextResponse.redirect(new URL("/dashboard", request.url));
+      return NextResponse.redirect(new URL("/app/dashboard", request.url));
     }
     return NextResponse.rewrite(new URL(`/app${path}`, request.url));
   }
