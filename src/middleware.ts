@@ -10,9 +10,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
-  let hostname = request.headers
-    .get("host")!
-    .replace(".localhost:3000", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+  let hostname = request.headers.get("host")!;
+  const developmentDomains = [
+    ".localhost:3000",
+    ".scaloorapp-git-mvp02-scaloors-projects.vercel.app" // Replace with your testing environment domain
+  ];
+
+  for (const devDomain of developmentDomains) {
+    if (hostname.endsWith(devDomain)) {
+      hostname = hostname.replace(devDomain, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+      break;
+    }
+  }
 
 
   const searchParams = request.nextUrl.searchParams.toString();
@@ -30,7 +39,7 @@ export async function middleware(request: NextRequest) {
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
-  
+
   // TODO: What does this do?
   await updateSession(request)
 
