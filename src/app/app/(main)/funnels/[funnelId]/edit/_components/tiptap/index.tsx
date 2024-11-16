@@ -19,6 +19,7 @@ export default function Tiptap({ initialContent, pageId }: TiptapProps) {
 
     const handleUpdate = useCallback(({ editor }: { editor: Editor }) => {
         const json = editor.getJSON();
+        console.log('json', json)
         setEditorContent(json);
     }, []);
 

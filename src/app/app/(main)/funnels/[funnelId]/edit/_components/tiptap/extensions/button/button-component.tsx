@@ -16,19 +16,19 @@ const ButtonComponent: React.FC<NodeViewProps> = ({ node, updateAttributes }) =>
   }
 
   return (
-    <NodeViewWrapper className="react-component-button">
+    <NodeViewWrapper className="react-component-button cursor-pointer">
       <Button
-        className="relative"
+        className="!cursor-pointer"
         contentEditable={false}
         data-type="button"
       >
-        <span className="pointer-events-none">{text}</span>
-        <input
+        <span className="">Test</span>
+        {/* <input
           type="text"
           value={text}
           onChange={handleChange}
-          className="absolute inset-0 w-full h-full opacity-0 cursor-text"
-        />
+          className="absolute inset-0 w-full h-full opacity-0"
+        /> */}
       </Button>
     </NodeViewWrapper>
   )

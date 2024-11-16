@@ -13,6 +13,7 @@ export default function EditorNavigation() {
 
     const handleSaveFunnel = async () => {
         const jsonPages = JSON.stringify(state.pages)
+        console.log(jsonPages[0])
 
         const { success, error } = await saveFunnelAction({
             funnelId: state.funnelId,
