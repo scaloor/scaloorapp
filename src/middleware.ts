@@ -25,10 +25,6 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  console.log("hostname:", hostname)
-
-  console.log("root domain:", process.env.NEXT_PUBLIC_ROOT_DOMAIN)
-
   const searchParams = request.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
@@ -37,6 +33,7 @@ export async function middleware(request: NextRequest) {
     if (path === "/") {
       return NextResponse.redirect(new URL("/app/dashboard", request.url));
     }
+    console.log("rewriting to:", `/app${path}`)
     return NextResponse.rewrite(new URL(`/app${path}`, request.url));
   }
 
@@ -48,9 +45,18 @@ export async function middleware(request: NextRequest) {
   // TODO: What does this do?
   await updateSession(request)
 
+  // Get the first path segment
+  // This is for testing, can probably remove in prod.
+  const firstPath = url.pathname.split('/')[1];
+  console.log("first path segment:", firstPath);
+  if (firstPath === "app") {
+    console.log("rewriting to:", `${hostname}${path}`)
+    return NextResponse.rewrite(new URL(`http://${hostname}${path}`, request.url));
+  }
+
+
   // If the path is a dynamic page, rewrite to the dynamic page
   return NextResponse.rewrite(new URL(`/${hostname}${path}`, request.url));
-
 }
 
 export const config = {
