@@ -20,8 +20,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={cn(inter.className, '')}>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={cn(inter.className)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -32,6 +33,6 @@ export default function RootLayout({
           <Toaster />
         </ThemeProvider>
       </body>
-    </html >
+    </html>
   );
 }

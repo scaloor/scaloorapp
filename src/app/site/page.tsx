@@ -8,7 +8,7 @@ import Waitlist from "./_components/waitlist";
 
 export default async function Home() {
   return (
-    <main className="flex-1">
+    <div className="flex-1">
       <MaxWidthWrapper>
         <Hero />
         <Waitlist />
@@ -16,6 +16,6 @@ export default async function Home() {
         <Features />
         <FAQ />
       </MaxWidthWrapper>
-    </main>
+    </div>
   );
 }

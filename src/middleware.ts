@@ -56,7 +56,7 @@ export async function middleware(request: NextRequest) {
 
 
   // If the path is a dynamic page, rewrite to the dynamic page
-  return NextResponse.rewrite(new URL(`/${hostname}${path}`, request.url));
+  //return NextResponse.rewrite(new URL(`/${hostname}${path}`, request.url));
 }
 
 export const config = {

@@ -15,7 +15,7 @@ export default function CheckoutPage({ }: CheckoutPageProps) {
     useEffect(() => {
         const loadStripePromise = async () => {
             const { stripePK } = await getStripePK() // Can probably change stripePK to next_public
-            const promise = await loadStripe(stripePK, { stripeAccount: 'acct_1Pq0p5PPUP2vo0Tr' });
+            const promise = await loadStripe(stripePK, { stripeAccount: 'acct_1Q7VXmPvCiotYkrr' });
             setStripePromise(promise);
         };
         loadStripePromise();

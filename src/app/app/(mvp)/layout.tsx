@@ -1,11 +1,17 @@
-import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
+import { SidebarProvider, SidebarTrigger } from "@/app/_components/ui/sidebar";
+import { AppSidebar } from "./_components/app-sidebar";
+
 
 export default function MVPLayout({ children }: { children: React.ReactNode }) {
     return (
-        <MaxWidthWrapper>
-            <section>
-                {children}
-            </section>
-        </MaxWidthWrapper>
+        <SidebarProvider>
+            <AppSidebar />
+            <main className="w-full h-full">
+                <SidebarTrigger />
+                <section className="p-4">
+                    {children}
+                </section>
+            </main>
+        </SidebarProvider>
     );
 }

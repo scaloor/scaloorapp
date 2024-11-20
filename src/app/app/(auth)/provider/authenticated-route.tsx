@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 export const getSessionUser = async () => {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser()
     return { user: data?.user, error: error }
 }

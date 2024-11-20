@@ -12,7 +12,7 @@ export async function checkoutAction() {
                 enabled: true,
             },
         }, {
-            stripeAccount: 'acct_1Pq0p5PPUP2vo0Tr'
+            stripeAccount: 'acct_1Q7VXmPvCiotYkrr'
         })
 
         //console.log('paymentIntent', paymentIntent)
@@ -24,6 +24,6 @@ export async function checkoutAction() {
 }
 
 export async function getStripePK() {
-    const stripePK = `${process.env.STRIPE_PUBLIC_KEY}`
+    const stripePK = `${process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY}`
     return { stripePK }
 }

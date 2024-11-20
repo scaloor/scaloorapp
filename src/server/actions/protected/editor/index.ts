@@ -1,6 +1,6 @@
 'use server'
 
-import { PageType } from "@/app/app/(main)/funnels/[funnelId]/edit/_components/editor-provider";
+import { PageType } from "@/app/app/main/funnels/[funnelId]/edit/_components/editor-provider";
 import { getFunnelById, updateFunnelColumns } from "@/server/data/funnels";
 import { addPage, deletePageById, getPageById, getPagesByFunnelId, updatePage } from "@/server/data/page";
 import { SelectPage } from "@/server/db/schema";

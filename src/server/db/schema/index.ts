@@ -6,3 +6,4 @@ export * from "./page";
 export * from "./domain";
 export * from "./product";
 export * from "./email-address";
+export * from "./checkout";
