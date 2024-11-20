@@ -4,18 +4,18 @@ import DynamicPageContent from './_components/dynamic-page-content'
 import { PageProvider } from './_components/page-provider'
 
 type DynamicPageProps = {
-  params: {
+  params: Promise<{
     domain: string
     funnel: string
     page: string
-  }
+  }>
 }
 
 export default async function DynamicPage({ params }: DynamicPageProps) {
-  //const subdomain = params.domain.replace(`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`, '');
+  const { domain, funnel, page } = await params;
 
   // Get the funnel page using the params
-  const { dbPage, checkoutProduct, funnelId, error } = await getDynamicPageAction({ domainName: params.domain, funnelPath: params.funnel, pagePath: params.page })
+  const { dbPage, checkoutProduct, funnelId, error } = await getDynamicPageAction({ domainName: domain, funnelPath: funnel, pagePath: page })
   if (error || !dbPage?.content || !checkoutProduct) {
     return (
       <div>

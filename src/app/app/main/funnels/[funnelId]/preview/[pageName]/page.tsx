@@ -8,14 +8,14 @@ import { PageProvider } from '@/app/[domain]/[funnel]/[page]/_components/page-pr
 import MaxWidthWrapper from '@/app/_components/common/max-width-wrapper'
 
 type PreviewPageProps = {
-    params: {
+    params: Promise<{
         funnelId: string
         pageName: string
-    }
+    }>
 }
 
 export default async function PreviewPage({ params }: PreviewPageProps) {
-    const { funnelId, pageName } = params
+    const { funnelId, pageName } = await params
     const { dbPage, checkoutProduct, error } = await getFunnelPreview(funnelId, pageName)
     if (error || !dbPage?.content || !checkoutProduct) {
         return (

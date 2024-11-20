@@ -3,13 +3,13 @@ import { redirect } from "next/navigation"
 
 
 type PreviewRouteProps = {
-    params: {
+    params: Promise<{
         funnelId: string
-    }
+    }>
 }
 
 export default async function PreviewRoute({ params }: PreviewRouteProps) {
-    const { funnelId } = params
+    const { funnelId } = await params
     const { pathName } = await getFirstPageAction(funnelId)
     redirect(`/funnels/${funnelId}/preview/${pathName}`)
 }

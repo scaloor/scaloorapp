@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { z } from "zod";
 
 export async function resetPassword(data: z.infer<typeof ResetSchema>) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const validation = ResetSchema.safeParse(data)
     if (!validation.success) {

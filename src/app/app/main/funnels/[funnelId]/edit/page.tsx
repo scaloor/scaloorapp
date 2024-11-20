@@ -8,13 +8,13 @@ import { defaultLandingPage } from './_components/editor-provider/defaults'
 import EditorNavigation from './_components/editor-navigation'
 
 type FunnelEditPageProps = {
-  params: {
+  params: Promise<{
     funnelId: string
-  }
+  }>
 }
 
 export default async function FunnelEditPage({ params }: FunnelEditPageProps) {
-  const { funnelId } = params
+  const { funnelId } = await params
   const { pages, businessId, checkoutProduct, published, error } = await loadEditorAction({ funnelId })
   if (error || !pages) {
     return <ErrorPage errorMessage={error || 'Error loading funnel'} />

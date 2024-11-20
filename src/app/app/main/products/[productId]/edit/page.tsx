@@ -4,13 +4,13 @@ import ErrorPage from "@/app/_components/common/error-page";
 import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
 
 type Props = {
-    params: {
+    params: Promise<{
         productId: string
-    }
+    }>
 }
 
 export default async function EditProductPage({ params }: Props) {
-    const { productId } = params;
+    const { productId } = await params;
     const { dbProduct } = await getEditProductAction(productId);
 
     if (!dbProduct) return <ErrorPage errorMessage="Product not found" />

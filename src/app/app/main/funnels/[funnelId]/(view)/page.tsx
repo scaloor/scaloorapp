@@ -4,13 +4,13 @@ import React from 'react'
 import FunnelNameCard from './_components/funnel-name-card'
 
 type FunnelViewPageProps = {
-  params: {
+  params: Promise<{
     funnelId: string
-  }
+  }>
 }
 
 export default async function FunnelSettingsPage({ params }: FunnelViewPageProps) {
-  const { funnelId } = params
+  const { funnelId } = await params
   const { dbFunnel, error } = await getFunnelByIdAction(funnelId)
   if (error) return <ErrorPage errorMessage={error} />
   if (!dbFunnel) return <ErrorPage errorMessage="Funnel not found" />

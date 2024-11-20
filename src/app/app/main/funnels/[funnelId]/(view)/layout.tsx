@@ -10,13 +10,13 @@ import { Button } from '@/app/_components/ui/button'
 
 type FunnelViewLayoutProps = {
     children: React.ReactNode
-    params: {
+    params: Promise<{
         funnelId: string
-    }
+    }>
 }
 
 export default async function FunnelViewLayout({ children, params }: FunnelViewLayoutProps) {
-    const { funnelId } = params
+    const { funnelId } = await params
     const { dbFunnel, dbDomain, error } = await getFunnelByIdAction(funnelId)
     if (error) return <ErrorPage errorMessage={error} />
     if (!dbFunnel) return <ErrorPage errorMessage="Funnel not found" />

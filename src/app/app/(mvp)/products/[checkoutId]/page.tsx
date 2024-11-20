@@ -4,9 +4,9 @@ import CheckoutPreview from './_components/preview'
 import { getCheckoutDetailsAction } from '@/server/actions/protected/checkout'
 
 type CheckoutPageProps = {
-    params: {
+    params: Promise<{
         checkoutId: string
-    }
+    }>
 }
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {

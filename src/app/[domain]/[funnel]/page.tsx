@@ -3,14 +3,14 @@ import { redirect } from "next/navigation"
 
 
 type DynamicFunnelPageProps = {
-    params: {
+    params: Promise<{
       domain: string
       funnel: string
-    }
+    }>
   }
 
 export default async function DynamicFunnelPage({ params }: DynamicFunnelPageProps) {
-    const { domain, funnel } = params
+    const { domain, funnel } = await params
     //console.log('domain', domain)
     const { path, error } = await getDynamicFunnelAction({ domainName: domain, funnelPath: funnel })
     const redirectUrl = `https://${domain}/${path}` //TODO add https
