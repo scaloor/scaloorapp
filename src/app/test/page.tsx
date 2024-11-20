@@ -7,7 +7,7 @@ export default function TestPage() {
         // Function to load script dynamically
         const loadScript = () => {
             const script = document.createElement('script')
-            script.src = 'http://localhost:3000/api/checkout'
+            script.src = `${process.env.NEXT_PUBLIC_ROOT_URL}/api/checkout`
             script.async = true
             document.body.appendChild(script)
         }

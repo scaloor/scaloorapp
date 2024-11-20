@@ -34,6 +34,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // If the path is the root path, rewrite to the site page
+  // This does not account for a custom domain root path, but its not needed yet.
   if (url.pathname === '/' || url.pathname === '/site' && url.host === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
