@@ -7,7 +7,7 @@ import { LoginSchema } from '@/app/app/(auth)/_components/schemas'
 import { z } from 'zod'
 
 export async function login(data: z.infer<typeof LoginSchema>) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const validation = LoginSchema.safeParse(data)
   if (!validation.success) {

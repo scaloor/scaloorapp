@@ -7,7 +7,7 @@ import { z } from "zod";
 
 
 export async function newPassword(data: z.infer<typeof NewPasswordSchema>) {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const validation = NewPasswordSchema.safeParse(data)
     if (!validation.success) {

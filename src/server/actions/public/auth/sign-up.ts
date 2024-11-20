@@ -7,7 +7,7 @@ import { addUser, getUserByEmail } from '@/server/data/users'
 import { capitalizeFirstLetter } from '@/lib/utils'
 
 export async function signup(data: z.infer<typeof RegisterSchema>) {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const validation = RegisterSchema.safeParse(data)
   if (!validation.success) {

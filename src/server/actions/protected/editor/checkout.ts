@@ -47,7 +47,7 @@ export async function checkoutAction({
 export async function getStripeCheckoutDetails(funnelId: string) {
     const { stripeAccountId, error } = await getStripeAccountIdByFunnelId(funnelId)
     if (error || !stripeAccountId) return { error: error || "Cannot find stripe account ID" }
-    return { stripePK: process.env.STRIPE_PUBLIC_KEY!, stripeAccountId: stripeAccountId }
+    return { stripePK: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!, stripeAccountId: stripeAccountId }
 }
 
 

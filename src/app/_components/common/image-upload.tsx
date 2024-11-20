@@ -1,5 +1,5 @@
 'use client';
-import { UploadCloud } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Loading } from "./loading";
@@ -40,11 +40,11 @@ export default function ImageUpload({ form, value, className }: ImageUploadProps
                 {!isLoading && !previewURL && ( // If the image is not loading and there is no image URL, render the dropzone
                     <div className=" text-center">
                         <div className="p-2 rounded-md max-w-min mx-auto text-gray-600">
-                            <UploadCloud size={20} />
+                            <Upload size={20} />
                         </div>
 
                         <p className="mt-2 text-sm text-gray-600">
-                            <span className="font-semibold">Drag files</span>
+                            <span className="font-semibold">Click to upload or drag and drop</span>
                         </p>
                         <p className="text-xs text-gray-500">
                             Click to upload files &#40;files should be under 10 MB &#41;

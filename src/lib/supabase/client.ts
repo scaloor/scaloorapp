@@ -9,8 +9,7 @@ export function createClient() {
 
 export async function uploadFile(file: File, path: string) {
   const supabase = createClient();
-  console.log(supabase.storage)
-  const { data, error } = await supabase.storage.from('scaloor-bucket').upload(`${path}/${file.name}`, file)
+  const { data, error } = await supabase.storage.from('scaloor-bucket').upload(`${path}`, file)
   return { data, error }
 }
 

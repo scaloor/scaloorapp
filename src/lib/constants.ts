@@ -17,3 +17,5 @@ export const BLACKLISTED_DOMAINS = [
 export const validDomainRegex = new RegExp(
     /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/,
   );
+
+export const SCALOOR_BUCKET = `${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL}/scaloor-bucket`
