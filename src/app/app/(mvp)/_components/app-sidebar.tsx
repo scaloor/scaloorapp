@@ -1,4 +1,5 @@
 "use client"
+import { Button } from "@/app/_components/ui/button"
 import {
     Sidebar,
     SidebarContent,
@@ -11,6 +12,7 @@ import {
     SidebarGroupLabel,
     SidebarHeader,
 } from "@/app/_components/ui/sidebar"
+import { signOut } from "@/server/actions/public/auth/sign-out"
 import { Calendar, Home, Inbox, PackageSearch, Search, Settings } from "lucide-react"
 
 
@@ -55,6 +57,13 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenuButton asChild>
+                    <Button onClick={() => signOut()}>
+                        Log out
+                    </Button>
+                </SidebarMenuButton>
+            </SidebarFooter>
         </Sidebar>
     )
 }
