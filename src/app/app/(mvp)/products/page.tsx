@@ -22,10 +22,10 @@ export default async function ProductPage() {
         </Link>
       </div>
       <div className="w-full h-px bg-gray-200 mb-4"></div>
-      {/* <DataTable
+      <DataTable
         columns={columns}
         data={dbCheckouts || []}
-      /> */}
+      />
     </div >
   );
 }
