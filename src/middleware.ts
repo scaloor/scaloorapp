@@ -14,7 +14,6 @@ export async function middleware(request: NextRequest) {
   const developmentDomains = [
     ".localhost:3000",
     ".scaloorapp-git-mvp02-scaloors-projects.vercel.app", // Replace with your testing environment domain
-    ".scaloorapp-qywwdbprr-scaloors-projects.vercel.app",
   ];
 
   for (const devDomain of developmentDomains) {
@@ -30,9 +29,6 @@ export async function middleware(request: NextRequest) {
 
   // If the path is the app path, rewrite to the app page
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    if (path === "/") {
-      return NextResponse.redirect(new URL("/app/dashboard", request.url));
-    }
     console.log("rewriting to:", `/app${path}`)
     return NextResponse.rewrite(new URL(`/app${path}`, request.url));
   }
