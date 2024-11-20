@@ -4,7 +4,6 @@ import { DataTable } from "@/app/_components/ui/data-table";
 import { columns } from "./checkout-columns";
 import { getCheckoutsByBusinessIdAction } from "@/server/actions/protected/checkout";
 import { getAuthUserDetails } from "@/server/actions/protected/users";
-import MaxWidthWrapper from "@/app/_components/common/max-width-wrapper";
 
 export default async function ProductPage() {
   const { dbUser } = await getAuthUserDetails();
@@ -23,10 +22,10 @@ export default async function ProductPage() {
         </Link>
       </div>
       <div className="w-full h-px bg-gray-200 mb-4"></div>
-      <DataTable
+      {/* <DataTable
         columns={columns}
         data={dbCheckouts || []}
-      />
+      /> */}
     </div >
   );
 }
