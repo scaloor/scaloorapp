@@ -47,7 +47,7 @@ export default function CheckoutPreview({ stripeAccountId, dbCheckout }: Checkou
     }, [])
 
     return (
-        <div className='flex flex-col w-full h-full justify-center items-center'>
+        <div className='flex flex-col w-1/2 h-full justify-center items-center'>
             <p className='mb-6'>Checkout Preview</p>
             <Card className='w-full'>
                 <CardContent>

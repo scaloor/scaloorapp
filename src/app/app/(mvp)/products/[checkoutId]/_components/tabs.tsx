@@ -6,6 +6,7 @@ import CheckoutExport from "./export"
 import CheckoutView from "./view"
 import { SelectCheckout } from "@/server/db/schema"
 import CheckoutAnalytics from "./analytics"
+import { ScrollArea } from "@/app/_components/ui/scroll-area"
 
 type CheckoutTabsProps = {
     checkout: SelectCheckout
@@ -13,7 +14,7 @@ type CheckoutTabsProps = {
 
 export default function CheckoutTabs({ checkout }: CheckoutTabsProps) {
     return (
-        <Tabs defaultValue="view" className="w-full">
+        <Tabs defaultValue="view" className="w-1/2">
             <TabsList className="w-full grid grid-cols-3">
                 <TabsTrigger value="view" className="w-full">View</TabsTrigger>
                 <TabsTrigger value="export" className="w-full">Export</TabsTrigger>
@@ -49,6 +50,7 @@ export default function CheckoutTabs({ checkout }: CheckoutTabsProps) {
                     <CheckoutAnalytics />
                 </motion.div>
             </TabsContent>
-        </Tabs>
+
+        </Tabs >
     )
 }

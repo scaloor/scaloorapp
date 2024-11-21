@@ -20,7 +20,7 @@ export const checkout = pgTable("checkout", {
     productFile: text("product_file").notNull(),
     stripeProductId: text("stripe_product_id"),
     customerName: boolean("customer_name"),
-    customerEmail: boolean("customer_email"),    
+    customerEmail: boolean("customer_email").default(true),    
     customerPhone: boolean("customer_phone"),
     customerAddress: boolean("customer_address"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
