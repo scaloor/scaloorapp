@@ -2,6 +2,20 @@ import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { NextResponse } from "next/server";
 
+const unprotectedRoutes = [
+  "/callback",
+  "/confirm",
+  "/login",
+  "/new-password",
+  "/register",
+  "/reset-password",
+]
+
+const developmentDomains = [
+  ".localhost:3000",
+  ".scaloorapp-git-mvp02-scaloors-projects.vercel.app", // Replace with your testing environment domain
+];
+
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl
 
@@ -10,11 +24,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next()
   }
 
+  const supaResponse = await updateSession(request)
+
   let hostname = request.headers.get("host")!;
-  const developmentDomains = [
-    ".localhost:3000",
-    ".scaloorapp-git-mvp02-scaloors-projects.vercel.app", // Replace with your testing environment domain
-  ];
 
   for (const devDomain of developmentDomains) {
     if (hostname.endsWith(devDomain)) {
@@ -29,8 +41,26 @@ export async function middleware(request: NextRequest) {
 
   // If the path is the app path, rewrite to the app page
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    console.log("rewriting to:", `/app${path}`)
-    return NextResponse.rewrite(new URL(`/app${path}`, request.url));
+    // If logged in and viewing a non-auth route, rewrite to app
+    if (!unprotectedRoutes.includes(request.nextUrl.pathname) && !supaResponse?.user.error) {
+      //console.log("Logged in, non-auth route")
+      return NextResponse.rewrite(new URL(`/app${path}`, request.url));
+    }
+    // If not logged in and viewing an auth route, rewrite to app
+    if (unprotectedRoutes.includes(request.nextUrl.pathname) && supaResponse?.user.error) {
+      //console.log("Not logged in, auth route")
+      return NextResponse.rewrite(new URL(`/app${path}`, request.url));
+    }
+    // If logged in and viewing an auth route, rewrite to root
+    if (unprotectedRoutes.includes(request.nextUrl.pathname) && !supaResponse?.user.error) {
+      //console.log("Logged in, auth route")
+      return NextResponse.redirect(new URL(`/`, request.url));
+    }
+    // If not logged in and viewing a non-auth route, rewrite to login
+    if (!unprotectedRoutes.includes(request.nextUrl.pathname) && supaResponse?.user.error) {
+      //console.log("Not logged in, non-auth route")
+      return NextResponse.redirect(new URL(`/login`, request.url));
+    }
   }
 
   // If the path is the root path, rewrite to the site page
@@ -40,7 +70,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // TODO: What does this do?
-  await updateSession(request)
+
 
   // Get the first path segment
   // This is for testing, can probably remove in prod.

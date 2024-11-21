@@ -16,7 +16,7 @@ export default function TestPage() {
 
         // Cleanup function to remove script when component unmounts
         return () => {
-            const script = document.querySelector('script[src="http://localhost:3000/api/checkout"]')
+            const script = document.querySelector(`script[src="${process.env.NEXT_PUBLIC_ROOT_URL}/api/checkout"]`)
             if (script) {
                 document.body.removeChild(script)
             }
