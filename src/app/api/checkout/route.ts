@@ -1,3 +1,4 @@
+import { stripe } from "@/lib/stripe"
 import { buildCheckoutHtml } from "@/server/actions/public/checkout"
 
 
@@ -7,6 +8,12 @@ export async function GET() {
     console.log('HTML:', html)
     const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
     console.log('Stripe key:', stripeKey)
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: 1000,
+        currency: 'usd',
+        automatic_payment_methods: { enabled: true },
+    })
+    console.log('Client secret:', paymentIntent.client_secret)
 
     // Create a script that will inject the HTML into the page
     const script = `
@@ -36,9 +43,12 @@ export async function GET() {
         }
 
         // Initialize Stripe Elements
-        const elements = stripe.elements();
-        const cardElement = elements.create('card');
-        cardElement.mount('#payment-element'); // Mount Stripe's Card Element
+        const elements = stripe.elements({clientSecret: '${paymentIntent.client_secret}'});
+        //const cardElement = elements.create('card');
+        //cardElement.mount('#payment-element'); // Mount Stripe's Card Element
+        
+        const paymentElement = elements.create('payment', {layout: 'tabs'});
+        paymentElement.mount('#payment-element'); // Mount Stripe's Card Element
 
         // Add submit event listener
         const form = document.getElementById('payment-form');
