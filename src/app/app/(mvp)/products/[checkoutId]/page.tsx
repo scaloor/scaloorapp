@@ -2,6 +2,7 @@ import React, { use } from 'react'
 import CheckoutTabs from './_components/tabs'
 import CheckoutPreview from './_components/preview'
 import { getCheckoutDetailsAction } from '@/server/actions/protected/checkout'
+import { CheckoutProvider } from './_components/checkout-provider'
 
 type CheckoutPageProps = {
     params: Promise<{
@@ -18,8 +19,10 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
 
     return (
         <div className='flex justify-between mt-4 gap-4'>
-            <CheckoutTabs checkout={dbCheckout} />
-            <CheckoutPreview stripeAccountId={dbBusiness?.stripeAccountId} dbCheckout={dbCheckout} />
+            <CheckoutProvider initialCheckout={dbCheckout}>
+                <CheckoutTabs dbCheckout={dbCheckout} />
+                <CheckoutPreview stripeAccountId={dbBusiness?.stripeAccountId} dbCheckout={dbCheckout} />
+            </CheckoutProvider>
         </div>
     )
 }

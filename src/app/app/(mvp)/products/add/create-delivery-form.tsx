@@ -22,6 +22,7 @@ import { addCheckoutAction } from '@/server/actions/protected/checkout/add';
 import { scaloorId } from '@/server/db/schema/defaults';
 import { uploadFile } from '@/lib/supabase/client';
 import { FormError } from '@/app/_components/common/form-error';
+import FileUpload from '@/app/_components/common/file-upload';
 
 type CreateDeliveryFormProps = {
     businessId: string;
@@ -36,6 +37,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
     });
     const [useSamePhoto, setUseSamePhoto] = useState(true)
     const [showDescription, setShowDescription] = useState(false)
+    const [checkoutType, setCheckoutType] = useState("embedded")
 
     const onSubmit = async (formData: z.infer<typeof CreateCheckoutSchema>) => {
         startTransition(async () => {
@@ -44,7 +46,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
             const checkoutId = scaloorId("chk")
             console.log("thumbnail", !!productImage)
             const uploadPromises = [
-                uploadFile(file, `business/${businessId}/checkout/product/${checkoutId}`)
+                uploadFile(file, `business/${businessId}/checkout/product/${file.name}`)
             ];
             if (!!productImage) {
                 uploadPromises.push(
@@ -212,40 +214,32 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
                                     <FormMessage />
                                 </FormItem>
                             )} />
-
-                        {/* <div className="space-y-3">
+                        {/* 
+                        // Need to add hosted option
+                        <div className="space-y-3">
                             <Label>Lesson category</Label>
                             <RadioGroup
-                                defaultValue="video"
-                                onValueChange={setLessonType}
+                                defaultValue="embedded"
+                                onValueChange={setCheckoutType}
                                 className="grid grid-cols-3 gap-4"
                             >
                                 <Label
-                                    htmlFor="video"
-                                    className={`flex flex-col items-center justify-center rounded-md border-2 p-4 cursor-pointer ${lessonType === "video" ? "border-primary" : "border-muted"
+                                    htmlFor="embedded"
+                                    className={`flex flex-col items-center justify-center rounded-md border-2 p-4 cursor-pointer ${checkoutType === "embedded" ? "border-primary" : "border-muted"
                                         }`}
                                 >
                                     <RadioGroupItem value="video" id="video" className="sr-only" />
                                     <MonitorPlay className="mb-2 h-6 w-6" />
-                                    Video
+                                    Embedded
                                 </Label>
                                 <Label
-                                    htmlFor="youtube"
-                                    className={`flex flex-col items-center justify-center rounded-md border-2 p-4 cursor-pointer ${lessonType === "youtube" ? "border-primary" : "border-muted"
+                                    htmlFor="hosted"
+                                    className={`flex flex-col items-center justify-center rounded-md border-2 p-4 cursor-pointer ${checkoutType === "hosted" ? "border-primary" : "border-muted"
                                         }`}
                                 >
                                     <RadioGroupItem value="youtube" id="youtube" className="sr-only" />
                                     <Youtube className="mb-2 h-6 w-6" />
-                                    YouTube
-                                </Label>
-                                <Label
-                                    htmlFor="immersive"
-                                    className={`flex flex-col items-center justify-center rounded-md border-2 p-4 cursor-pointer ${lessonType === "immersive" ? "border-primary" : "border-muted"
-                                        }`}
-                                >
-                                    <RadioGroupItem value="immersive" id="immersive" className="sr-only" />
-                                    <Camera className="mb-2 h-6 w-6" />
-                                    Immersive
+                                    Hosted
                                 </Label>
                             </RadioGroup>
                         </div> */}
@@ -277,7 +271,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
                                             <FormItem className="w-full">
                                                 <FormLabel className="text-left">Product Image</FormLabel>
                                                 <FormControl className="w-full">
-                                                    <ImageUpload form={form} value="productImage" />
+                                                    <FileUpload form={form} value="productImage" accept="IMAGE" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -294,7 +288,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
                                     <FormItem className="w-full">
                                         <FormLabel className="text-left">Product File</FormLabel>
                                         <FormControl className="w-full">
-                                            <ImageUpload form={form} value="file" />
+                                            <FileUpload form={form} value="file" accept="DOCUMENT" />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>

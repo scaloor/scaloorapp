@@ -39,6 +39,9 @@ export async function middleware(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams.toString();
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""}`;
 
+  //Middleware does not account for accessing the app directly from /app
+  //TODO: Fix this
+
   // If the path is the app path, rewrite to the app page
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     // If logged in and viewing a non-auth route, rewrite to app
