@@ -68,7 +68,7 @@ export async function GET() {
             clientSecret: '${paymentIntent.client_secret}',
             elements,
             confirmParams: {
-              return_url: '${process.env.NEXT_PUBLIC_URL}/test/success',
+              return_url: 'https://scaloor.com/test/success',
             },
           })
 
