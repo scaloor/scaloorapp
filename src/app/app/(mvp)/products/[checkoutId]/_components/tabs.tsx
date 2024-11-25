@@ -9,10 +9,10 @@ import CheckoutAnalytics from "./analytics"
 import { ScrollArea } from "@/app/_components/ui/scroll-area"
 
 type CheckoutTabsProps = {
-    checkout: SelectCheckout
+    dbCheckout: SelectCheckout
 }
 
-export default function CheckoutTabs({ checkout }: CheckoutTabsProps) {
+export default function CheckoutTabs({ dbCheckout }: CheckoutTabsProps) {
     return (
         <Tabs defaultValue="view" className="w-1/2">
             <TabsList className="w-full grid grid-cols-3">
@@ -27,7 +27,7 @@ export default function CheckoutTabs({ checkout }: CheckoutTabsProps) {
                     exit={{ x: 20, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <CheckoutView checkout={checkout} />
+                    <CheckoutView dbCheckout={dbCheckout} />
                 </motion.div>
             </TabsContent>
             <TabsContent value="export">

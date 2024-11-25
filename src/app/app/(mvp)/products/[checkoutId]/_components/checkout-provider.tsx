@@ -7,6 +7,8 @@ import type { SelectCheckout } from '@/server/db/schema/checkout'
 type CheckoutContextType = {
     // State
     checkout: SelectCheckout
+    thumbnailFile: File | null
+    productFile: File | null
     // General update
     updateCheckout: (updates: Partial<SelectCheckout>) => void
     // Customer field toggles
@@ -18,8 +20,8 @@ type CheckoutContextType = {
     updateName: (name: string) => void
     updateDescription: (description: string | null) => void
     updatePrice: (price: number) => void
-    updateThumbnail: (thumbnail: string | null) => void
-    updateProductFile: (file: string) => void
+    updateThumbnail: (thumbnail: string | null, file?: File | null) => void
+    updateProductFile: (filePath: string, file?: File | null) => void
 }
 
 
@@ -48,6 +50,8 @@ interface CheckoutProviderProps {
 
 export function CheckoutProvider({ initialCheckout, children }: CheckoutProviderProps) {
     const [checkout, setCheckout] = useState<SelectCheckout>(initialCheckout)
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null)
+    const [productFile, setProductFile] = useState<File | null>(null)
 
     const updateCheckout = useCallback((updates: Partial<SelectCheckout>) => {
         setCheckout(prev => ({ ...prev, ...updates }))
@@ -83,20 +87,28 @@ export function CheckoutProvider({ initialCheckout, children }: CheckoutProvider
         setCheckout(prev => ({ ...prev, productPrice: price }))
     }, [])
 
-    const updateThumbnail = useCallback((thumbnail: string | null) => {
+    const updateThumbnail = useCallback((thumbnail: string | null, file?: File | null) => {
         setCheckout(prev => ({ ...prev, thumbnail }))
+        if (file !== undefined) {
+            setThumbnailFile(file)
+        }
     }, [])
 
 
 
-    const updateProductFile = useCallback((file: string) => {
-        setCheckout(prev => ({ ...prev, productFile: file }))
+    const updateProductFile = useCallback((filePath: string, file?: File | null) => {
+        setCheckout(prev => ({ ...prev, productFile: filePath }))
+        if (file !== undefined) {
+            setProductFile(file)
+        }
     }, [])
 
 
 
     const value = {
         checkout,
+        thumbnailFile,
+        productFile,
         updateCheckout,
         toggleCustomerName,
         toggleCustomerEmail,

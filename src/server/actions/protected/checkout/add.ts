@@ -3,7 +3,7 @@
 import { InsertCheckout } from "@/server/db/schema";
 import { z } from "zod";
 import { getAuthUserDetails } from "../users";
-import { createStripeProduct } from "../../stripe/create-product";
+import { createStripeProduct } from "../../stripe/product";
 import { addCheckout } from "@/server/data/checkout";
 import { getBusinessById } from "@/server/data/business";
 

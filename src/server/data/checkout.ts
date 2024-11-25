@@ -33,3 +33,21 @@ export async function getCheckoutsByBusinessId(businessId: string) {
         return { error: error.message }
     }
 }
+
+export async function updateCheckout(checkoutId: string, updates: Partial<InsertCheckout>) {
+    try {
+        console.log("updates", updates)
+        const dbCheckout = await db
+            .update(checkout)
+            .set(updates)
+            .where(eq(checkout.id, checkoutId))
+            .returning()
+            .then(res => res[0]);
+            
+        return { dbCheckout };
+    } catch (error: any) {
+        console.log(error);
+        return { error: error.message };
+    }
+}
+

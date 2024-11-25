@@ -14,9 +14,10 @@ type FileUploadProps = {
     className?: string
     accept?: "DOCUMENT" | "IMAGE"
     initialURL?: string
+    onFileChange?: (path: string, file: File | null) => void
 }
 
-export default function FileUpload({ form, value, className, accept = "IMAGE", initialURL }: FileUploadProps) {
+export default function FileUpload({ form, value, className, accept = "IMAGE", initialURL, onFileChange }: FileUploadProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [previewURL, setPreviewURL] = useState<string | undefined>(
         initialURL
@@ -28,21 +29,23 @@ export default function FileUpload({ form, value, className, accept = "IMAGE", i
 
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         setIsLoading(true);
-        form?.setValue(`${value}`, acceptedFiles[0]); // If there is a form, set the value of the form field to the uploaded file
+        form?.setValue(`${value}`, acceptedFiles[0]);
         if (accept === "IMAGE") {
-            setPreviewURL(URL.createObjectURL(acceptedFiles[0])); // Set the image URL to the URL of the uploaded file
-        } else {
-            setPreviewURL(acceptedFiles[0].name); // Set the image URL to the URL of the uploaded file
+            const url = URL.createObjectURL(acceptedFiles[0]);
+            setPreviewURL(url);
+            onFileChange?.(url, acceptedFiles[0]);
+        } else if (accept === "DOCUMENT") {
+            setPreviewURL(acceptedFiles[0].name);
+            onFileChange?.(acceptedFiles[0].name, acceptedFiles[0]);
         }
         setIsLoading(false);
-    }, []);
+    }, [form, value, accept, onFileChange]);
 
     const removeImage = () => {
         setPreviewURL(undefined);
         setIsLoading(false);
+        onFileChange?.("", null);
     }
-
-    console.log("previewURL", previewURL);
 
     const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
