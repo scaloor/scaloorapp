@@ -5,15 +5,14 @@ import { buildCheckoutHtml } from "@/server/actions/public/checkout"
 export async function GET() {
     // Create the HTML content with a button wrapped in a div
     const html = await buildCheckoutHtml()
-    console.log('HTML:', html)
     const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
-    console.log('Stripe key:', stripeKey)
     const paymentIntent = await stripe.paymentIntents.create({
         amount: 1000,
         currency: 'usd',
         automatic_payment_methods: { enabled: true },
     })
     console.log('Client secret:', paymentIntent.client_secret)
+    console.log(`${process.env.NEXT_PUBLIC_ROOT_URL}/test/success`)
 
     // Create a script that will inject the HTML into the page
     const script = `
@@ -47,8 +46,8 @@ export async function GET() {
         //const cardElement = elements.create('card');
         //cardElement.mount('#payment-element'); // Mount Stripe's Card Element
         
-        const paymentElement = elements.create('payment', {layout: 'tabs'});
-        paymentElement.mount('#payment-element'); // Mount Stripe's Card Element
+        const paymentElement = elements.create('payment');
+        paymentElement.mount('#payment-element'); // Mount Stripe's Payment Element
 
         // Add submit event listener
         const form = document.getElementById('payment-form');
@@ -58,11 +57,20 @@ export async function GET() {
           console.log('Form submitted!'); // Placeholder log
 
           // You can handle payment processing here
-          /*
-          const { error, paymentMethod } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-          });
+
+          const {error: submitError} = await elements.submit();
+          if (submitError) {
+            //handleError(submitError);
+            return;
+          }
+          
+          const { error } = await stripe.confirmPayment({
+            clientSecret: '${paymentIntent.client_secret}',
+            elements,
+            confirmParams: {
+              return_url: '${process.env.NEXT_PUBLIC_URL}/test/success',
+            },
+          })
 
 
           if (error) {
@@ -70,7 +78,7 @@ export async function GET() {
           } else {
             console.log('Payment method created successfully:', paymentMethod);
           }
-          */
+          
         });
       }
 
