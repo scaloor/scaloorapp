@@ -1,5 +1,4 @@
-
-import { readFileSync } from 'fs'
+import 'server-only'
 
 
 export async function buildCheckoutHtml() {
