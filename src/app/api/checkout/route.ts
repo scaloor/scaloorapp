@@ -4,7 +4,9 @@ import { buildCheckoutHtml } from "@/server/actions/public/checkout"
 export async function GET() {
     // Create the HTML content with a button wrapped in a div
     const html = await buildCheckoutHtml()
+    console.log('HTML:', html)
     const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
+    console.log('Stripe key:', stripeKey)
 
     // Create a script that will inject the HTML into the page
     const script = `
