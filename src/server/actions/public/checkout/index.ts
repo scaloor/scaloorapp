@@ -1,16 +1,22 @@
 import 'server-only'
+import { getCheckoutById } from '@/server/data/checkout'
+import { SCALOOR_BUCKET } from '@/lib/constants'
 
-
-export async function buildCheckoutHtml() {
+export async function buildCheckoutHtml(checkoutId: string) {
+    const { dbCheckout } = await getCheckoutById(checkoutId)
+    if (!dbCheckout) {
+        return new Response('Checkout not found', { status: 404 })
+    }
+    console.log(dbCheckout)
     const html = `
     <!-- <script src="https://js.stripe.com/v3/"></script> -->
 <section>
     <form id="payment-form" class="checkout-form">
         <!-- Product Information -->
         <div>
-            <h2 id="product-name">Product Name</h2>
-            <p id="product-price">$40.00</p>
-            <img src="https://eewvmilsxsdrbeekjzwn.supabase.co/storage/v1/object/public/scaloor-bucket/business/bus_ug5cz5vymkqqdnqcbi4m5mw5/checkout/thumbnail/chk_juax48jb982320z7lu1kunjk.png"
+            <h2 id="product-name">${dbCheckout.productName}</h2>
+            <p id="product-price">$${dbCheckout.productPrice}</p>
+            <img src="${SCALOOR_BUCKET}/${dbCheckout.thumbnail}"
                 alt="Product Name" width="200" height="200" class="product-image">
         </div>
 
@@ -21,10 +27,10 @@ export async function buildCheckoutHtml() {
 
         <!-- Customer Information -->
         <div class="input-group">
-            <input type="text" placeholder="Name" class="input">
-            <input type="email" placeholder="Email" class="input">
-            <input type="tel" placeholder="Phone" class="input">
-            <input type="text" placeholder="Address" class="input">
+            ${dbCheckout.customerName ? `<input type="text" placeholder="Name" class="input">` : ''}
+            ${dbCheckout.customerEmail ? `<input type="email" placeholder="Email" class="input">` : ''}
+            ${dbCheckout.customerPhone ? `<input type="tel" placeholder="Phone" class="input">` : ''}
+            ${dbCheckout.customerAddress ? `<input type="text" placeholder="Address" class="input">` : ''}
         </div>
 
         <!-- Placeholder for payment element -->

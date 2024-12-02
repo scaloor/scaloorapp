@@ -1,14 +1,9 @@
 'use client'
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react'
-import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { z } from "zod";
 import { Card, CardTitle, CardHeader, CardDescription, CardContent } from '@/app/_components/ui/card'
 import { SelectCheckout } from '@/server/db/schema';
 import { Input } from "@/app/_components/ui/input";
-import Image from 'next/image';
 import FileUpload from '@/app/_components/common/file-upload';
 import { Textarea } from '@/app/_components/ui/textarea';
 import { Switch } from '@/app/_components/ui/switch';
@@ -30,19 +25,20 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
   const filename = checkoutStore.checkout.productFile.split("/").pop();
 
   const deleteCheckout = async () => {
-    const result = await deleteFile(`business/bus_ug5cz5vymkqqdnqcbi4m5mw5/checkout/thumbnail/chk_juax48jb982320z7lu1kunjk.png`)
+    // TODO
+    // This should be a dialog and delete from stripe also
+    toast.success("Checkout deleted successfully");
+    router.push(`/products`);
   }
 
   const saveCheckout = async () => {
-    console.log("CheckoutStore:", checkoutStore)
-
     const uploadPromises = [];
     const deletePromises = [];
 
     // Handle upload operations
-    if (checkoutStore.thumbnailFile) { 
+    if (checkoutStore.thumbnailFile) {
       uploadPromises.push(
-        uploadFile(checkoutStore.thumbnailFile, `business/${checkoutStore.checkout.businessId}/checkout/thumbnail/${checkoutStore.checkout.id}`)
+        uploadFile(checkoutStore.thumbnailFile, `business/${checkoutStore.checkout.businessId}/checkout/thumbnail/${checkoutStore.checkout.id}/${checkoutStore.thumbnailFile.name}`)
       );
       if (dbCheckout.thumbnail) {
         deletePromises.push(deleteFile(dbCheckout.thumbnail))
@@ -51,7 +47,7 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
 
     if (checkoutStore.productFile) {
       uploadPromises.push(
-        uploadFile(checkoutStore.productFile, `business/${checkoutStore.checkout.businessId}/checkout/product/${checkoutStore.productFile.name}`)
+        uploadFile(checkoutStore.productFile, `business/${checkoutStore.checkout.businessId}/checkout/product/${checkoutStore.checkout.id}/${checkoutStore.productFile.name}`)
       );
       deletePromises.push(deleteFile(dbCheckout.productFile))
     }
@@ -75,12 +71,14 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
       // Update paths in store
       if (checkoutStore.thumbnailFile) {
         const thumbnailPath = uploadResults[0]!.data!.path;
-        checkoutStore.updateThumbnail(thumbnailPath, checkoutStore.thumbnailFile);
+        checkoutStore.updateThumbnailPath(thumbnailPath);
+        checkoutStore.updateThumbnailFile(null); // Clear the file after upload
       }
 
       if (checkoutStore.productFile) {
         const productFilePath = uploadResults[uploadResults.length - 1]!.data!.path;
-        checkoutStore.updateProductFile(productFilePath, checkoutStore.productFile);
+        checkoutStore.updateProductFilePath(productFilePath);
+        checkoutStore.updateProductFile(null); // Clear the file after upload
       }
 
       // Update the checkout record
@@ -109,8 +107,13 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
             View your checkout.
           </CardDescription>
         </div>
-        <Button onClick={deleteCheckout}>Delete</Button>
-        <Button onClick={saveCheckout}>Save</Button>
+        <div className="flex gap-2">
+          <Button onClick={() => {
+            console.log("CheckoutStore:", checkoutStore)
+          }}>Check Store</Button>
+          <Button onClick={deleteCheckout}>Delete</Button>
+          <Button onClick={saveCheckout}>Save</Button>
+        </div>
       </CardHeader>
 
       <CardContent className="space-y-6">
@@ -200,7 +203,9 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
           initialURL={filename}
           accept='DOCUMENT'
           onFileChange={(path: string, file: File | null) => {
-            checkoutStore.updateProductFile(path, file)
+            if (file) {
+              checkoutStore.updateProductFile(file);
+            }
           }}
         />
 
@@ -210,7 +215,9 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
           initialURL={thumbnail}
           accept='IMAGE'
           onFileChange={(path: string, file: File | null) => {
-            checkoutStore.updateThumbnail(path, file)
+            if (file) {
+              checkoutStore.updateThumbnailFile(file);
+            }
           }}
         />
 
