@@ -31,7 +31,6 @@ export async function middleware(request: NextRequest) {
   for (const devDomain of developmentDomains) {
     if (hostname.endsWith(devDomain)) {
       hostname = hostname.replace(devDomain, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
-      console.log("hostname updated:", hostname)
       break;
     }
   }
@@ -78,9 +77,7 @@ export async function middleware(request: NextRequest) {
   // Get the first path segment
   // This is for testing, can probably remove in prod.
   const firstPath = url.pathname.split('/')[1];
-  console.log("first path segment:", firstPath);
   if (firstPath === "app") {
-    console.log("rewriting to:", `${hostname}${path}`)
     return NextResponse.rewrite(new URL(`http://${hostname}${path}`, request.url));
   }
 

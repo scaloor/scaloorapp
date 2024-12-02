@@ -39,7 +39,7 @@ export default function CheckoutForm({ dbCheckout }: CheckoutFormProps) {
         >
             <div>
                 <h2>{checkoutStore.checkout.productName}</h2>
-                <p>{formatPriceToString(checkoutStore.checkout.productPrice * 100)}</p>
+                <p>{formatPriceToString(checkoutStore.checkout.productPrice)}</p>
                 {checkoutStore.checkout.thumbnail && (
                     <Image 
                         src={checkoutStore.thumbnailFile ? URL.createObjectURL(checkoutStore.thumbnailFile) : `${SCALOOR_BUCKET}/${dbCheckout.thumbnail}`} 

@@ -2,17 +2,23 @@ import { stripe } from "@/lib/stripe"
 import { buildCheckoutHtml } from "@/server/actions/public/checkout"
 
 
-export async function GET() {
+export async function GET(request: Request) {
+    // Get the checkoutId from the URL
+    const url = new URL(request.url)
+    const checkoutId = url.searchParams.get('checkoutId')
+
+    if (!checkoutId) {
+        return new Response('Checkout ID is required', { status: 400 })
+    }
+
     // Create the HTML content with a button wrapped in a div
-    const html = await buildCheckoutHtml()
+    const html = await buildCheckoutHtml(checkoutId)
     const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY
     const paymentIntent = await stripe.paymentIntents.create({
         amount: 1000,
         currency: 'usd',
         automatic_payment_methods: { enabled: true },
     })
-    console.log('Client secret:', paymentIntent.client_secret)
-    console.log(`${process.env.NEXT_PUBLIC_ROOT_URL}/test/success`)
 
     // Create a script that will inject the HTML into the page
     const script = `

@@ -46,11 +46,11 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
             const checkoutId = scaloorId("chk")
             console.log("thumbnail", !!productImage)
             const uploadPromises = [
-                uploadFile(file, `business/${businessId}/checkout/product/${file.name}`)
+                uploadFile(file, `business/${businessId}/checkout/product/${checkoutId}/${file.name}`)
             ];
             if (!!productImage) {
                 uploadPromises.push(
-                    uploadFile(productImage, `business/${businessId}/checkout/thumbnail/${checkoutId}`)
+                    uploadFile(productImage, `business/${businessId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
                 );
             }
             const results = await Promise.all(uploadPromises);

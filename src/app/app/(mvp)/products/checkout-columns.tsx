@@ -10,26 +10,33 @@ import { SelectCheckout } from "@/server/db/schema"
 import { toast } from "sonner"
 import { parseISO, format } from 'date-fns'
 import { deleteFile } from "@/lib/supabase/client"
+import { deleteCheckoutByIdAction } from "@/server/actions/protected/checkout/delete"
 
 function formatDate(dateString: string) {
     const date = parseISO(dateString)
     return format(date, 'PPp')
 }
 
-const deleteCheckout = async (checkoutId: string, thumbnail: string | null) => {
-    // Delete the thumbnail from the bucket if it exists
+const deleteCheckout = async (checkoutId: string, thumbnail: string | null, productFile: string, businessId: string) => {
+
+    // Delete all files associated with the checkout in parallel
+    const deletePromises = [deleteFile(productFile)];
     if (thumbnail) {
-        const { error: fileError } = await deleteFile(thumbnail)
-        if (fileError) {
-            return toast.error(fileError.message)
-        }
+        deletePromises.push(deleteFile(thumbnail));
     }
-    
-    // TODO: Add deleteCheckoutByIdAction
-    // const { error: checkoutError } = await deleteCheckoutByIdAction(checkoutId)
-    // if (checkoutError) {
-    //     return toast.error(checkoutError.message)
-    // }
+
+    const results = await Promise.all(deletePromises);
+    const errors = results.filter(result => result.error).map(result => result.error);
+
+    if (errors.length > 0) {
+        return toast.error(errors[0]?.message);
+    }
+
+    // Delete the checkout from the database
+    const { error: checkoutError } = await deleteCheckoutByIdAction(checkoutId, businessId)
+    if (checkoutError) {
+        return toast.error(checkoutError.message)
+    }
 
     toast.success("Checkout deleted successfully")
     window.location.reload()
@@ -147,7 +154,7 @@ export const columns: ColumnDef<SelectCheckout>[] = [
                                     Edit
                                 </DropdownMenuItem>
                             </a>
-                            <DropdownMenuItem onClick={() => { deleteCheckout(row.original.id, row.original.thumbnail) }}>
+                            <DropdownMenuItem onClick={() => { deleteCheckout(row.original.id, row.original.thumbnail, row.original.productFile, row.original.businessId) }}>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>

@@ -20,15 +20,17 @@ type CheckoutContextType = {
     updateName: (name: string) => void
     updateDescription: (description: string | null) => void
     updatePrice: (price: number) => void
-    updateThumbnail: (thumbnail: string | null, file?: File | null) => void
-    updateProductFile: (filePath: string, file?: File | null) => void
+    // File path updates
+    updateThumbnailPath: (path: string | null) => void
+    updateProductFilePath: (path: string) => void
+    // File updates
+    updateThumbnailFile: (file: File | null) => void
+    updateProductFile: (file: File | null) => void
 }
 
 
 
 const CheckoutContext = createContext<CheckoutContextType | null>(null)
-
-
 
 export function useCheckout() {
     const checkoutStore = useContext(CheckoutContext)
@@ -87,23 +89,21 @@ export function CheckoutProvider({ initialCheckout, children }: CheckoutProvider
         setCheckout(prev => ({ ...prev, productPrice: price }))
     }, [])
 
-    const updateThumbnail = useCallback((thumbnail: string | null, file?: File | null) => {
-        setCheckout(prev => ({ ...prev, thumbnail }))
-        if (file !== undefined) {
-            setThumbnailFile(file)
-        }
+    const updateThumbnailPath = useCallback((path: string | null) => {
+        setCheckout(prev => ({ ...prev, thumbnail: path }))
     }, [])
 
-
-
-    const updateProductFile = useCallback((filePath: string, file?: File | null) => {
-        setCheckout(prev => ({ ...prev, productFile: filePath }))
-        if (file !== undefined) {
-            setProductFile(file)
-        }
+    const updateProductFilePath = useCallback((path: string) => {
+        setCheckout(prev => ({ ...prev, productFile: path }))
     }, [])
 
+    const updateThumbnailFile = useCallback((file: File | null) => {
+        setThumbnailFile(file)
+    }, [])
 
+    const updateProductFile = useCallback((file: File | null) => {
+        setProductFile(file)
+    }, [])
 
     const value = {
         checkout,
@@ -117,7 +117,9 @@ export function CheckoutProvider({ initialCheckout, children }: CheckoutProvider
         updateName,
         updateDescription,
         updatePrice,
-        updateThumbnail,
+        updateThumbnailPath,
+        updateProductFilePath,
+        updateThumbnailFile,
         updateProductFile,
     }
 
