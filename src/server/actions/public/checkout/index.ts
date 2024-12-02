@@ -46,6 +46,7 @@ export async function buildCheckoutHtml(checkoutId: string) {
     /* Define CSS variables inline */
     :root {
         --background: 0 0% 100%;
+        --primary: 222.2 84% 4.9%;
         --foreground: 222.2 84% 4.9%;
         --muted-foreground: 215.4 16.3% 46.9%;
         --input: 214.3 31.8% 91.4%;
@@ -124,21 +125,16 @@ export async function buildCheckoutHtml(checkoutId: string) {
     /* Base button styles */
     .button {
         display: inline-flex;
+
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        /* gap-2 */
         white-space: nowrap;
         border-radius: 0.375rem;
-        /* rounded-md */
         font-size: 0.875rem;
-        /* text-sm */
         font-weight: 500;
-        /* font-medium */
         height: 2.5rem;
-        /* h-10 */
         padding: 0.5rem 1rem;
-        /* px-4 py-2 */
         transition-property: color, background-color;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
