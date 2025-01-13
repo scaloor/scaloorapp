@@ -125,7 +125,7 @@ export async function buildCheckoutHtml(checkoutId: string) {
     /* Base button styles */
     .button {
         display: inline-flex;
-
+        text-color: hsl(var(--primary-foreground));
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
