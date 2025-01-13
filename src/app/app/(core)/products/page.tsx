@@ -2,14 +2,14 @@ import Link from "next/link";
 import { Button } from "@/app/_components/ui/button";
 import { DataTable } from "@/app/_components/ui/data-table";
 import { columns } from "./checkout-columns";
-import { getCheckoutsByBusinessIdAction } from "@/server/actions/protected/checkout";
+import { getCheckoutsByOrganizationIdAction } from "@/server/actions/protected/checkout";
 import { getAuthUserDetails } from "@/server/actions/protected/users";
-
+    
 export default async function ProductPage() {
   const { dbUser } = await getAuthUserDetails();
-  if (!dbUser?.businessId) return null;
+  if (!dbUser?.organizationId) return null;
 
-  const { dbCheckouts } = await getCheckoutsByBusinessIdAction(dbUser.businessId);
+  const { dbCheckouts } = await getCheckoutsByOrganizationIdAction(dbUser.organizationId);
 
   return (
     <div>

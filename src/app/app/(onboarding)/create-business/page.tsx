@@ -12,7 +12,7 @@ export default async function AccountSetup() {
   if (!user) {
     return redirect('/login')
   }
-  if (user.businessId) {
+  if (user.organizationId) {
     return redirect('/dashboard')
   }
 

@@ -1,7 +1,7 @@
 'use server'
 
 import { stripe } from "@/lib/stripe"
-import { getBusinessById } from "@/server/data/business"
+import { getOrganizationById } from "@/server/data/organization"
 import { getCheckoutById } from "@/server/data/checkout"
 
 export async function createPaymentIntent(checkoutId: string) {
@@ -12,19 +12,19 @@ export async function createPaymentIntent(checkoutId: string) {
             return { error: 'Checkout not found' }
         }
 
-        // Get business details
-        const { dbBusiness } = await getBusinessById(dbCheckout.businessId)
-        if (!dbBusiness?.defaultCurrency || !dbBusiness.stripeAccountId) {
+        // Get organization details
+        const { dbOrganization } = await getOrganizationById(dbCheckout.organizationId)
+        if (!dbOrganization?.defaultCurrency || !dbOrganization.stripeAccountId) {
             return { error: 'Default currency or stripe account not set' }
         }
 
         // Create payment intent
         const paymentIntent = await stripe.paymentIntents.create({
             amount: dbCheckout.productPrice,
-            currency: dbBusiness.defaultCurrency,
+            currency: dbOrganization.defaultCurrency,
             description: dbCheckout.productDescription || undefined,
         }, {
-            stripeAccount: dbBusiness.stripeAccountId
+            stripeAccount: dbOrganization.stripeAccountId
         })
 
         return { clientSecret: paymentIntent.client_secret }

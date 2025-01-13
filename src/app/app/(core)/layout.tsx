@@ -1,7 +1,6 @@
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/_components/ui/sidebar";
-import { AppSidebar } from "./_components/app-sidebar";
-import { AppTopbar } from "./_components/app-topbar";
-import { Separator } from "@/app/_components/ui/separator";
+import { AppSidebar } from "./_components/navigation/app-sidebar";
+import { AppTopbar } from "./_components/navigation/app-topbar";
 
 
 export default function MVPLayout({ children }: { children: React.ReactNode }) {

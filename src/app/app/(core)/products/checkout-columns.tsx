@@ -17,7 +17,7 @@ function formatDate(dateString: string) {
     return format(date, 'PPp')
 }
 
-const deleteCheckout = async (checkoutId: string, thumbnail: string | null, productFile: string, businessId: string) => {
+const deleteCheckout = async (checkoutId: string, thumbnail: string | null, productFile: string, organizationId: string) => {
 
     // Delete all files associated with the checkout in parallel
     const deletePromises = [deleteFile(productFile)];
@@ -33,7 +33,7 @@ const deleteCheckout = async (checkoutId: string, thumbnail: string | null, prod
     }
 
     // Delete the checkout from the database
-    const { error: checkoutError } = await deleteCheckoutByIdAction(checkoutId, businessId)
+    const { error: checkoutError } = await deleteCheckoutByIdAction(checkoutId, organizationId)
     if (checkoutError) {
         return toast.error(checkoutError.message)
     }
@@ -154,7 +154,7 @@ export const columns: ColumnDef<SelectCheckout>[] = [
                                     Edit
                                 </DropdownMenuItem>
                             </a>
-                            <DropdownMenuItem onClick={() => { deleteCheckout(row.original.id, row.original.thumbnail, row.original.productFile, row.original.businessId) }}>
+                            <DropdownMenuItem onClick={() => { deleteCheckout(row.original.id, row.original.thumbnail, row.original.productFile, row.original.organizationId) }}>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>

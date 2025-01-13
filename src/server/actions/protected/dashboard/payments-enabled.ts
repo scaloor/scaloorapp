@@ -1,13 +1,13 @@
 'use server'
 
 import { stripe } from "@/lib/stripe"
-import { canAccessBusiness } from "@/server/authorization/business";
-import { updateBusinessColumn } from "@/server/data/business";
+import { canAccessOrganization } from "@/server/authorization/organization";
+import { updateOrganizationColumn } from "@/server/data/organization";
 
-export async function checkPaymentsEnabledAction(stripeAccountId: string, businessId: string) {
+export async function checkPaymentsEnabledAction(stripeAccountId: string, organizationId: string) {
     const chargesEnabled = (await stripe.accounts.retrieve(stripeAccountId)).charges_enabled
-    if (chargesEnabled === true && await canAccessBusiness(businessId)) {
-        await updateBusinessColumn({ id: businessId, paymentsEnabled: true });
+    if (chargesEnabled === true && await canAccessOrganization(organizationId)) {
+        await updateOrganizationColumn({ id: organizationId, paymentsEnabled: true });
     }
     
     return chargesEnabled

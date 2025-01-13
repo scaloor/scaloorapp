@@ -13,7 +13,7 @@ import { uploadFile } from "@/lib/supabase/client";
 import { FormError } from "@/app/_components/common/form-error";
 import { InsertUser } from "@/server/db/schema";
 import CountryDropdown from "@/app/_components/common/countries-dropdown";
-import { createBusiness } from "@/server/actions/protected/onboarding";
+import { createOrganization } from "@/server/actions/protected/onboarding";
 import { useRouter } from "next/navigation";
 
 
@@ -47,7 +47,7 @@ export default function CreateBusinessForm({ user }: createBusinessFormProps) {
                 businessLogoPath = data.path;
             }
             // Create the business in the database
-            const { url, error } = await createBusiness({
+            const { url, error } = await createOrganization({
                 name: formData.name,
                 email: formData.businessEmail,
                 country: formData.country,

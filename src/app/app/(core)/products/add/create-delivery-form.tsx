@@ -25,10 +25,10 @@ import { FormError } from '@/app/_components/common/form-error';
 import FileUpload from '@/app/_components/common/file-upload';
 
 type CreateDeliveryFormProps = {
-    businessId: string;
+    organizationId: string;
 }
 
-export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormProps) {
+export default function CreateDeliveryForm({ organizationId }: CreateDeliveryFormProps) {
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
@@ -46,11 +46,11 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
             const checkoutId = scaloorId("chk")
             console.log("thumbnail", !!productImage)
             const uploadPromises = [
-                uploadFile(file, `business/${businessId}/checkout/product/${checkoutId}/${file.name}`)
+                uploadFile(file, `organization/${organizationId}/checkout/product/${checkoutId}/${file.name}`)
             ];
             if (!!productImage) {
                 uploadPromises.push(
-                    uploadFile(productImage, `business/${businessId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
+                    uploadFile(productImage, `organization/${organizationId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
                 );
             }
             const results = await Promise.all(uploadPromises);

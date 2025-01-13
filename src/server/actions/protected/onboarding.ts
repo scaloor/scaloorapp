@@ -1,10 +1,10 @@
 'use server'
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { addBusiness } from "@/server/data/business";
+import { addOrganization } from "@/server/data/organization";
 import { updateUserColumns } from "@/server/data/users";
 import { stripeSession } from "../stripe";
 
-export async function createBusiness(
+export async function createOrganization(
     {
         name,
         email,
@@ -21,19 +21,19 @@ export async function createBusiness(
 ) {
     const countryCapitalized = capitalizeFirstLetter(country)
 
-    const businessDetails = {
+    const organizationDetails = {
         name,
-        businessEmail: email,
+        orgEmail: email,
         country: countryCapitalized,
-        businessLogo: logo,
+        orgLogo: logo,
     }
 
-    const { dbBusiness } = await addBusiness(businessDetails, userId);
-    if (!dbBusiness) return { error: "Unable to create business" }
+    const { dbOrganization } = await addOrganization(organizationDetails, userId);
+    if (!dbOrganization) return { error: "Unable to create organization" }
 
     const { dbUser, error: userError } = await updateUserColumns({
         id: userId,
-        businessId: dbBusiness.id
+        organizationId: dbOrganization.id
     })
     if (userError) return { error: userError }
     if (!dbUser) return { error: "Unable to update user" }

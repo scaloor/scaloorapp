@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, LucideIcon } from 'lucide-react'
+import { LucideIcon } from 'lucide-react'
 import React from 'react'
 
 type OnboardingStepsProps = {
