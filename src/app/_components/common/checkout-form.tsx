@@ -6,7 +6,7 @@ import { Input } from '@/app/_components/ui/input';
 import { Button } from '@/app/_components/ui/button';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { SCALOOR_BUCKET } from '@/lib/constants';
-import { useCheckout } from '@/app/app/(mvp)/products/[checkoutId]/_components/checkout-provider';
+import { useCheckout } from '@/app/app/(core)/products/[checkoutId]/_components/checkout-provider';
 import { useEffect } from 'react';
 
 

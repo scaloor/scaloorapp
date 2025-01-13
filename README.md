@@ -13,16 +13,16 @@ Scaloor is a unique funnel builder based on the ideaology that building funnels 
 
 ## Roadmap
 - Funnel Editor
-    [ ] Text based funnel page editor
-    [ ] Pre-built custom made funnel page components (e.g. checkout)
-    [ ] GUI for creating funnel pages
-    [ ] Funnel page templates
+[ ] Text based funnel page editor
+[ ] Pre-built custom made funnel page components (e.g. checkout)
+[ ] GUI for creating funnel pages
+[ ] Funnel page templates
 
 - Funnel Analytics
 
 - Digital Product Management
-    [ ] Store digital products
-    [ ] Deliver digital products
+[ ] Store digital products
+[ ] Deliver digital products
 
 - Membership
 

@@ -1,8 +1,8 @@
 import { integer, pgTable,timestamp, text, pgEnum, boolean } from "drizzle-orm/pg-core";
 import { business } from "./business";
-import { billingType } from "./product";
 import { scaloorId } from "./defaults";
 
+export const billingType = pgEnum("billing_type", ["one_time", "recurring"]);
 
 export const checkout = pgTable("checkout", {
     id: text("id")
