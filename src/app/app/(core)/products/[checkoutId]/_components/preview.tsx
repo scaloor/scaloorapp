@@ -8,15 +8,17 @@ import { SelectCheckout } from '@/server/db/schema'
 import { Elements } from '@stripe/react-stripe-js'
 import CheckoutForm from '@/app/_components/common/checkout-form'
 import { Card, CardContent } from '@/app/_components/ui/card'
+import { useAppStore } from '@/app/app/(core)/_components/stores/app-store'
 
 type CheckoutPreviewProps = {
-    stripeAccountId: string;
     dbCheckout: SelectCheckout;
 }
 
-export default function CheckoutPreview({ stripeAccountId, dbCheckout }: CheckoutPreviewProps) {
+export default function CheckoutPreview({ dbCheckout }: CheckoutPreviewProps) {
     const [stripePromise, setStripePromise] = useState<Stripe | null | Promise<Stripe | null>>(null)
     const [clientSecret, setClientSecret] = useState<string | null>(null)
+    const { organizations } = useAppStore()
+    const stripeAccountId = organizations?.[0]?.stripeAccountId ?? ''
 
     // Load stripe promise
     // Wrapped in useEffect to prevent infinite re-renders
@@ -28,7 +30,7 @@ export default function CheckoutPreview({ stripeAccountId, dbCheckout }: Checkou
             setStripePromise(promise)
         }
         loadStripePromise()
-    }, [])
+    }, [stripeAccountId])
 
     // Create payment intent
     // This will need to be passed to the users-customer via the api

@@ -24,15 +24,9 @@ export async function getCheckoutsByOrganizationIdAction(organizationId: string)
 
 export async function getCheckoutDetailsAction(checkoutId: string) {
     try {
-        const [
-            { dbCheckout, error: checkoutError },
-            { dbOrganization, error: organizationError }
-        ] = await Promise.all([
-            getCheckoutById(checkoutId),
-            getCheckoutById(checkoutId).then(({ dbCheckout }) => getOrganizationById(dbCheckout!.organizationId))
-        ])
-        if (dbOrganization && await canAccessOrganization(dbOrganization.id)) {
-            return { dbCheckout, dbOrganization }
+        const { dbCheckout } = await getCheckoutById(checkoutId)
+        if (dbCheckout && await canAccessOrganization(dbCheckout.organizationId)) {
+            return { dbCheckout }
         } else {
             return { error: "You are not authorized to access this organization" }
         }

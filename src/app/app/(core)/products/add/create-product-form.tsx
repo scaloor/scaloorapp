@@ -24,6 +24,7 @@ import { uploadFile } from '@/lib/supabase/client';
 import { FormError } from '@/app/_components/common/form-error';
 import FileUpload from '@/app/_components/common/file-upload';
 import { useAppStore } from '../../_components/stores/app-store';
+import { Loading } from '@/app/_components/common/loading';
 
 
 
@@ -33,9 +34,19 @@ export default function CreateProductForm() {
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
+    
+    // Initialize form with default values
     const form = useForm<z.infer<typeof CreateCheckoutSchema>>({
         resolver: zodResolver(CreateCheckoutSchema),
+        defaultValues: {
+            name: '',
+            description: '',
+            price: '',
+            productImage: undefined,
+            file: undefined,
+        }
     });
+
     const [useSamePhoto, setUseSamePhoto] = useState(true)
     const [showDescription, setShowDescription] = useState(false)
     const [checkoutType, setCheckoutType] = useState("embedded")
@@ -92,12 +103,14 @@ export default function CreateProductForm() {
         };
     }, [form, onSubmit]);
 
+    if (isPending) return <Loading />
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Card className="w-full max-w-2xl mx-auto">
                     <CardHeader>
-                        <CardTitle>Sell your files online</CardTitle>
+                        <CardTitle>Sell your digital products online</CardTitle>
                         <CardDescription>
                             Upload any file, embed your checkout on your website and let us handle the product delivery.
                         </CardDescription>
@@ -111,6 +124,7 @@ export default function CreateProductForm() {
                                     <FormControl>
                                         <Input
                                             {...field}
+                                            value={field.value ?? ''}
                                             disabled={isPending}
                                             placeholder="Product Name"
                                         />
@@ -177,6 +191,7 @@ export default function CreateProductForm() {
                                     <FormControl>
                                         <Input
                                             {...field}
+                                            value={field.value ?? ''}
                                             disabled={isPending}
                                             placeholder="Price"
                                             onKeyDown={(e) => {

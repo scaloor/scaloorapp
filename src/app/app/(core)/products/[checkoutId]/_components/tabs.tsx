@@ -6,7 +6,6 @@ import CheckoutExport from "./export"
 import CheckoutView from "./view"
 import { SelectCheckout } from "@/server/db/schema"
 import CheckoutAnalytics from "./analytics"
-import { ScrollArea } from "@/app/_components/ui/scroll-area"
 
 type CheckoutTabsProps = {
     dbCheckout: SelectCheckout

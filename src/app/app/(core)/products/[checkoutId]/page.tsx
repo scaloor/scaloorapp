@@ -12,8 +12,8 @@ type CheckoutPageProps = {
 
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
     const { checkoutId } = await params
-    const { dbCheckout, dbOrganization } = await getCheckoutDetailsAction(checkoutId)
-    if (!dbCheckout || !dbOrganization?.stripeAccountId) {
+    const { dbCheckout } = await getCheckoutDetailsAction(checkoutId)
+    if (!dbCheckout) {
         return <div>Checkout not found</div>
     }
 
@@ -21,7 +21,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
         <div className='flex justify-between mt-4 gap-4'>
             <CheckoutProvider initialCheckout={dbCheckout}>
                 <CheckoutTabs dbCheckout={dbCheckout} />
-                <CheckoutPreview stripeAccountId={dbOrganization?.stripeAccountId} dbCheckout={dbCheckout} />
+                <CheckoutPreview dbCheckout={dbCheckout} />
             </CheckoutProvider>
         </div>
     )

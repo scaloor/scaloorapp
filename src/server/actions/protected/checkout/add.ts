@@ -33,7 +33,7 @@ export async function addCheckoutAction(checkoutData: z.infer<typeof CreateCheck
     // Create the stripe product
     const stripeProduct = await createStripeProduct({
         name: checkoutData.name,
-        description: checkoutData.description,
+        ...(checkoutData.description ? { description: checkoutData.description } : {}),
         default_price_data: {
             unit_amount: price,
             currency: dbOrganization.defaultCurrency,
