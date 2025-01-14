@@ -26,8 +26,8 @@ const items = {
             icon: Home,
         },
         {
-            title: "Offers",
-            url: "/offers",
+            title: "Products",
+            url: "/products",
             icon: PackageSearch,
         },
         {

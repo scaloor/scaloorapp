@@ -71,10 +71,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL('/site', request.url));
   }
 
-  // TODO: What does this do?
-
-
-  // Get the first path segment
+    // Get the first path segment
   // This is for testing, can probably remove in prod.
   const firstPath = url.pathname.split('/')[1];
   if (firstPath === "app") {

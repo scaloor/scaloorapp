@@ -23,12 +23,13 @@ import { scaloorId } from '@/server/db/schema/defaults';
 import { uploadFile } from '@/lib/supabase/client';
 import { FormError } from '@/app/_components/common/form-error';
 import FileUpload from '@/app/_components/common/file-upload';
+import { useAppStore } from '../../_components/stores/app-store';
 
-type CreateDeliveryFormProps = {
-    organizationId: string;
-}
 
-export default function CreateDeliveryForm({ organizationId }: CreateDeliveryFormProps) {
+
+export default function CreateProductForm() {
+    const { organizations } = useAppStore()
+    const organizationId = organizations?.[0]?.id
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();

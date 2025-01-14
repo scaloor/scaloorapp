@@ -1,14 +1,11 @@
 import React from 'react'
-import CreateDeliveryForm from './create-delivery-form'
-import { getAuthUserDetails } from '@/server/actions/protected/users'
+import CreateProductForm from './create-product-form'
 
 
-export default async function DeliveryPage() {
-    const { dbUser } = await getAuthUserDetails()
-    if (!dbUser?.organizationId) return <div>Loading...</div>
+export default async function AddProductPage() {
     return (
         <div className="flex justify-center items-center md:mt-10">
-            <CreateDeliveryForm organizationId={dbUser.organizationId} />
+            <CreateProductForm />
         </div>
     )
 }
