@@ -12,7 +12,7 @@ import {
     SidebarHeader,
     SidebarMenuSubItem,
 } from "@/app/_components/ui/sidebar"
-import { CreditCard, Home, Inbox, PackageSearch, Settings } from "lucide-react"
+import { ChartLine, CreditCard, Home, Inbox, PackageSearch, Settings } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { NavUser } from "./nav-user"
 
@@ -26,8 +26,8 @@ const items = {
             icon: Home,
         },
         {
-            title: "Offers",
-            url: "/offers",
+            title: "Products",
+            url: "/products",
             icon: PackageSearch,
         },
         {
@@ -63,7 +63,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         >
                             <div className="flex items-center gap-2">
                                 <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                                    <span className="text-primary-foreground font-semibold">S</span>
+                                    <ChartLine className="size-4 text-primary-foreground" />
                                 </div>
                                 <h2 className="text-2xl font-semibold font-plus-jakarta">
                                     Scaloor

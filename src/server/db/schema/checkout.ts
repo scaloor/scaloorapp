@@ -1,5 +1,5 @@
 import { integer, pgTable,timestamp, text, pgEnum, boolean } from "drizzle-orm/pg-core";
-import { business } from "./business";
+import { organization } from "./organization";
 import { scaloorId } from "./defaults";
 
 export const billingType = pgEnum("billing_type", ["one_time", "recurring"]);
@@ -9,8 +9,8 @@ export const checkout = pgTable("checkout", {
         .primaryKey()
         .notNull()
         .$defaultFn(() => scaloorId('chk')),
-    businessId: text("business_id")
-        .references(() => business.id)
+    organizationId: text("organization_id")
+        .references(() => organization.id)
         .notNull(),
     productName: text("product_name").notNull(),
     productDescription: text("product_description"),

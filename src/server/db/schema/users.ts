@@ -1,6 +1,6 @@
 import { pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { scaloorId } from "./defaults";
-import { business } from "./business";
+import { organization } from "./organization";
 
 export const users = pgTable("user", {
     id: text("id")
@@ -12,7 +12,7 @@ export const users = pgTable("user", {
     email: text("email").notNull(),
     mobile: text("mobile"),
     image: text("image"),
-    businessId: text("business_id").references(() => business.id),
+    organizationId: text("organization_id").references(() => organization.id),
     createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 

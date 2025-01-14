@@ -24,9 +24,9 @@ export async function getCheckoutById(checkoutId: string) {
     }
 }
 
-export async function getCheckoutsByBusinessId(businessId: string) {
+export async function getCheckoutsByOrganizationId(organizationId: string) {
     try {
-        const checkouts = await db.select().from(checkout).where(eq(checkout.businessId, businessId));
+        const checkouts = await db.select().from(checkout).where(eq(checkout.organizationId, organizationId));
         return { data: checkouts };
     } catch (error: any) {
         console.log(error)

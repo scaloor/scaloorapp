@@ -1,34 +1,34 @@
 'use server'
 
 import { capitalizeFirstLetter } from "@/lib/utils";
-import { updateBusinessColumn } from "@/server/data/business";
+import { updateOrganizationColumn } from "@/server/data/organization";
 
-export async function editBusinessAction(
+export async function editOrganizationAction(
     {
         id,
         name,
-        businessEmail,
+        email,
         country,
-        businessLogo
+        logo
     }: {
         id: string;
         name: string;
-        businessEmail: string;
+        email: string;
         country: string;
-        businessLogo?: string;
+        logo?: string;
     }
 ) {
     const countryCapitalized = capitalizeFirstLetter(country);
-    const { error } = await updateBusinessColumn({
+    const { error } = await updateOrganizationColumn({
         id,
         name,
-        businessEmail,
+        orgEmail: email,
         country: countryCapitalized,
-        businessLogo,
+        orgLogo: logo,
     })
 
     if (error) {
         return { error: error.message }
     }
-    return { success: "Business updated successfully" }
+    return { success: "Organization updated successfully" }
 }

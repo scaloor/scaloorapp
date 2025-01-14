@@ -1,5 +1,5 @@
 'use server';
-import { getBusinessById } from "@/server/data/business";
+import { getOrganizationById } from "@/server/data/organization";
 import { getAuthUserDetails } from "../protected/users";
 import { getSubscriptionById } from "@/server/data/subscription";
 import { stripe } from "@/lib/stripe";
@@ -8,16 +8,16 @@ import { PLANS } from "@/lib/stripe/plans";
 export async function stripeSession(plan_slug: string) {
     const plan = PLANS.find(plan => plan.slug === plan_slug);
     const { dbUser } = await getAuthUserDetails();
-    if (!dbUser?.businessId) {
+    if (!dbUser?.organizationId) {
         throw new Error('No user found');
     }
-    const { dbBusiness } = await getBusinessById(dbUser.businessId);
-    if (!dbBusiness) {
-        throw new Error('No business found');
+    const { dbOrganization } = await getOrganizationById(dbUser.organizationId);
+    if (!dbOrganization) {
+        throw new Error('No organization found');
     }
 
     // Check if the user has a subscription
-    if (!dbBusiness.currentSubscriptionId) {
+    if (!dbOrganization.currentSubscriptionId) {
         const stripeSession = await stripe.checkout.sessions.create({
             mode: 'subscription',
             billing_address_collection: 'auto',
@@ -29,21 +29,21 @@ export async function stripeSession(plan_slug: string) {
             ],
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/cancel`,
-            customer_email: dbBusiness.businessEmail,
+            customer_email: dbOrganization.orgEmail,
             subscription_data: {
                 metadata: {
-                    business_id: dbBusiness.id,
+                    organization_id: dbOrganization.id,
                 },
             },
             metadata: {
-                business_id: dbBusiness.id,
+                organization_id: dbOrganization.id,
             },
         });
 
         return stripeSession.url;
     }
 
-    const { dbSubscription: subscription } = await getSubscriptionById(dbBusiness.currentSubscriptionId);
+    const { dbSubscription: subscription } = await getSubscriptionById(dbOrganization.currentSubscriptionId);
 
     if (!subscription) {
         throw new Error('No subscription found');

@@ -1,26 +1,26 @@
 'use server'
 
-import { canAccessBusiness } from "@/server/authorization/business";
+import { canAccessOrganization } from "@/server/authorization/organization";
 import { SelectCheckout } from "@/server/db/schema";
 import { updateStripeProduct } from "../../stripe/product";
-import { getBusinessById } from "@/server/data/business";
+import { getOrganizationById } from "@/server/data/organization";
 import { getCheckoutById, updateCheckout } from "@/server/data/checkout";
 import { stripe } from "@/lib/stripe";
 
 
 export async function updateCheckoutAction(checkout: SelectCheckout) {
     // Authorize the user
-    if (!await canAccessBusiness(checkout.businessId)) {
-        throw new Error("You are not authorized to access this business")
+    if (!await canAccessOrganization(checkout.organizationId)) {
+        throw new Error("You are not authorized to access this organization")
     }
 
     // Fetch both resources in parallel
-    const [{ dbBusiness }, { dbCheckout }] = await Promise.all([
-        getBusinessById(checkout.businessId),
+    const [{ dbOrganization }, { dbCheckout }] = await Promise.all([
+        getOrganizationById(checkout.organizationId),
         getCheckoutById(checkout.id)
     ])
 
-    if (!dbBusiness?.stripeAccountId) {
+    if (!dbOrganization?.stripeAccountId) {
         throw new Error("Stripe account ID not found")
     }
 
@@ -35,9 +35,9 @@ export async function updateCheckoutAction(checkout: SelectCheckout) {
         const price = await stripe.prices.create({
             product: checkout.stripeProductId!,
             unit_amount: checkout.productPrice * 100,
-            currency: dbBusiness.defaultCurrency || "usd",
+            currency: dbOrganization.defaultCurrency || "usd",
         }, {
-            stripeAccount: dbBusiness.stripeAccountId,
+            stripeAccount: dbOrganization.stripeAccountId,
         })
         priceId = price.id
     }
@@ -47,7 +47,7 @@ export async function updateCheckoutAction(checkout: SelectCheckout) {
         name: checkout.productName,
         description: checkout.productDescription,
         default_price: priceId,
-    }, dbBusiness.stripeAccountId)
+    }, dbOrganization.stripeAccountId)
 
     if (!stripeProduct) {
         throw new Error("Failed to update stripe product")

@@ -42,12 +42,12 @@ export class Checkout {
     /**
      * Retrieves all checkouts for a business
      */
-    static async getByBusinessId(businessId: string) {
+    static async getByOrganizationId(organizationId: string) {
         try {
             const checkouts = await db
                 .select()
                 .from(checkout)
-                .where(eq(checkout.businessId, businessId));
+                .where(eq(checkout.organizationId, organizationId));
             return { data: checkouts };
         } catch (error: any) {
             console.log(error);

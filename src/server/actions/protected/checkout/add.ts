@@ -4,7 +4,7 @@ import { InsertCheckout } from "@/server/db/schema";
 import { z } from "zod";
 import { getAuthUserDetails } from "../users";
 import { createStripeProduct } from "../../stripe/product";
-import { getBusinessById } from "@/server/data/business";
+import { getOrganizationById } from "@/server/data/organization";
 import { Checkout } from "@/server/data/checkout-class";
 
 const CreateCheckoutSchema = z.object({
@@ -19,13 +19,13 @@ const CreateCheckoutSchema = z.object({
 export async function addCheckoutAction(checkoutData: z.infer<typeof CreateCheckoutSchema>) {
     // Get business ID, verify if user is logged in
     const { dbUser } = await getAuthUserDetails();
-    if (!dbUser?.businessId) {
-        throw new Error("Business ID not found");
+    if (!dbUser?.organizationId) {
+        throw new Error("Organization ID not found");
     }
 
     // Get stripe account ID and default currency
-    const { dbBusiness } = await getBusinessById(dbUser.businessId);
-    if (!dbBusiness?.stripeAccountId || !dbBusiness?.defaultCurrency) {
+    const { dbOrganization } = await getOrganizationById(dbUser.organizationId);
+    if (!dbOrganization?.stripeAccountId || !dbOrganization?.defaultCurrency) {
         throw new Error("Stripe account ID not found");
     }
     const price = parseInt(checkoutData.price) * 100
@@ -33,17 +33,17 @@ export async function addCheckoutAction(checkoutData: z.infer<typeof CreateCheck
     // Create the stripe product
     const stripeProduct = await createStripeProduct({
         name: checkoutData.name,
-        description: checkoutData.description,
+        ...(checkoutData.description ? { description: checkoutData.description } : {}),
         default_price_data: {
             unit_amount: price,
-            currency: dbBusiness.defaultCurrency,
+            currency: dbOrganization.defaultCurrency,
         },
-    }, dbBusiness.stripeAccountId);
+    }, dbOrganization.stripeAccountId);
 
     // Create the checkout record
     const newCheckout: InsertCheckout = {
         id: checkoutData.checkoutId,
-        businessId: dbUser.businessId,
+        organizationId: dbUser.organizationId,
         productName: checkoutData.name,
         productDescription: checkoutData.description,
         productPrice: price,

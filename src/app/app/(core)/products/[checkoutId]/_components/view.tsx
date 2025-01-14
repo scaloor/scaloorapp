@@ -12,6 +12,7 @@ import { useCheckout } from './checkout-provider';
 import { Button } from '@/app/_components/ui/button';
 import { updateCheckoutAction } from '@/server/actions/protected/checkout/update';
 import { deleteFile, uploadFile } from '@/lib/supabase/client';
+import { formatPriceToString } from '@/lib/utils';
 
 type CheckoutViewProps = {
   dbCheckout: SelectCheckout
@@ -38,7 +39,7 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
     // Handle upload operations
     if (checkoutStore.thumbnailFile) {
       uploadPromises.push(
-        uploadFile(checkoutStore.thumbnailFile, `business/${checkoutStore.checkout.businessId}/checkout/thumbnail/${checkoutStore.checkout.id}/${checkoutStore.thumbnailFile.name}`)
+        uploadFile(checkoutStore.thumbnailFile, `organization/${checkoutStore.checkout.organizationId}/checkout/thumbnail/${checkoutStore.checkout.id}/${checkoutStore.thumbnailFile.name}`)
       );
       if (dbCheckout.thumbnail) {
         deletePromises.push(deleteFile(dbCheckout.thumbnail))
@@ -47,7 +48,7 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
 
     if (checkoutStore.productFile) {
       uploadPromises.push(
-        uploadFile(checkoutStore.productFile, `business/${checkoutStore.checkout.businessId}/checkout/product/${checkoutStore.checkout.id}/${checkoutStore.productFile.name}`)
+        uploadFile(checkoutStore.productFile, `organization/${checkoutStore.checkout.organizationId}/checkout/product/${checkoutStore.checkout.id}/${checkoutStore.productFile.name}`)
       );
       deletePromises.push(deleteFile(dbCheckout.productFile))
     }
@@ -145,7 +146,7 @@ export default function CheckoutView({ dbCheckout }: CheckoutViewProps) {
         <div className="space-y-2">
           <Label>Price</Label>
           <Input
-            defaultValue={checkoutStore.checkout.productPrice.toString()}
+            defaultValue={formatPriceToString(checkoutStore.checkout.productPrice)}
             //disabled={isPending}
             onChange={(e) => {
               checkoutStore.updatePrice(Number(e.target.value))

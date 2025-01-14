@@ -20,12 +20,11 @@ export function AppTopbar() {
                         {/* Will add the ability to change between offers here */}
                     </div>
                 </div>
-                <div className="flex items-center gap-2 px-4">
-                    <Button className="h-8 rounded-xl">
-                        Create Offer
-                        <Plus className="size-4 ml-auto" />
+                {/* <div className="flex items-center gap-2 px-4">
+                    <Button className="h-8 rounded-xl" variant="link">
+                        Switch To Affiliate Mode
                     </Button>
-                </div>
+                </div> */}
             </div>
         </header>
     )

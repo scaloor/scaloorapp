@@ -23,18 +23,30 @@ import { scaloorId } from '@/server/db/schema/defaults';
 import { uploadFile } from '@/lib/supabase/client';
 import { FormError } from '@/app/_components/common/form-error';
 import FileUpload from '@/app/_components/common/file-upload';
+import { useAppStore } from '../../_components/stores/app-store';
+import { Loading } from '@/app/_components/common/loading';
 
-type CreateDeliveryFormProps = {
-    businessId: string;
-}
 
-export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormProps) {
+
+export default function CreateProductForm() {
+    const { organizations } = useAppStore()
+    const organizationId = organizations?.[0]?.id
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
+    
+    // Initialize form with default values
     const form = useForm<z.infer<typeof CreateCheckoutSchema>>({
         resolver: zodResolver(CreateCheckoutSchema),
+        defaultValues: {
+            name: '',
+            description: '',
+            price: '',
+            productImage: undefined,
+            file: undefined,
+        }
     });
+
     const [useSamePhoto, setUseSamePhoto] = useState(true)
     const [showDescription, setShowDescription] = useState(false)
     const [checkoutType, setCheckoutType] = useState("embedded")
@@ -46,11 +58,11 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
             const checkoutId = scaloorId("chk")
             console.log("thumbnail", !!productImage)
             const uploadPromises = [
-                uploadFile(file, `business/${businessId}/checkout/product/${checkoutId}/${file.name}`)
+                uploadFile(file, `organization/${organizationId}/checkout/product/${checkoutId}/${file.name}`)
             ];
             if (!!productImage) {
                 uploadPromises.push(
-                    uploadFile(productImage, `business/${businessId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
+                    uploadFile(productImage, `organization/${organizationId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
                 );
             }
             const results = await Promise.all(uploadPromises);
@@ -91,12 +103,14 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
         };
     }, [form, onSubmit]);
 
+    if (isPending) return <Loading />
+
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <Card className="w-full max-w-2xl mx-auto">
                     <CardHeader>
-                        <CardTitle>Sell your files online</CardTitle>
+                        <CardTitle>Sell your digital products online</CardTitle>
                         <CardDescription>
                             Upload any file, embed your checkout on your website and let us handle the product delivery.
                         </CardDescription>
@@ -110,6 +124,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
                                     <FormControl>
                                         <Input
                                             {...field}
+                                            value={field.value ?? ''}
                                             disabled={isPending}
                                             placeholder="Product Name"
                                         />
@@ -176,6 +191,7 @@ export default function CreateDeliveryForm({ businessId }: CreateDeliveryFormPro
                                     <FormControl>
                                         <Input
                                             {...field}
+                                            value={field.value ?? ''}
                                             disabled={isPending}
                                             placeholder="Price"
                                             onKeyDown={(e) => {

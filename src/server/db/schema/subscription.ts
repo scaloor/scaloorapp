@@ -8,7 +8,7 @@ export const subscription = pgTable("subscription", {
         .primaryKey()
         .notNull()
         .$defaultFn(() => scaloorId('sub')),
-    businessId: text("business_id").notNull(),
+    organizationId: text("organization_id").notNull(),
     plan: planEnum("plan").notNull(),
     price: integer("price").notNull(),
     active: boolean("active").default(false).notNull(),

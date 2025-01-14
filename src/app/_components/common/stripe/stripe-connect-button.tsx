@@ -9,7 +9,7 @@ import React from 'react'
 type StripeConnectButtonProps = {
     country_name: string;
     email: string;
-    businessId: string;
+    organizationId: string;
     returnUrl: StripeConnectReturnUrl;
     connected: boolean;
     className?: string;
@@ -18,7 +18,7 @@ type StripeConnectButtonProps = {
 export default function StripeConnectButton({
     country_name,
     email,
-    businessId,
+    organizationId,
     returnUrl,
     connected,
     className
@@ -26,7 +26,7 @@ export default function StripeConnectButton({
     const router = useRouter()
     
     const connectStripe = async () => {
-        const { url, error } = await createStripeAccount({ country_name, email, businessId, returnUrl });
+        const { url, error } = await createStripeAccount({ country_name, email, organizationId, returnUrl });
         // Client side error handling here
         router.push(url!);
     }

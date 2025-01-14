@@ -1,12 +1,12 @@
 'use server'
-import { canAccessBusiness } from "@/server/authorization/business"
+import { canAccessOrganization } from "@/server/authorization/organization"
 import { Checkout } from "@/server/data/checkout-class"
 
 
-export async function deleteCheckoutByIdAction(checkoutId: string, businessId: string) {
+export async function deleteCheckoutByIdAction(checkoutId: string, organizationId: string) {
     try {
-        if (!await canAccessBusiness(businessId)) {
-            throw new Error("You are not authorized to access this business")
+        if (!await canAccessOrganization(organizationId)) {
+            throw new Error("You are not authorized to access this organization")
         }
         const { error } = await Checkout.deleteById(checkoutId)
         return { success: true }

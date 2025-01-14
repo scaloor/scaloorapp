@@ -2,14 +2,14 @@ import { boolean, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
 import { subscription } from "./subscription";
 import { scaloorId } from "./defaults";
 
-export const business = pgTable("business", {
+export const organization = pgTable("organization", {
     id: text("id")
         .primaryKey()
         .notNull()
-        .$defaultFn(() => scaloorId('bus')),
+        .$defaultFn(() => scaloorId('org')),
     name: text("name").notNull(),
-    businessLogo: text("business_logo"),
-    businessEmail: text("business_email").notNull(),
+    orgLogo: text("org_logo"),
+    orgEmail: text("org_email").notNull(),
     country: text("country").notNull(),
     currentSubscriptionId: text("subscription_id").references(() => subscription.id),
     stripeAccountId: text("stripe_account_id"),
@@ -19,9 +19,9 @@ export const business = pgTable("business", {
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: 'string' }).defaultNow().notNull(),
 }, (table) => {
     return {
-        businessIdKey: unique("business_id_key").on(table.id),
+        orgIdKey: unique("org_id_key").on(table.id),
     }
 });
 
-export type InsertBusiness = typeof business.$inferInsert;
-export type SelectBusiness = typeof business.$inferSelect;
+export type InsertOrganization = typeof organization.$inferInsert;
+export type SelectOrganization = typeof organization.$inferSelect;

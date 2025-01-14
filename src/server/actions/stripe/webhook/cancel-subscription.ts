@@ -1,4 +1,4 @@
-import { updateBusinessColumn } from "@/server/data/business"
+import { updateOrganizationColumn } from "@/server/data/organization"
 import { getSubscriptionById } from "@/server/data/subscription"
 import { db } from "@/server/db"
 import { subscription } from "@/server/db/schema"
@@ -22,9 +22,9 @@ export async function cancelSubscriptionAction(subscriptionId: string) {
             .returning()
             .then(res => res[0])
 
-        //Update the business to remove the current subscription
-        const { dbBusiness } = await updateBusinessColumn({
-            id: dbSubscription.businessId,
+        //Update the organization to remove the current subscription
+        const { dbOrganization } = await updateOrganizationColumn({
+            id: dbSubscription.organizationId,
             currentSubscriptionId: ''
         })
 

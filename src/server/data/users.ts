@@ -1,9 +1,8 @@
 import 'server-only'
 import { eq } from "drizzle-orm";
 import { db } from "@/server/db";
-import { SelectUser, users } from "@/server/db/schema";
-import { InsertUser } from "../db/schema";
-import { canAccessUser } from '../authorization/user';
+import { users, InsertUser } from "@/server/db/schema";
+import { canAccessUser } from '@/server/authorization/user';
 
 /**
  * Add new user
@@ -49,7 +48,7 @@ export async function updateUser(userDetails: InsertUser) {
 
 type UpdateUserOptions = {
     id: string;
-    businessId?: string;
+    organizationId?: string;
     firstName?: string;
     lastName?: string;
     email?: string;

@@ -3,20 +3,20 @@
 import { CountryProps } from "@/app/_components/common/countries-dropdown/types";
 import countries from "@/app/_components/common/countries-dropdown/countries.json";
 import { stripe } from "@/lib/stripe";
-import { getBusinessById, updateBusiness, updateBusinessColumn } from "@/server/data/business";
+import { getOrganizationById, updateOrganization, updateOrganizationColumn } from "@/server/data/organization";
 import { createStripeAccountLink, StripeConnectReturnUrl } from "./account-link";
 
 type CreateStripeAccountOptions = {
     country_name: string;
     email: string;
-    businessId: string;
+    organizationId: string;
     returnUrl: StripeConnectReturnUrl;
 }
 
 export default async function createStripeAccount({
     country_name,
     email,
-    businessId,
+    organizationId,
     returnUrl
 }: CreateStripeAccountOptions) {
     try {
@@ -26,13 +26,13 @@ export default async function createStripeAccount({
 
         // Check if there is an existing Stripe account
         let accountId: string | undefined;
-        const { dbBusiness } = await getBusinessById(businessId);
-        if (dbBusiness?.stripeAccountId) {
-            accountId = dbBusiness.stripeAccountId;
+        const { dbOrganization } = await getOrganizationById(organizationId);
+        if (dbOrganization?.stripeAccountId) {
+            accountId = dbOrganization.stripeAccountId;
         }
 
         // Create Stripe account
-        if (!dbBusiness?.stripeAccountId) {
+        if (!dbOrganization?.stripeAccountId) {
             const account = await stripe.accounts.create({
                 email,
                 ...(countryId ? { country: countryId } : {}),
@@ -51,7 +51,7 @@ export default async function createStripeAccount({
             console.log('Account created:', account);
             accountId = account.id;
             // Send account ID to server for database update
-            await updateBusinessColumn({ id: businessId, stripeAccountId: accountId });
+            await updateOrganizationColumn({ id: organizationId, stripeAccountId: accountId });
         }
 
         if (!accountId) {
