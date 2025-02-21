@@ -3,30 +3,25 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/_components/ui/tabs"
 import { motion } from "framer-motion"
 import CheckoutExport from "./export"
-import CheckoutView from "./view"
-import { SelectCheckout } from "@/server/db/schema"
 import CheckoutAnalytics from "./analytics"
+import EditCheckoutForm from "./edit-checkout-form"
 
-type CheckoutTabsProps = {
-    dbCheckout: SelectCheckout
-}
-
-export default function CheckoutTabs({ dbCheckout }: CheckoutTabsProps) {
+export default function CheckoutTabs() {
     return (
-        <Tabs defaultValue="view" className="w-1/2">
+        <Tabs defaultValue="edit" className="w-1/2">
             <TabsList className="w-full grid grid-cols-3">
-                <TabsTrigger value="view" className="w-full">View</TabsTrigger>
+                <TabsTrigger value="edit" className="w-full">Edit</TabsTrigger>
                 <TabsTrigger value="export" className="w-full">Export</TabsTrigger>
                 <TabsTrigger value="analytics" className="w-full">Analytics</TabsTrigger>
             </TabsList>
-            <TabsContent value="view">
+            <TabsContent value="edit">
                 <motion.div
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 20, opacity: 0 }}
                     transition={{ duration: 0.2 }}
                 >
-                    <CheckoutView dbCheckout={dbCheckout} />
+                    <EditCheckoutForm />
                 </motion.div>
             </TabsContent>
             <TabsContent value="export">

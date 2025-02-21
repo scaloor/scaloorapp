@@ -20,7 +20,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
     return (
         <div className='flex justify-between mt-4 gap-4'>
             <CheckoutProvider initialCheckout={dbCheckout}>
-                <CheckoutTabs dbCheckout={dbCheckout} />
+                <CheckoutTabs />
                 <CheckoutPreview dbCheckout={dbCheckout} />
             </CheckoutProvider>
         </div>

@@ -9,9 +9,9 @@ import { Checkout } from "@/server/data/checkout-class";
 
 const CreateCheckoutSchema = z.object({
     checkoutId: z.string(),
-    name: z.string().min(1, { message: "Name is required" }),
-    description: z.string().optional(),
-    price: z.string(),
+    productName: z.string().min(1, { message: "Name is required" }),
+    productDescription: z.string().optional(),
+    productPrice: z.string(),
     thumbnailPath: z.string().optional(),
     filePath: z.string(),
 });
@@ -28,12 +28,12 @@ export async function addCheckoutAction(checkoutData: z.infer<typeof CreateCheck
     if (!dbOrganization?.stripeAccountId || !dbOrganization?.defaultCurrency) {
         throw new Error("Stripe account ID not found");
     }
-    const price = parseInt(checkoutData.price) * 100
+    const price = parseInt(checkoutData.productPrice) * 100
 
     // Create the stripe product
     const stripeProduct = await createStripeProduct({
-        name: checkoutData.name,
-        ...(checkoutData.description ? { description: checkoutData.description } : {}),
+        name: checkoutData.productName,
+        ...(checkoutData.productDescription ? { description: checkoutData.productDescription } : {}),
         default_price_data: {
             unit_amount: price,
             currency: dbOrganization.defaultCurrency,
@@ -44,8 +44,8 @@ export async function addCheckoutAction(checkoutData: z.infer<typeof CreateCheck
     const newCheckout: InsertCheckout = {
         id: checkoutData.checkoutId,
         organizationId: dbUser.organizationId,
-        productName: checkoutData.name,
-        productDescription: checkoutData.description,
+        productName: checkoutData.productName,
+        productDescription: checkoutData.productDescription,
         productPrice: price,
         billingType: "one_time",
         thumbnail: checkoutData.thumbnailPath,

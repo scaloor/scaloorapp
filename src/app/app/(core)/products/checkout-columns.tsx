@@ -51,7 +51,7 @@ export const columns: ColumnDef<SelectCheckout>[] = [
                 <div>
                     {row.original.thumbnail ? (
                         <Image
-                            src={`${process.env.NEXT_PUBLIC_SUPABASE_STORAGE_URL}/scaloor-bucket/${row.original.thumbnail}`}
+                            src={`${row.original.thumbnail}`}
                             alt={row.original.productName}
                             width={50}
                             height={50}
@@ -97,7 +97,7 @@ export const columns: ColumnDef<SelectCheckout>[] = [
         cell: ({ row }) => {
             return (
                 <div>
-                    {formatPriceToString(row.original.productPrice * 100)}
+                    ${formatPriceToString(row.original.productPrice)}
                 </div>
             )
         }

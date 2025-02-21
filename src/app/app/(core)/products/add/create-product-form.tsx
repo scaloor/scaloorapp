@@ -1,6 +1,5 @@
 "use client"
 
-import { Camera, FileChartColumn, MonitorPlay, Upload, Youtube } from 'lucide-react'
 import { useEffect, useState, useTransition } from "react"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/app/_components/ui/form";
 import { useForm } from 'react-hook-form'
@@ -8,12 +7,9 @@ import { Button } from "@/app/_components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/_components/ui/card"
 import { Input } from "@/app/_components/ui/input"
 import { Label } from "@/app/_components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/app/_components/ui/radio-group"
 import { Switch } from "@/app/_components/ui/switch"
-import ImageUpload from '@/app/_components/common/image-upload'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CreateCheckoutSchema } from './form-schema'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { Textarea } from "@/app/_components/ui/textarea"
@@ -22,11 +18,23 @@ import { addCheckoutAction } from '@/server/actions/protected/checkout/add';
 import { scaloorId } from '@/server/db/schema/defaults';
 import { uploadFile } from '@/lib/supabase/client';
 import { FormError } from '@/app/_components/common/form-error';
-import FileUpload from '@/app/_components/common/file-upload';
 import { useAppStore } from '../../_components/stores/app-store';
 import { Loading } from '@/app/_components/common/loading';
+import { SCALOOR_BUCKET } from "@/lib/constants";
+import ImageUploader from "@/app/_components/common/image-uploader";
+import FileUploader from "@/app/_components/common/file-uploader";
 
+const MAX_UPLOAD_SIZE = 1024 * 1024 * 100; // 100MB
 
+const CreateCheckoutSchema = z.object({
+    productName: z.string().min(1, { message: "Name is required" }),
+    productDescription: z.string().optional(),
+    productPrice: z.string(),
+    thumbnail: z.instanceof(File).refine((file) => file.size <= MAX_UPLOAD_SIZE, { message: "File size must be less than 10MB" }).optional(),
+    productFile: z.instanceof(File).refine((file) => file.size <= MAX_UPLOAD_SIZE, { message: "File size must be less than 100MB" }),
+});
+
+type FormData = z.infer<typeof CreateCheckoutSchema>
 
 export default function CreateProductForm() {
     const { organizations } = useAppStore()
@@ -34,35 +42,27 @@ export default function CreateProductForm() {
     const [isPending, startTransition] = useTransition();
     const [formError, setFormError] = useState<string>("");
     const router = useRouter();
-    
+
     // Initialize form with default values
-    const form = useForm<z.infer<typeof CreateCheckoutSchema>>({
+    const form = useForm<FormData>({
         resolver: zodResolver(CreateCheckoutSchema),
-        defaultValues: {
-            name: '',
-            description: '',
-            price: '',
-            productImage: undefined,
-            file: undefined,
-        }
     });
 
     const [useSamePhoto, setUseSamePhoto] = useState(true)
     const [showDescription, setShowDescription] = useState(false)
     const [checkoutType, setCheckoutType] = useState("embedded")
 
-    const onSubmit = async (formData: z.infer<typeof CreateCheckoutSchema>) => {
+    const onSubmit = async (formData: FormData) => {
         startTransition(async () => {
-            const { name, description, price, productImage, file } = formData;
+            const { productName, productDescription, productPrice, productFile, thumbnail } = formData;
             // Create the file paths and upload the files
             const checkoutId = scaloorId("chk")
-            console.log("thumbnail", !!productImage)
             const uploadPromises = [
-                uploadFile(file, `organization/${organizationId}/checkout/product/${checkoutId}/${file.name}`)
+                uploadFile(productFile, `organization/${organizationId}/checkout/product/${checkoutId}/${productFile.name}`)
             ];
-            if (!!productImage) {
+            if (!!thumbnail) {
                 uploadPromises.push(
-                    uploadFile(productImage, `organization/${organizationId}/checkout/thumbnail/${checkoutId}/${productImage.name}`)
+                    uploadFile(thumbnail, `organization/${organizationId}/checkout/thumbnail/${checkoutId}/${thumbnail.name}`)
                 );
             }
             const results = await Promise.all(uploadPromises);
@@ -75,12 +75,12 @@ export default function CreateProductForm() {
             }
 
             // Add the checkout to the database
-            const filePath = results[0]!.data!.path
+            const filePath = `${SCALOOR_BUCKET}/${results[0]!.data!.path}`
             let thumbnailPath = '';
-            if (!!productImage) {
-                thumbnailPath = results[1]!.data!.path
+            if (!!thumbnail) {
+                thumbnailPath = `${SCALOOR_BUCKET}/${results[1]!.data!.path}`
             }
-            await addCheckoutAction({ checkoutId, name, description, price, filePath, thumbnailPath });
+            await addCheckoutAction({ checkoutId, productName, productDescription, productPrice, filePath, thumbnailPath });
             toast.success("Product created successfully", { description: JSON.stringify(formData) });
             router.push(`/products/${checkoutId}`)
         });
@@ -118,7 +118,7 @@ export default function CreateProductForm() {
                     <CardContent className="space-y-6">
                         <FormField
                             control={form.control}
-                            name="name"
+                            name="productName"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
@@ -143,16 +143,19 @@ export default function CreateProductForm() {
                                     >
                                         <FormField
                                             control={form.control}
-                                            name="description"
+                                            name="productDescription"
                                             render={({ field }) => (
                                                 <FormItem>
                                                     <FormControl>
                                                         <Textarea
-                                                            {...field}
-                                                            disabled={isPending}
-                                                            placeholder="Enter your product description"
                                                             className="resize-none"
-                                                            rows={4}
+                                                            onChange={field.onChange}
+                                                            onBlur={field.onBlur}
+                                                            name={field.name}
+                                                            ref={field.ref}
+                                                            placeholder="Product Description"
+                                                            value={field.value ?? ""}
+                                                            disabled={isPending}
                                                         />
                                                     </FormControl>
                                                     <FormMessage />
@@ -185,7 +188,7 @@ export default function CreateProductForm() {
 
                         <FormField
                             control={form.control}
-                            name="price"
+                            name="productPrice"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormControl>
@@ -282,12 +285,22 @@ export default function CreateProductForm() {
                                 >
                                     <FormField
                                         control={form.control}
-                                        name="productImage"
+                                        name="thumbnail"
                                         render={({ field }) => (
-                                            <FormItem className="w-full">
+                                            <FormItem className="w-1/2">
                                                 <FormLabel className="text-left">Product Image</FormLabel>
-                                                <FormControl className="w-full">
-                                                    <FileUpload form={form} value="productImage" accept="IMAGE" />
+                                                <FormControl className="w-full">                                                    
+                                                    <ImageUploader
+                                                        className="w-full"
+                                                        value={null}
+                                                        onImageChange={(file) => {
+                                                            if (file) {                                        
+                                                                form.setValue("thumbnail", file);
+                                                            } else {
+                                                                form.setValue("thumbnail", undefined);
+                                                            }
+                                                        }}
+                                                    />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -299,12 +312,20 @@ export default function CreateProductForm() {
                         <div className="space-y-3">
                             <FormField
                                 control={form.control}
-                                name="file"
+                                name="productFile"
                                 render={({ field }) => (
                                     <FormItem className="w-full">
                                         <FormLabel className="text-left">Product File</FormLabel>
                                         <FormControl className="w-full">
-                                            <FileUpload form={form} value="file" accept="DOCUMENT" />
+                                            <FileUploader
+                                                className="w-full"
+                                                value={null}
+                                                onFileChange={(file) => {
+                                                    if (file) {
+                                                        form.setValue("productFile", file);
+                                                    }
+                                                }}
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
@@ -312,7 +333,7 @@ export default function CreateProductForm() {
                             />
                         </div>
                         {formError && <FormError message={formError} />}
-                        <div className="flex items-center justify-between pt-4">
+                        <div className="flex items-center justify-between pt-4 float-right">
                             <Button
                                 type="submit"
                                 className="bg-primary text-primary-foreground"
